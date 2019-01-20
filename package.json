@@ -1,19 +1,31 @@
 {
-  "name": "Visualization",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "name": "electron-flask",
+  "version": "0.0.1",
+  "description": "Test of electron with flask.",
+  "main": "src/main.js",
+  "author": "Rich Lewis",
+  "license": "MIT",
   "devDependencies": {
-    "electron": "^4.0.1"
+    "gulp": "^3.9.0",
+    "gulp-webserver": "^0.9.1",
+    "request-promise": "^4.2.2"
   },
   "dependencies": {
-    "python-shell": "^1.0.7"
-  }
+    "electron-prebuilt": "^1.4.13",
+    "electron-packager": "^13.0.1",
+    "request-promise": "^4.2.2",
+    "jquery": "^3.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/richlewis42/electron-flask"
+  },
+  "keywords": [
+    "electron",
+    "flask",
+    "api"
+  ]
 }
