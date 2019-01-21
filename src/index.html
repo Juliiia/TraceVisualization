@@ -1,25 +1,72 @@
-<head>
-  <title> Flask-Electron test </title>
-  <style>
-  * { font-family: Helvetica, sans-serif;}
-  </style>
-  <script>
-    function load () {
-	function reqListener () {
-        document.getElementById("dynamic").innerHTML = this.responseText;
-      }
-      xhttp = new XMLHttpRequest();
-      xhttp.addEventListener("load", reqListener);
-      xhttp.open('GET', 'http://localhost:5000');
-      xhttp.send();
-    }
-  </script>
-</head>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> Flask-Electron test </title>
 
-<body>
-  <h1>Electron-Flask test!!</h1>
-  <button onclick="load()">Access the API</button>
-  <p id="dynamic">jkashbjköasdhvböjksdhvbjködsabhajkösdbla</p>
-  <script>window.$ = window.jQuery = require("../node_modules/jquery/dist/jquery.min");</script>
-  <script src="static/js/test.js"></script>
-</body>
+        <link rel="stylesheet" type="text/css" href="../node_modules/semantic-ui/dist/semantic.min.css">
+
+  <!--      <script>
+            function load () {
+	        function reqListener () {
+                document.getElementById("dynamic").innerHTML = this.responseText;
+            }
+            xhttp = new XMLHttpRequest();
+            xhttp.addEventListener("load", reqListener);
+            xhttp.open('GET', 'http://localhost:5000');
+            xhttp.send();
+            }
+        </script> -->
+    </head>
+
+    <body>
+        <!-- ----- Sidebar ----- -->
+        <div class="ui sidebar inverted vertical menu">
+
+            <!-- input files -->
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+
+                <input type="file" class="custom-file-input" id="fileUpload" aria-label="Text input with dropdown button">
+                <label class="custom-file-label" for="fileUpload">Choose file</label>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                </div>
+            </div>
+
+            <a class="item">
+              2
+            </a>
+            <a class="item">
+              3
+            </a>
+        </div>
+
+        <div class="pusher">
+
+            <!-- ----- Menu Head ----- -->
+            <div class="ui menu">
+                <a class="item" id="sidebar" onclick="toggleSidbar()">
+                    <i class="cog icon"></i>
+                </a>
+            </div>
+
+            <h1>Hello Python!</h1>
+
+        </div>
+
+
+        <!-- Scripts -->
+        <script>window.$ = window.jQuery = require("../node_modules/jquery/dist/jquery.min");</script>
+        <script type="text/javascript" src="../node_modules/semantic-ui/dist/semantic.min.js"></script>
+        <script type="text/javascript" src="static/js/uiDynamics.js"></script>
+    </body>
+<html>
