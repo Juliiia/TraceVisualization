@@ -6,6 +6,7 @@
 
         <link rel="stylesheet" type="text/css" href="../node_modules/semantic-ui/dist/semantic.min.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="static/css/filter.css">
 
   <!--      <script>
             function load () {
@@ -25,22 +26,25 @@
         <div class="ui sidebar inverted vertical menu">
 
             <!-- input files -->
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 smallMargin">
 
                 <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                    <select class="btn btn-outline-secondary dropdown-toggle" >
+                        <option value="volvo">Requirement</option>
+                        <option value="saab">Code</option>
+                        <option value="opel">Trace</option>
+                    </select>
                 </div>
 
-                <input type="file" class="custom-file-input" id="fileUpload" aria-label="Text input with dropdown button">
-                <label class="custom-file-label" for="fileUpload">Choose file</label>
-                <div class="input-group-append">
-                    <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputCSV" accept=".csv" aria-describedby="button-UploadInput">
+                    <label class="custom-file-label" for="inputCSV">Choose CSV file</label>
                 </div>
+
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="button-UploadInput" type="button" onclick="uploadFile()">Upload</button>
+                </div>
+
             </div>
 
             <a class="item">
@@ -71,7 +75,7 @@
         <script type="text/javascript" src="../node_modules/semantic-ui/dist/semantic.min.js"></script>
         <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-
         <script type="text/javascript" src="static/js/uiDynamics.js"></script>
+        <script type="text/javascript" src="static/js/fileUploader.js"></script>
     </body>
 <html>

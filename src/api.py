@@ -11,5 +11,9 @@ class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
 
+@app.route('/fileupload', methode=['POST'])
+def fileupload():
+    return "uploaded"
+
 if __name__ == "__main__":
     app.run()
