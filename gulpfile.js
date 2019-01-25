@@ -1,8 +1,8 @@
 var gulp      = require('gulp'),
     webserver = require('gulp-webserver'),
     spawn     = require('child_process').spawn,
-    packager  = require('electron-packager'),
-    electron  = require('electron-prebuilt');
+    packager  = require('electron-builder'),
+    electron  = require('electron');
 
 var PIPE = {stdio: 'inherit'}; 
 

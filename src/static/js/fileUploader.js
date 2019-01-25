@@ -28,13 +28,13 @@ function uploadFile() {
 function sendToServer(data) {
     $.ajax({
         type: 'POST',
-        url: '/fileupload',
+        url: 'http://127.0.0.1:5000/fileuploader',
         data: data,
         contentType: false,
         cache: false,
         processData: false,
         success: function(data) {
-            console.log('Success! ' + data);
-            },
-        });
+           $("#test").append(data);
+        }
+    });
 }
