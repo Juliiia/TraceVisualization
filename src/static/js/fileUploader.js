@@ -1,8 +1,6 @@
 function uploadFile() {
-    console.log('uplaod');
     // get file
     let input = ($('#inputCSV'))[0];
-    console.log(input.files);
 
     if (!input) {
       alert("Um, couldn't find the fileinput element.");
@@ -15,13 +13,8 @@ function uploadFile() {
     }
     else {
         let file = input.files[0];
-        let fileReader = new FileReader();
-
-        fileReader.onloadend = function(){
-            sendToServer(fileReader.result);
-        };
-
-        fileReader.readAsDataURL(file);
+        let form_data = new FormData(file);
+        sendToServer(input.files[0]);
     }
 }
 
@@ -30,11 +23,16 @@ function sendToServer(data) {
         type: 'POST',
         url: 'http://127.0.0.1:5000/fileuploader',
         data: data,
-        contentType: false,
-        cache: false,
-        processData: false,
+         cache:false,
+          processData:false,
+          contentType:false,
+        error:function(xhr, ajaxOptions, thrownError){
+            console.log(thrownError);
+        },
         success: function(data) {
-           $("#test").append(data);
+           console.log(data);
+           let text = JSON.stringify(data);
+           $("#test").append(text);
         }
     });
 }

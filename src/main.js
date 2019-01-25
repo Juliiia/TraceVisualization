@@ -16,7 +16,9 @@ app.on('quit', function() {
 });
 
 app.on('ready', function() {
-  subpy = require('child_process').spawn('python', [__dirname + '/api.py']);
+  subpy = require('child_process').spawn('python', [__dirname + '/backend/api.py']);
+
+  console.log(__dirname + '../../backend/api.py');
   
   var openWindow = function () {
     mainWindow = new BrowserWindow({width: 800, height: 600});

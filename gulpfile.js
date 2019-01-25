@@ -7,7 +7,7 @@ var gulp      = require('gulp'),
 var PIPE = {stdio: 'inherit'}; 
 
 gulp.task('serve:api', function(){
-  return spawn('python', ['src/api.py'], PIPE);
+  return spawn('python', ['src/backend/api.py'], PIPE);
 });
 
 gulp.task('serve:client', function () {
