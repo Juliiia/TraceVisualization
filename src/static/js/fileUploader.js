@@ -13,26 +13,28 @@ function uploadFile() {
     }
     else {
         let file = input.files[0];
-        let form_data = new FormData(file);
-        sendToServer(input.files[0]);
+        //et data = new FormData(file);
+        sendToServer(file);
     }
 }
 
 function sendToServer(data) {
+    console.log(data);
     $.ajax({
         type: 'POST',
         url: 'http://127.0.0.1:5000/fileuploader',
         data: data,
-         cache:false,
-          processData:false,
-          contentType:false,
-        error:function(xhr, ajaxOptions, thrownError){
+        cache: false,
+        processData: false,
+        contentType: false,
+        error: function (xhr, ajaxOptions, thrownError) {
             console.log(thrownError);
         },
-        success: function(data) {
-           console.log(data);
-           let text = JSON.stringify(data);
-           $("#test").append(text);
+        success: function (data) {
+            console.log('test');
+            console.log(data);
+            let text = JSON.stringify(data);
+            $("#test").append(text);
         }
-    });
+    })
 }
