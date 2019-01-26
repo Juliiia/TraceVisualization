@@ -190,3 +190,5 @@ spec/.hash
 
 # Generated native addon files
 /spec/fixtures/native-addon/echo/build/
+*.txt
+*.txt
