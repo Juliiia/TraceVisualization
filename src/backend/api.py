@@ -14,7 +14,7 @@ CORS(app, origins='http://localhost:8000')
 def print_out():
     file = request.get_data()
     networkgraph = NetworkGraph(StringIO(file.decode("utf-8")))
-    text = networkgraph.testOutput()
+    text = networkgraph.returnJsonWithCoordinates()
     return jsonify(text)
 
 
