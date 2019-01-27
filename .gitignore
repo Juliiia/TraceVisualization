@@ -192,3 +192,4 @@ spec/.hash
 /spec/fixtures/native-addon/echo/build/
 *.txt
 *.txt
+*.csv
