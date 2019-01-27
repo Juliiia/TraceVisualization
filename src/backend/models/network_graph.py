@@ -5,37 +5,54 @@ from io import StringIO
 import plotly.plotly as plotly
 import plotly.graph_objs as graphobject
 import networkx as network
+import pandas as pandas
 
 
 class NetworkGraph:
     def __init__(self, file):
         self.file = file
         self.json_complete = {}
+        self.graph = network.Graph()
 
     def returnJsonWithCoordinates(self):
-        path_edge_file = self.createBasicDataAndReturnEdges()
-        self.calculateCoordinates(path_edge_file)
+        self.createJsonAndGraph()
+        path_to_file = self.calculateCoordinates()
+        self.addCoordinatesToJson(path_to_file)
         return self.json_complete
 
-    def createBasicDataAndReturnEdges(self):
-        data = []
+    def createJsonAndGraph(self):
         reader = csv.reader(self.file, delimiter=";")
+        next(reader, None)  # skip the headers
 
         array_nodes = []
         array_links = []
-        edge_content = ''
+        unique_nodes_set = set()
 
         for line in reader:
 
-            # source node
-            json_node_source = self.getNodeJson(line[0], line[1])
-            source_node_id = json_node_source['id']
+            source_node_id = line[0].strip() + ':' + line[1].strip()
+            target_node_id = line[3].strip() + ':' + line[4].strip()
 
-            # target node
-            json_node_target = self.getNodeJson(line[3], line[4])
-            target_node_id = json_node_target['id']
+            # HANDLE NODES
+            if source_node_id not in unique_nodes_set:
+                # create and add node json
+                json_node_source = self.getNodeJson(line[0], line[1])
+                array_nodes.append(json_node_source)
+                # add node to graph
+                self.graph.add_node(str(source_node_id))
+                # add id to unique_nodes_set
+                unique_nodes_set.add(source_node_id)
 
-            # relation
+            if target_node_id not in unique_nodes_set:
+                # create and add node json
+                json_node_target = self.getNodeJson(line[3], line[4])
+                array_nodes.append(json_node_target)
+                # add node to graph
+                self.graph.add_node(str(target_node_id))
+                # add id to unique_nodes_set
+                unique_nodes_set.add(target_node_id)
+
+            # HANDEL RELATIONS
             json_link = {}
             json_link['sourceId'] = source_node_id
             json_link['targetId'] = target_node_id
@@ -44,89 +61,50 @@ class NetworkGraph:
             json_link['origin'] = 'matching algorithm'
             json_link['reposible'] = 'tool'
 
-            # edge_list
-            # item = (str(source_node_id), str(target_node_id), '')
-            item = source_node_id + ',' + target_node_id + ',' + str(1) + '\n'
-            # edge_list.append(item)
-            edge_content = edge_content + item
-
-            # add to json
-            array_nodes.append(json_node_source)
-            array_nodes.append(json_node_target)
+            # add edge to graph
+            self.graph.add_edge(str(source_node_id), str(target_node_id), weight=1)
             array_links.append(json_link)
-            #data.append(line)
 
+        # add part arrays to json
         self.json_complete['entities'] = array_nodes
         self.json_complete['links'] = array_links
-        path_with_file = 'src/backend/dataExchange/edgeList.txt'
-        self.writeToFile(path_with_file, edge_content)
-        return path_with_file
 
-    def calculateCoordinates(self, edges):
-        graph = network.read_edgelist(edges, delimiter=',', create_using=network.Graph, data=(('weight', float),), nodetype=str)
-        print(graph)
+    def calculateCoordinates(self):
+        pos = network.spring_layout(self.graph, k=0.04, iterations=10, scale=100)
+        # Set result dataset positions as positions to be used in graph.
+        network.set_node_attributes(self.graph, values=pos, name='pos')
+        # Set entrance into network and exit from network as top left and bottom right nodes.
+        pos[-2] = [100.0, 0.0]
+        pos[-1] = [0.0, 100.0]
+        # Structure output in pandas dataframe.
+        positions = pandas.DataFrame(pos).transpose()
+        positions.columns = ['X', 'Y']
+        # Export to csv.
+        path_to_file = 'src/backend/dataExchange/nodepositions.csv'
+        positions.to_csv(path_to_file, encoding='utf-8', index_label='ID')
+        return path_to_file
 
-        self.calculateCoordinatestest()
+    def addCoordinatesToJson(self, path_to_file):
+        all_nodes = self.json_complete['entities']
+        with open(path_to_file, 'rt') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            next(csv_reader, None)  # skip the headers
 
+            for item in all_nodes:
+                node_id = item['id']
 
-    def calculateCoordinatestest(self):
-        G = network.random_geometric_graph(100, 0.125)
-        pos = network.get_node_attributes(G, 'pos')
-        print(pos)
+                for row in csv_reader:
+                    print(node_id + '  #### ' + row[0])
+                    if node_id == row[0]:
+                        print('found equel')
 
-        dmin = 1
-        ncenter = 0
-        for n in pos:
-            x, y = pos[n]
-            d = (x - 0.5) ** 2 + (y - 0.5) ** 2
-            if d < dmin:
-                ncenter = n
-                dmin = d
+                        json_coordinates = {}
+                        json_coordinates['x'] = float(row[1])
+                        json_coordinates['y'] = float(row[2])
+                        item['coordinates'] = json_coordinates
+                        break
 
-        p = network.single_source_shortest_path_length(G, ncenter)
-
-        # Create Edges
-        edge_trace = graphobject.Scatter(
-            x=[],
-            y=[],
-            line=dict(width=0.5, color='#888'),
-            hoverinfo='none',
-            mode='lines')
-
-        for edge in G.edges():
-            x0, y0 = G.node[edge[0]]['pos']
-            x1, y1 = G.node[edge[1]]['pos']
-            edge_trace['x'] += tuple([x0, x1, None])
-            edge_trace['y'] += tuple([y0, y1, None])
-
-        node_trace = graphobject.Scatter(
-            x=[],
-            y=[],
-            text=[],
-            mode='markers',
-            hoverinfo='text',
-            marker=dict(
-                showscale=True,
-                # colorscale options
-                # 'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
-                # 'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
-                # 'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
-                colorscale='YlGnBu',
-                reversescale=True,
-                color=[],
-                size=10,
-                colorbar=dict(
-                    thickness=15,
-                    title='Node Connections',
-                    xanchor='left',
-                    titleside='right'
-                ),
-                line=dict(width=2)))
-
-        for node in G.nodes():
-            x, y = G.node[node]['pos']
-            node_trace['x'] += tuple([x])
-            node_trace['y'] += tuple([y])
+        self.json_complete['entities'] = all_nodes
 
     def writeToFile(self, path_file, logcontent):
         log = open(path_file, 'w')
