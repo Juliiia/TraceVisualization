@@ -26,6 +26,8 @@ class OriginJson{
             } else {
                 if(!that.uiFilterCreator){
                     that.getUiFilterCreator();
+                    // notify for finished loading
+                    new FilteredDataCollector().notifyThatOriginJsonIsCompleted();
                 }
             }
         });
