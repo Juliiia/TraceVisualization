@@ -2,7 +2,6 @@ function toggleSidbar() {
     $('.ui.sidebar')
         .sidebar({
             onHide: function() {
-              console.log('on Hide');
               loadVisualization();
             }
         })
@@ -11,7 +10,6 @@ function toggleSidbar() {
 }
 
 function loadVisualization(){
-    console.log('loadVisualization');
     let filteredDataCollector = new FilteredDataCollector();
     filteredDataCollector.visualizeJsonStructure();
 }
