@@ -21,7 +21,7 @@ app.on('ready', function() {
   console.log(__dirname + '../../backend/api.py');
   
   var openWindow = function () {
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({width: 1000, height: 800});
     mainWindow.loadURL('file://' + __dirname + '/index.html');
     mainWindow.on('closed', function() {
       mainWindow = null;

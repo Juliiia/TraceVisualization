@@ -10,3 +10,13 @@
 .smallMargin {
     margin: 5px;
 }
+
+.shortInfoBox p{
+    color: white;
+    width: 100%;
+    background-color: #4d4d4d;
+}
+
+.hidden{
+    display: none;
+}

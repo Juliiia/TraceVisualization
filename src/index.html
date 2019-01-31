@@ -8,41 +8,39 @@
         <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="static/css/filter.css">
 
-  <!--      <script>
-            function load () {
-	        function reqListener () {
-                document.getElementById("dynamic").innerHTML = this.responseText;
-            }
-            xhttp = new XMLHttpRequest();
-            xhttp.addEventListener("load", reqListener);
-            xhttp.open('GET', 'http://localhost:5000');
-            xhttp.send();
-            }
-        </script> -->
     </head>
 
     <body>
         <!-- ----- Sidebar ----- -->
         <div class="ui sidebar inverted vertical menu">
 
-            <!-- input files -->
-            <div class="input-group mb-3 smallMargin">
+            <!-- REUIREMENTS -->
+            <div class="item" id="filterSectionRequirements">
+                <!-- input Requirements -->
+                <div class="input-group mb-3 smallMargin">
 
-                <div class="input-group-prepend">
-                    <select class="btn btn-outline-secondary dropdown-toggle" >
-                        <option value="volvo">Requirement</option>
-                        <option value="saab">Code</option>
-                        <option value="opel">Trace</option>
-                    </select>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputCSVRequirements" accept=".csv" aria-describedby="button-UploadInput">
+                        <label class="custom-file-label" for="inputCSV">Choose Requirements CSV file</label>
+                    </div>
+
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="button-UploadInput" type="button" onclick="uploadFile('Requirements')">Upload</button>
+                    </div>
                 </div>
 
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="inputCSV" accept=".csv" aria-describedby="button-UploadInput">
-                    <label class="custom-file-label" for="inputCSV">Choose CSV file</label>
-                </div>
+                <div class="filterOptionsSection hidden">
 
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" id="button-UploadInput" type="button" onclick="uploadFile()">Upload</button>
+                    <!-- shortInfo -->
+                    <div class="shortInfoBox">
+                        <p></p>
+                    </div>
+
+                    <!-- Filter -->
+                    <div class="filter">
+
+                    </div>
+
                 </div>
 
             </div>
@@ -64,8 +62,12 @@
                 </a>
             </div>
 
-            <h1>Hello Python!</h1>
-            <label for="test"></label><textarea id="test" rows="10" class="w-100"></textarea>
+            <div class="content">
+                <div class="visualisation">
+                    <svg id="svgVis" xmlns="http://www.w3.org/2000/svg" width="1000" height="800">
+                    </svg>
+                </div>
+            </div>
         </div>
 
 
@@ -73,6 +75,15 @@
         <script>window.$ = window.jQuery = require("../node_modules/jquery/dist/jquery.min");</script>
         <script type="text/javascript" src="../node_modules/semantic-ui/dist/semantic.min.js"></script>
         <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="static/js/lib/svg-pan-zoom.js"></script>
+
+        <!-- classes -->
+        <script type="text/javascript" src="static/js/FilteredDataCollector.js"></script>
+        <script type="text/javascript" src="static/js/OriginJson.js"></script>
+        <script type="text/javascript" src="static/js/UiFilterCreatorFactory.js"></script>
+        <script type="text/javascript" src="static/js/uiCreators/UiFilterCreatorArtefact.js"></script>
+        <script type="text/javascript" src="static/js/uiCreators/UiVisualisationCreator.js"></script>
 
         <script type="text/javascript" src="static/js/uiDynamics.js"></script>
         <script type="text/javascript" src="static/js/fileUploader.js"></script>

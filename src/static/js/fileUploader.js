@@ -1,6 +1,7 @@
-function uploadFile() {
+function uploadFile(artefactName) {
+    // TODO: filter leeren
     // get file
-    let input = ($('#inputCSV'))[0];
+    let input = ($('#inputCSVRequirements'))[0]; //TODO: dynamisch abrufen
 
     if (!input) {
       alert("Um, couldn't find the fileinput element.");
@@ -14,11 +15,11 @@ function uploadFile() {
     else {
         let file = input.files[0];
         //et data = new FormData(file);
-        sendToServer(file);
+        sendToServer(file, artefactName);
     }
 }
 
-function sendToServer(data) {
+function sendToServer(data, artefactName) {
     console.log(data);
     $.ajax({
         type: 'POST',
@@ -31,10 +32,12 @@ function sendToServer(data) {
             console.log(thrownError);
         },
         success: function (data) {
-            console.log('test');
-            console.log(data);
-            let text = JSON.stringify(data);
-            $("#test").append(text);
+            console.log('Path to Json' + data);
+            // Workaround
+            let filteredDataCollector = new FilteredDataCollector();
+            filteredDataCollector.addNewOriginJson(artefactName, data);
+            // let text = JSON.stringify(data);
+            // $("#test").append(text);
         }
     })
 }
