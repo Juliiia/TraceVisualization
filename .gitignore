@@ -193,3 +193,4 @@ spec/.hash
 *.txt
 *.txt
 *.csv
+*.json
