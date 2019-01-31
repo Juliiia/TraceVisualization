@@ -69,9 +69,9 @@ class NetworkGraph:
 
             # HANDEL RELATIONS
             json_link = {}
-            json_link['source'] = source_node_id
-            json_link['target'] = target_node_id
-            json_link['ralation'] = line[2]
+            json_link['sourceId'] = source_node_id
+            json_link['targetId'] = target_node_id
+            json_link['relation'] = line[2]
             json_link['approved'] = 'false'
             json_link['origin'] = 'matching algorithm'
             json_link['reposible'] = 'tool'
