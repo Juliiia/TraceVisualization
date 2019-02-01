@@ -1,8 +1,10 @@
 class UiVisualisationCreator{
 
     static visualizeNetworkGraph(arrayWithJsons){
+        // TODO: clean svg
+
+        // create new
         console.log('# UiVisualisationCreator - visualizeNetworkGraph');
-        console.log(arrayWithJsons);
         if(arrayWithJsons.length > 0){
             for(let i=0; i < arrayWithJsons.length; i++){
                 this.createGraph(arrayWithJsons[i][1], arrayWithJsons[i][0]);
@@ -65,7 +67,7 @@ class UiVisualisationCreator{
         circles.setAttribute("cx", json.coordinates.x);
         circles.setAttribute("cy", json.coordinates.y);
         circles.setAttribute('fill', '#0000FF');
-        circles.setAttribute("r",2);
+        circles.setAttribute("r",1);
         return circles;
     }
 
@@ -77,7 +79,7 @@ class UiVisualisationCreator{
         line.setAttribute('y2', targetCoordinates.y);
         line.setAttribute('y2', targetCoordinates.y);
         line.setAttribute('stroke', 'black');
-        line.setAttribute('stroke-width', 0.5);
+        line.setAttribute('stroke-width', 0.2);
         line.setAttribute('marker-end', 'url(#'+ id +')');
         return line;
     }

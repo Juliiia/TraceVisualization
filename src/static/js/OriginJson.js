@@ -16,6 +16,7 @@ class OriginJson{
      */
     getJsonStructureFromFile(path){
         console.log('OriginJson - loadJsonStructureFromFile ' + path);
+        this.jsonObject = null;
         let that = this;
         $.getJSON('../' + path, function (data) {
             that.jsonObject = data;
@@ -26,9 +27,10 @@ class OriginJson{
             } else {
                 if(!that.uiFilterCreator){
                     that.getUiFilterCreator();
-                    // notify for finished loading
-                    new FilteredDataCollector().notifyThatOriginJsonIsCompleted();
                 }
+                // notify for finished loading
+                new FilteredDataCollector().notifyThatOriginJsonIsCompleted();
+                that.uiFilterCreator.createFilter();
             }
         });
     }
@@ -44,6 +46,11 @@ class OriginJson{
 
     getNrOfAllLinks(){
         return this.jsonObject['links'].length
+    }
+
+    getAllNodeTypes(){
+        let entities = this.jsonObject.entities;
+        // TODO: create set
     }
 
     onError(title, message){
