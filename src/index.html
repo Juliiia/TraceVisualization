@@ -14,37 +14,73 @@
         <!-- ----- Sidebar ----- -->
         <div class="ui sidebar inverted vertical menu">
 
-            <!-- REUIREMENTS -->
+            <!-- ####### NEW FILTER SECTION: Requirements ####### -->
             <div class="item" id="filterSectionRequirements">
+                <h5>
+                    Requirements
+                </h5>
                 <!-- input Requirements -->
                 <div class="input-group mb-3 smallMargin">
-
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputCSVRequirements" accept=".csv" aria-describedby="button-UploadInput">
+                        <input name="Requirements" type="file" class="custom-file-input" id="inputCSVRequirements" accept=".csv" aria-describedby="button-UploadInput">
                         <label class="custom-file-label" for="inputCSV">Choose Requirements CSV file</label>
                     </div>
 
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" id="button-UploadInput" type="button" onclick="uploadFile('Requirements')">Upload</button>
+                        <button class="btn btn-outline-secondary csvFileUploaderButton" id="button-UploadInput" form="inputCSVRequirements" type="button">Upload</button>
                     </div>
                 </div>
 
-                <div class="filterOptionsSection hidden">
+                <div class="loader hidden"></div>
+
+                <!--div class="filterOptionsSection hidden"-->
+                <div class="filterOptionsSection">
 
                     <!-- shortInfo -->
-                    <div class="shortInfoBox">
-                        <p></p>
-                    </div>
+                    <div class="shortInfoBox"></div>
 
                     <!-- Filter -->
                     <div class="filter">
+                        <div class="entityTypes">
+                            <span> Entity Types: </span>
+                            <a class="ui label">
+                              PROD
+                            </a>
+                            <a class="ui label">
+                              CLASS
+                            </a>
+                            <a class="ui label">
+                              REQU
+                            </a>
+                            <a class="ui label">
+                              mehr
+                            </a>
+                        </div>
 
+                        <div class="space"></div>
+
+                        <div class="linkeTypes">
+                            <span>Linke Types: </span>
+                             <a class="ui label">
+                              PROD
+                            </a>
+                            <a class="ui label">
+                              CLASS
+                            </a>
+                            <a class="ui label">
+                              REQU
+                            </a>
+                            <a class="ui label">
+                              mehr
+                            </a>
+                        </div>
                     </div>
 
                 </div>
 
             </div>
 
+            <!-- ####### NEW FILTER SECTION: Code ####### -->
             <a class="item">
               2
             </a>
@@ -57,7 +93,7 @@
 
             <!-- ----- Menu Head ----- -->
             <div class="ui menu">
-                <a class="item" id="sidebar" onclick="toggleSidbar()">
+                <a class="item" id="sidebarOpener" >
                     <i class="cog icon"></i>
                 </a>
             </div>
@@ -85,7 +121,7 @@
         <script type="text/javascript" src="static/js/uiCreators/UiFilterCreatorArtefact.js"></script>
         <script type="text/javascript" src="static/js/uiCreators/UiVisualisationCreator.js"></script>
 
-        <script type="text/javascript" src="static/js/uiDynamics.js"></script>
-        <script type="text/javascript" src="static/js/fileUploader.js"></script>
+        <script type="text/javascript" src="static/js/uiController.js"></script>
+        <script type="text/javascript" src="static/js/FileUploader.js"></script>
     </body>
 <html>
