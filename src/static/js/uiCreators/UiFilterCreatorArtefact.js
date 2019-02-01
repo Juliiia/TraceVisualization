@@ -72,7 +72,7 @@ class UiFilterCreatorArtefact{
         let nodesAndCounter = this.originJson.getAllNodeTypesWithNrOfTypes();
         $.each(nodesAndCounter, function (key, nr) {
            let text = key + ' (' + nr + ')';
-           let id = that.artefactName + '_entities_type_' + key;
+           let id = that.artefactName + '_entities_type_' + key; // TODO: one class for all Rules like ids
            let label = that.getLabel(text, id);
            entityTypeFilter.append(label);
         });
@@ -99,7 +99,7 @@ class UiFilterCreatorArtefact{
         let linksAndCounter = this.originJson.getAllLinkTypesWithNrOfTypes();
         $.each(linksAndCounter, function (key, nr) {
             let text = key + ' (' + nr + ')';
-            let id = that.artefactName + '_links_type_' + key;
+            let id = that.artefactName + '_links_relation_' + key;
             let label = that.getLabel(text, id);
             linkTypeFilter.append(label);
         });
@@ -117,7 +117,7 @@ class UiFilterCreatorArtefact{
 
     getLabel(text, id){
         let element = document.createElement('a');
-        element.setAttribute('class', 'ui label');
+        element.setAttribute('class', 'ui label active');
         element.setAttribute('id', id);
         element.append(text);
         element.addEventListener('click', handleLabelClick);

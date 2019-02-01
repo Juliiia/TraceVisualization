@@ -1,3 +1,4 @@
+// TODO: make static methodes with class
 function toggleSidebar() {
     $('.ui.sidebar')
         .sidebar({
@@ -12,12 +13,15 @@ function toggleSidebar() {
 function loadVisualization(){
     let filteredDataCollector = new FilteredDataCollector();
     filteredDataCollector.visualizeJsonStructure();
+    return;
 }
 
 function startFileUploader() {
     let inputElementId = $(this).attr('form');
     let inputElement = $('#' + inputElementId);
     let artifactName = inputElement.attr('name');
+
+    // get input
     let input = (inputElement)[0];
 
     if (!input) {
@@ -27,9 +31,18 @@ function startFileUploader() {
     } else if (!input.files[0]) {
         alert("Please select a file before clicking 'Load'");
     } else {
+        updateInputLabel(input.files[0].path, artifactName);
         FileUploader.uploadFile(input.files[0], artifactName);
         startLoaderAndHideFilter(artifactName);
     }
+    return;
+}
+
+function updateInputLabel(path, artifactName) {
+    let label = $('#inputCSVLabel' + artifactName);
+    label.empty();
+    label.append(path);
+    return;
 }
 
 function startLoaderAndHideFilter(artifactName) {
@@ -45,13 +58,14 @@ function startLoaderAndHideFilter(artifactName) {
 }
 
 function handleLabelClick() {
+    let filterdDataCollector = new FilteredDataCollector();
     // check if already active
     if($(this).hasClass('active')){
         $(this).removeClass('active');
-        // TODO: update Filter
+        filterdDataCollector.addDeselectionToFilter($(this).attr('id'));
     } else {
         $(this).addClass('active');
-        // TODO: update Filter
+        filterdDataCollector.removeDeselectionFromFilter($(this).attr('id'));
     }
 }
 

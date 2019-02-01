@@ -49,3 +49,8 @@ div.filter .ui.label {
 div.filter .ui.label.active {
     background-color: #3498db;
 }
+
+/* svg */
+.deselect{
+    opacity: 0.1;
+}
