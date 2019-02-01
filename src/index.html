@@ -20,7 +20,7 @@
                     Requirements
                 </h5>
                 <!-- input Requirements -->
-                <div class="input-group mb-3 smallMargin">
+                <div class="input-group mb-3">
                     <div class="custom-file">
                         <input name="Requirements" type="file" class="custom-file-input" id="inputCSVRequirements" accept=".csv" aria-describedby="button-UploadInput">
                         <label class="custom-file-label" for="inputCSV">Choose Requirements CSV file</label>
@@ -37,19 +37,23 @@
                 <div class="filterOptionsSection">
 
                     <!-- shortInfo -->
-                    <div class="shortInfoBox"></div>
+                    <div class="shortInfoBox">
+                        <span class="filterTitle"> Short Info: </span>
+                        <span>Test test test test test test</span>
+                    </div>
+                    <div class="space"></div>
 
                     <!-- Filter -->
                     <div class="filter">
                         <div class="entityTypes">
-                            <span> Entity Types: </span>
+                            <span class="filterTitle"> Entity Types: </span>
                             <a class="ui label">
                               PROD
                             </a>
                             <a class="ui label">
                               CLASS
                             </a>
-                            <a class="ui label">
+                            <a class="ui label active">
                               REQU
                             </a>
                             <a class="ui label">
@@ -60,7 +64,7 @@
                         <div class="space"></div>
 
                         <div class="linkeTypes">
-                            <span>Linke Types: </span>
+                            <span class="filterTitle">Linke Types: </span>
                              <a class="ui label">
                               PROD
                             </a>

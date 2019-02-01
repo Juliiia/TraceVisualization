@@ -17,8 +17,10 @@ class UiFilterCreatorArtefact{
 
         // add content to info box
         let infobox = $(mainSelector + ' .filterOptionsSection div.shortInfoBox');
+        let span = document.createElement('span');
         let textNode = document.createTextNode('Number of Entities: ' + this.originJson.getNrOfAllNodes() + '\n Number of Links: ' + this.originJson.getNrOfAllLinks());
-        infobox.append(textNode);
+        span.append(textNode);
+        infobox.append(span);
 
         // add Filter content
 

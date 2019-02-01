@@ -2,6 +2,7 @@
 
 $('#sidebarOpener').click(toggleSidbar);
 $('.csvFileUploaderButton').click(startFileUploader);
+$('a.label').click(handleLabelClick);
 
 
 // Methodes //////////////////////////////////////
@@ -50,4 +51,15 @@ function startLoaderAndHideFilter(artifactName) {
 
     // hide filter
     $('#filterSection' + artifactName + ' .filterOptionsSection').addClass('hidden');
+}
+
+function handleLabelClick() {
+    // check if already active
+    if($(this).hasClass('active')){
+        $(this).removeClass('active');
+        // TODO: update Filter
+    } else {
+        $(this).addClass('active');
+        // TODO: update Filter
+    }
 }
