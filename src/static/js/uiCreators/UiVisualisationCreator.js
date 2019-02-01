@@ -65,7 +65,7 @@ class UiVisualisationCreator{
 
     static highlightSelection(deselectionList){
         // select all
-        $('svg').children().removeClass('deselect');
+        $('svg').find('.deselect').removeClass('deselect');
         // deselect selection2
         if(deselectionList.length > 0){
             for(let i=0; i<deselectionList.length; i++){
