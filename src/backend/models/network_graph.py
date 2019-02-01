@@ -118,23 +118,27 @@ class NetworkGraph:
                         json_coordinates['x'] = float(row[1])
                         json_coordinates['y'] = float(row[2])
                         item['coordinates'] = json_coordinates
-                      #  item['x'] = float(row[1])
-                      #  item['y'] = float(row[2])
                         break
 
         self.json_complete['entities'] = all_nodes
 
     def writeToFile(self, path_file, logcontent, isList):
         log = open(path_file, 'w')
-        if isList:
-            for item in logcontent:
-                log.write('%s\n' % item)
-        else:
-            log.write(logcontent)
+        try:
+            if isList:
+                for item in logcontent:
+                    log.write('%s\n' % item)
+            else:
+                log.write(logcontent)
+        finally:
+            log.close()
 
     def writeJsonFile(self, path_file, content):
         outputfile = open(path_file, 'w')
-        json.dump(content, outputfile)
+        try:
+            json.dump(content, outputfile)
+        finally:
+            outputfile.close()
 
     def getNodeJson(self, node_type, node):
         # remove space
