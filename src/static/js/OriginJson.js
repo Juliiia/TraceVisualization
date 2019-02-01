@@ -48,9 +48,36 @@ class OriginJson{
         return this.jsonObject['links'].length
     }
 
-    getAllNodeTypes(){
+    getAllNodeTypesWithNrOfTypes(){
         let entities = this.jsonObject.entities;
-        // TODO: create set
+        let nodeTypesWithNr = new Object();
+
+        for(let i=0; i<entities.length; i++){
+            if(nodeTypesWithNr[entities[i].type]){
+                // increment counter
+                nodeTypesWithNr[entities[i].type] = nodeTypesWithNr[entities[i].type] + 1
+            } else {
+                // create element
+                nodeTypesWithNr[entities[i].type] = 1;
+            }
+        }
+        return nodeTypesWithNr;
+    }
+
+    getAllLinkTypesWithNrOfTypes(){
+        let links = this.jsonObject.links;
+        let linkTypesWithNr = new Object();
+
+        for(let i=0; i<links.length; i++){
+            if(linkTypesWithNr[links[i].relation]){
+                // increment counter
+                linkTypesWithNr[links[i].relation] = linkTypesWithNr[links[i].relation] + 1
+            } else {
+                // create element
+                linkTypesWithNr[links[i].relation] = 1;
+            }
+        }
+        return linkTypesWithNr;
     }
 
     onError(title, message){
