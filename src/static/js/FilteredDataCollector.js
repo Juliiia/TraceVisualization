@@ -19,7 +19,7 @@ class FilteredDataCollector{
     addNewOriginJson(artefaktName, pathToJsonFile){
         console.log('FilteredDataCollector - addNewOriginJson');
         this.newDataAvailable = 'LOADING';
-        // replace an old artefact json
+        // replace an old artifact json
         if(this.originJsonList.length > 0){
             for(let i=0; i<this.originJsonList.length; i++){
                 if(this.originJsonList[i].artefactName == artefaktName){
@@ -133,8 +133,19 @@ class FilteredDataCollector{
         return;
     }
 
+    /**
+     * checks if the variable jsonDataCompleted == true of all OriginJson objects
+     */
     notifyThatOriginJsonIsCompleted(){
         console.log('FilteredDataCollector - notifyThatOriginJsonIsCompleted');
+
+        for(let i=0; i<this.originJsonList.length; i++){
+            if(!this.originJsonList[i].jsonDataCompleted){
+                // if there is only one originjson objects which is still loading -> stop
+                return;
+            }
+        }
+        // continue if all jsonorigin objects are completed
         this.newDataAvailable = 'AVAILABLE';
         if(this.askForVisualisation){
             this.visualizeJsonStructure();

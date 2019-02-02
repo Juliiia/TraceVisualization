@@ -6,6 +6,7 @@ class OriginJson{
         this.jsonObject = null;
         this.getJsonStructureFromFile(pathToJsonFile);
         this.uiFilterCreator = null;
+        this.jsonDataCompleted = false;
     }
 
     /**
@@ -17,6 +18,7 @@ class OriginJson{
     getJsonStructureFromFile(path){
         console.log('OriginJson - loadJsonStructureFromFile ' + path);
         this.jsonObject = null;
+        this.jsonDataCompleted = false;
         let that = this;
         $.getJSON('../' + path, function (data) {
             that.jsonObject = data;
@@ -29,6 +31,7 @@ class OriginJson{
                     that.getUiFilterCreator();
                 }
                 // notify for finished loading
+                that.jsonDataCompleted = true;
                 new FilteredDataCollector().notifyThatOriginJsonIsCompleted();
                 that.uiFilterCreator.createFilter();
             }
