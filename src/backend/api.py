@@ -1,7 +1,7 @@
 #!/usr/bin/python3.6
 import json
 from io import StringIO
-from flask import Flask, request, jsonify,Response
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS, cross_origin
 
 from models.network_graph import NetworkGraph
@@ -10,12 +10,13 @@ app = Flask(__name__)
 CORS(app, origins='http://localhost:8000')
 
 
-@app.route("/fileuploader", methods=["POST"])
+@app.route("/fileuploader", methods=["POST","GET"])
 def print_out():
-    file = request.get_data()
-    networkgraph = NetworkGraph(StringIO(file.decode("utf-8")))
+    path = request.form["path"]
+    header = request.form["header"]
+    csv = open(path, "r")
+    networkgraph = NetworkGraph(header, csv)
     text = networkgraph.returnJsonWithCoordinatespath()
-    # return jsonify(text)
     return text
 
 
