@@ -14,7 +14,7 @@
 }
 
 .hidden{
-    display: none;
+    display: none !important;
 }
 
 .space {
@@ -37,10 +37,6 @@
   100% { transform: rotate(360deg); }
 }
 
-div.filterOptionsSection span.filterTitle{
-    padding-right: 15px;
-}
-
 /* Tags */
 div.filter .ui.label {
     background-color: #666666;
@@ -48,9 +44,4 @@ div.filter .ui.label {
 
 div.filter .ui.label.active {
     background-color: #3498db;
-}
-
-/* svg */
-.deselect{
-    opacity: 0.1;
 }

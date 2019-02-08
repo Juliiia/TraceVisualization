@@ -5,6 +5,7 @@ class UiVisualisationCreator{
 
         // create new
         console.log('# UiVisualisationCreator - visualizeNetworkGraph');
+        console.log(arrayWithJsons);
         if(arrayWithJsons.length > 0){
             for(let i=0; i < arrayWithJsons.length; i++){
                 this.createGraph(arrayWithJsons[i][1], arrayWithJsons[i][0]);
@@ -51,6 +52,7 @@ class UiVisualisationCreator{
         group.append(nodeGroup);
         parentSelector.append(group);
 
+
         // pan-zoom
         let panZoomInstance = svgPanZoom('#svgVis', {
             zoomEnabled: true,
@@ -60,7 +62,7 @@ class UiVisualisationCreator{
             minZoom: 0.1
           });
 
-        return;
+        return true;
     }
 
     static highlightSelection(deselectionList){
@@ -82,7 +84,23 @@ class UiVisualisationCreator{
         circles.setAttribute('fill', '#0000FF');
         circles.setAttribute('fill-opacity', 1);
         circles.setAttribute('class', cicleClass);
-        circles.setAttribute("r",1);
+
+        circles.setAttribute('data-name', json.name);
+        circles.setAttribute('data-neighbors', json.neighbors);
+        circles.setAttribute('data-type', json.type);
+        circles.setAttribute('data-id', json.id);
+        circles.setAttribute('data-artifact', json.artifact);
+
+        let radius = json.neighbors * 0.5;
+        if(radius < 1){
+            radius = 1;
+        } else if(radius > 8){
+            radius = 8;
+        }
+
+        circles.setAttribute("r", radius);
+        circles.addEventListener('click', handleNodeClick);
+
         return circles;
     }
 
@@ -109,7 +127,7 @@ class UiVisualisationCreator{
         arrow.setAttribute('id', id);
         arrow.setAttribute('markerWidth', 10);
         arrow.setAttribute('markerHeight', 10);
-        arrow.setAttribute('refX', 0);
+        arrow.setAttribute('refX', 14);
         arrow.setAttribute('refY', 3);
         arrow.setAttribute('orient', 'auto');
         arrow.setAttribute('markerUnits', 'strokeWidth');

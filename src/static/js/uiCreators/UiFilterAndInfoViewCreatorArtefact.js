@@ -1,13 +1,15 @@
-class UiFilterCreatorArtefact{
+class UiFilterAndInfoViewCreatorArtefact{
 
     constructor(artefactName, originJsonReference) {
-        console.log('# UiFilterCreatorArtefact - Constructor');
+        console.log('# UiFilterAndInfoViewCreatorArtefact - Constructor');
         this.artefactName = artefactName;
         this.originJson = originJsonReference;
     }
 
+    // TODO: UiFilterViewCreator erstellen
+
     createFilter(){
-        console.log('UiFilterCreatorArtefact - createFilter');
+        console.log('UiFilterAndInfoViewCreatorArtefact - createFilter');
         let mainSelector = 'div#filterSection' + this.artefactName + '.item';
 
         // hide loading
@@ -24,6 +26,12 @@ class UiFilterCreatorArtefact{
 
         // add link type filter
         this.updateLinkTypeFilter(mainSelector);
+
+        // create info view
+        UiDashboardCreator.createArtifactInfoView(this.artefactName, this.originJson.getNrOfAllNodes(), this.originJson.getNrOfAllLinks());
+
+        // create color legend
+        UiDashboardCreator.createColorLegend(this.artefactName, this.originJson.getAllNodeTypesWithNrOfTypes(), this.originJson.getAllLinkTypesWithNrOfTypes());
 
         return;
     }
@@ -47,7 +55,7 @@ class UiFilterCreatorArtefact{
 
     updateShortInfo(mainSelectorSting){
         let infobox = $(mainSelectorSting + ' .filterOptionsSection div.shortInfoBox');
-        let titleSpan = this.getFilterTitle('Short Info:');
+        let titleSpan = UiElementLib.getSubSectionTitle('Short Info:');
         let textSpan = document.createElement('span');
         let textNode = document.createTextNode('Number of Entities: ' + this.originJson.getNrOfAllNodes() + '\n Number of Links: ' + this.originJson.getNrOfAllLinks());
         textSpan.append(textNode);
@@ -65,21 +73,21 @@ class UiFilterCreatorArtefact{
         entityTypeFilter.setAttribute('class', 'entityTypeFilter');
 
         // add title
-        let title = this.getFilterTitle('Entity Types:');
+        let title = UiElementLib.getSubSectionTitle('Entity Types:');
         entityTypeFilter.append(title);
 
         // add options
         let nodesAndCounter = this.originJson.getAllNodeTypesWithNrOfTypes();
         $.each(nodesAndCounter, function (key, nr) {
            let text = key + ' (' + nr + ')';
-           let id = that.artefactName + '_entities_type_' + key; // TODO: one class for all Rules like ids
-           let label = that.getLabel(text, id);
+           let id = UiElementLib.getGlobalEntityFilterId(that.artefactName, key);
+           let label = UiElementLib.getLabel(text, id, handleLabelClick);
            entityTypeFilter.append(label);
         });
 
         filter.append(entityTypeFilter);
         // add space behind
-        filter.append(this.getSpacer());
+        filter.append(UiElementLib.getSpacer());
         return;
     }
 
@@ -92,15 +100,15 @@ class UiFilterCreatorArtefact{
         linkTypeFilter.setAttribute('class', 'linkTypeFilter');
 
         // add title
-        let title = this.getFilterTitle('Link Types:');
+        let title = UiElementLib.getSubSectionTitle('Link Types:');
         linkTypeFilter.append(title);
 
         // add options
         let linksAndCounter = this.originJson.getAllLinkTypesWithNrOfTypes();
         $.each(linksAndCounter, function (key, nr) {
             let text = key + ' (' + nr + ')';
-            let id = that.artefactName + '_links_relation_' + key;
-            let label = that.getLabel(text, id);
+            let id = UiElementLib.getGlobalLinkFilterId(that.artefactName, key);
+            let label = UiElementLib.getLabel(text, id, handleLabelClick);
             linkTypeFilter.append(label);
         });
 
@@ -108,25 +116,4 @@ class UiFilterCreatorArtefact{
         return;
     }
 
-    getFilterTitle(title){
-        let element = document.createElement('span');
-        element.setAttribute('class', 'filterTitle');
-        element.append(title);
-        return element;
-    }
-
-    getLabel(text, id){
-        let element = document.createElement('a');
-        element.setAttribute('class', 'ui label active');
-        element.setAttribute('id', id);
-        element.append(text);
-        element.addEventListener('click', handleLabelClick);
-        return element;
-    }
-
-    getSpacer(){
-        let element = document.createElement('div');
-        element.setAttribute('class', 'space');
-        return element;
-    }
 }

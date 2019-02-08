@@ -8,8 +8,6 @@ class FilteredDataCollector{
             this.deselectedFilterList = [];
             this.originJsonList = [];
             filteredDataCollectorInstance = this;
-            this.newDataAvailable = 'NO'; /* contains 3 states: NO, LOADING, AVAILABLE */
-            this.askForVisualisation = false;
             this.isfilterChanged = false;
         } else {
             return filteredDataCollectorInstance;
@@ -30,34 +28,16 @@ class FilteredDataCollector{
         }
         let originJson = new OriginJson(artefaktName, pathToJsonFile);
         this.originJsonList.push(originJson);
+        console.log(this.originJsonList.length);
     }
 
-    /**
-     * manage visualization Requests:#
-     *      a) ask for visualization before new json is loaded -> askForVisualisation = true
-     *      b) ask for visualization new Json is available but no new filter -> start visualization
-     *      c) ask for visualization but no new filters are selected and no new Json are available-> do nothing
-     *      d) ask for visualization no new Json is available but new filters -> start visualization
-     */
+
     visualizeJsonStructure(){
         console.log('FilteredDataCollector - visualizeJsonStructure');
-        if(this.newDataAvailable == 'LOADING'){
-            // story a)
-            console.log('ask Later');
-            this.askForVisualisation = true;
-            return;
-
-        } else if(this.newDataAvailable == 'AVAILABLE') {
-            // story b)
-            this.visualizeJsonStructureConsiderFilter();
-            this.newDataAvailable = 'NO';
-            return;
-        } else if(this.isfilterChanged){
-            // story d)
+        if(this.isfilterChanged){
             this.updateVisualisation();
             return;
         }
-        // story c)
         console.log('do nothing');
         return;
     }
@@ -138,19 +118,7 @@ class FilteredDataCollector{
      */
     notifyThatOriginJsonIsCompleted(){
         console.log('FilteredDataCollector - notifyThatOriginJsonIsCompleted');
-
-        for(let i=0; i<this.originJsonList.length; i++){
-            if(!this.originJsonList[i].jsonDataCompleted){
-                // if there is only one originjson objects which is still loading -> stop
-                return;
-            }
-        }
-        // continue if all jsonorigin objects are completed
-        this.newDataAvailable = 'AVAILABLE';
-        if(this.askForVisualisation){
-            this.visualizeJsonStructure();
-            this.askForVisualisation = false;
-        }
+        this.visualizeJsonStructureConsiderFilter();
         return;
     }
 

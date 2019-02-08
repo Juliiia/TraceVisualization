@@ -5,11 +5,16 @@ class FileUploader {
         let filteredDataCollector = new FilteredDataCollector();
         filteredDataCollector.notifyThatWaitForNewJsonData();
 
+        let formdata = new FormData();
+        formdata.append('header', artifactName);
+        formdata.append('path', data.path);
+        console.log(formdata);
+
         // query to server
         $.ajax({
             type: 'POST',
             url: 'http://127.0.0.1:5000/fileuploader',
-            data: data,
+            data: formdata,
             cache: false,
             processData: false,
             contentType: false,
@@ -21,6 +26,7 @@ class FileUploader {
                 console.log('Path to Json' + data);
                 filteredDataCollector.addNewOriginJson(artifactName, data);
             }
-        })
+
+        });
     }
 }
