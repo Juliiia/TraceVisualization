@@ -32,7 +32,7 @@ class OriginJson{
                 }
                 // notify for finished loading
                 that.jsonDataCompleted = true;
-                new FilteredDataCollector().notifyThatOriginJsonIsCompleted();
+                new FilteredDataCollector().notifyThatOriginJsonIsCompleted(that.artefactName);
                 that.uiFilterCreator.createFilter();
             }
         });

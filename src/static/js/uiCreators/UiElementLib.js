@@ -74,6 +74,14 @@ class  UiElementLib {
         return element;
     }
 
+    static getSVGTag(id, width, height){
+        let element = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        element.setAttribute('id', id);
+        element.setAttribute('width', width);
+        element.setAttribute('height', height);
+        return element;
+    }
+
     static getSpacer(){
         let element = document.createElement('div');
         element.setAttribute('class', 'space');
@@ -88,5 +96,9 @@ class  UiElementLib {
 
     static getGlobalLinkFilterId(artifactName, localId){
         return artifactName + '_links_relation_' + localId;
+    }
+
+    static getSVGId(artifactName){
+        return 'svg' + artifactName;
     }
 }

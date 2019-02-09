@@ -43,7 +43,7 @@ class FilteredDataCollector{
     }
 
     // TODO: maybe better to hold an array of all jsons and only update them if json changes
-    visualizeJsonStructureConsiderFilter(){
+    visualizeJsonStructureConsiderFilter(artifactName){
         console.log('FilteredDataCollector - visualizeJsonStructureConsiderFilter');
         if (this.originJsonList.length > 0) {
             // if jsons are existing and there was a new filter selected or a new json was loaded
@@ -51,12 +51,15 @@ class FilteredDataCollector{
 
             // get all data structures
             for (let i = 0; i < this.originJsonList.length; i++) {
-                let item = [];
-                item[0] = this.originJsonList[i].artefactName;
-                item[1] = this.originJsonList[i].jsonObject;
-                arrayWithJsons[i] = item;
+                if(artifactName == this.originJsonList[i].artefactName){
+                    let item = [];
+                    item[0] = this.originJsonList[i].artefactName;
+                    item[1] = this.originJsonList[i].jsonObject;
+                    arrayWithJsons.push(item);
+                }
             }
             // send json to visualise
+            console.log(arrayWithJsons);
             UiVisualisationCreator.visualizeNetworkGraph(arrayWithJsons);
 
             // highlight selections
@@ -116,9 +119,9 @@ class FilteredDataCollector{
     /**
      * checks if the variable jsonDataCompleted == true of all OriginJson objects
      */
-    notifyThatOriginJsonIsCompleted(){
+    notifyThatOriginJsonIsCompleted(artifactName){
         console.log('FilteredDataCollector - notifyThatOriginJsonIsCompleted');
-        this.visualizeJsonStructureConsiderFilter();
+        this.visualizeJsonStructureConsiderFilter(artifactName);
         return;
     }
 

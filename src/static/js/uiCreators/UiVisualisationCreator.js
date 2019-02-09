@@ -20,8 +20,19 @@ class UiVisualisationCreator{
         let links = jsonData.links;
         let entityCoordinatesMap = new Object();
 
+        // create parent svg and title
+        let parentElement = $('#visualisation');
+        let childDiv = document.createElement('div');
+        childDiv.setAttribute('id', 'svgDiv' + artefactName);
+
+        let childId = UiElementLib.getSVGId(artefactName);
+
+        // clean old
+        this.removeChildElementIfExists(parentElement, '#' + childId);
+
+        let svgElement = UiElementLib.getSVGTag(childId, 1000, 800);
+
         // create group for each artifact json
-        let parentSelector = $('#svgVis');
         let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
         group.setAttribute("id", artefactName);
 
@@ -47,14 +58,23 @@ class UiVisualisationCreator{
             linkGroup.append(link);
         }
 
+        // create Title
+        let sectionTitle = document.createElement('div');
+        sectionTitle.setAttribute('class', 'paddingSmall');
+
+        // append all
+        sectionTitle.append(UiElementLib.getSectionTitle(artefactName + ' Networkgraph'));
+        parentElement.append(childDiv);
+        childDiv.append(sectionTitle);
+        childDiv.append(svgElement);
         group.append(linkGroup);
         group.append(markerGroup);
         group.append(nodeGroup);
-        parentSelector.append(group);
+        svgElement.append(group);
 
 
         // pan-zoom
-        let panZoomInstance = svgPanZoom('#svgVis', {
+        let panZoomInstance = svgPanZoom('#' + childId, {
             zoomEnabled: true,
             controlIconsEnabled: true,
             fit: true,
@@ -133,6 +153,12 @@ class UiVisualisationCreator{
         arrow.setAttribute('markerUnits', 'strokeWidth');
         arrow.append(path);
         return arrow;
+    }
+
+    static removeChildElementIfExists(parentElement, childSelector){
+        if(parentElement.find(childSelector).length !== 0){
+            parentElement.find(childSelector).remove();
+        }
     }
 
 }
