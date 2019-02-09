@@ -102,6 +102,14 @@ class EntityAndRelationTypeManager{
         this.displayAllTypesReadMode();
     }
 
+    getColorOfType(type){
+        let colorCode = '#e6e6e6';
+        if(this.typeJson[type]){
+            colorCode = this.typeJson[type][0].color;
+        }
+        return colorCode;
+    }
+
     onError(title, message){
         // TODO: ein zentrales Alert
         let text = title + 'inside OriginJson: \n' + message;

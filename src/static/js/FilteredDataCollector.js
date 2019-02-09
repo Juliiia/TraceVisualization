@@ -9,6 +9,7 @@ class FilteredDataCollector{
             this.originJsonList = [];
             filteredDataCollectorInstance = this;
             this.isfilterChanged = false;
+            this.uiVisualisationCreator = new UiVisualisationCreator();
         } else {
             return filteredDataCollectorInstance;
         }
@@ -60,7 +61,7 @@ class FilteredDataCollector{
             }
             // send json to visualise
             console.log(arrayWithJsons);
-            UiVisualisationCreator.visualizeNetworkGraph(arrayWithJsons);
+            this.uiVisualisationCreator.visualizeNetworkGraph(arrayWithJsons);
 
             // highlight selections
             if(this.isfilterChanged){
@@ -77,7 +78,7 @@ class FilteredDataCollector{
 
     updateVisualisation(){
         console.log('FilteredDataCollector - updateVisualisation');
-        UiVisualisationCreator.highlightSelection(this.deselectedFilterList);
+        this.uiVisualisationCreator.highlightSelection(this.deselectedFilterList);
         this.isfilterChanged = false;
     }
 

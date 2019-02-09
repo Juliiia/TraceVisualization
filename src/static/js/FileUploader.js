@@ -21,6 +21,7 @@ class FileUploader {
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
                 filteredDataCollector.notifyIfErrorOccur();
+                // TODO: display to client
             },
             success: function (data) {
                 console.log('Path to Json' + data);

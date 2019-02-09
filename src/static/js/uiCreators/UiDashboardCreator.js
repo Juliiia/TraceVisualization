@@ -1,6 +1,10 @@
 class UiDashboardCreator{
 
-    static createArtifactInfoView(artifactName, nrOfNodes, nrOfLinks){
+    constructor() {
+        this.entityAndRelationTypesManager = new EntityAndRelationTypeManager();
+    }
+
+    createArtifactInfoView(artifactName, nrOfNodes, nrOfLinks){
         console.log('UiDashboardCreator - createArtifactInfoView');
         let parentElement = $('#artifactInformationView');
         let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName);
@@ -19,7 +23,8 @@ class UiDashboardCreator{
         return true;
     }
 
-    static createColorLegend(artifactName, nodetypes, linktypes) {
+    createColorLegend(artifactName, nodetypes, linktypes) {
+        let that = this;
         let parentElement = $('#colorLegendView');
         let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName)
 
@@ -35,9 +40,10 @@ class UiDashboardCreator{
 
         // append labels for entity types
         $.each(nodetypes, function (key, nr) {
+            console.log(key);
            let text = key + ' (' + nr + ')';
            let id = UiElementLib.getGlobalEntityFilterId(artifactName, key);
-           let label = UiElementLib.getLabel(text, id);
+           let label = UiElementLib.getLabelWithCustomColor(text, id, null, that.entityAndRelationTypesManager.getColorOfType(key));
            subSectionEntities.append(label);
         });
 
@@ -49,7 +55,7 @@ class UiDashboardCreator{
         $.each(linktypes, function (key, nr) {
             let text = key + ' (' + nr + ')';
             let id = UiElementLib.getGlobalLinkFilterId(artifactName, key);
-            let label = UiElementLib.getLabel(text, id);
+            let label = UiElementLib.getLabel(text, id, null);
             subSectionLinks.append(label);
         });
 
@@ -60,7 +66,7 @@ class UiDashboardCreator{
         return true;
     }
 
-    static removeChildElementIfExists(parentElement, childSelector){
+    removeChildElementIfExists(parentElement, childSelector){
         if(parentElement.find(childSelector).length !== 0){
             parentElement.find(childSelector).remove();
         }

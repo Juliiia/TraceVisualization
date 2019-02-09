@@ -4,6 +4,7 @@ class UiFilterAndInfoViewCreatorArtefact{
         console.log('# UiFilterAndInfoViewCreatorArtefact - Constructor');
         this.artefactName = artefactName;
         this.originJson = originJsonReference;
+        this.uiDashboardCreator = new UiDashboardCreator();
     }
 
     // TODO: UiFilterViewCreator erstellen
@@ -28,10 +29,10 @@ class UiFilterAndInfoViewCreatorArtefact{
         this.updateLinkTypeFilter(mainSelector);
 
         // create info view
-        UiDashboardCreator.createArtifactInfoView(this.artefactName, this.originJson.getNrOfAllNodes(), this.originJson.getNrOfAllLinks());
+        this.uiDashboardCreator.createArtifactInfoView(this.artefactName, this.originJson.getNrOfAllNodes(), this.originJson.getNrOfAllLinks());
 
         // create color legend
-        UiDashboardCreator.createColorLegend(this.artefactName, this.originJson.getAllNodeTypesWithNrOfTypes(), this.originJson.getAllLinkTypesWithNrOfTypes());
+        this.uiDashboardCreator.createColorLegend(this.artefactName, this.originJson.getAllNodeTypesWithNrOfTypes(), this.originJson.getAllLinkTypesWithNrOfTypes());
 
         return;
     }

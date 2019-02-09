@@ -1,6 +1,17 @@
+let uiVisualisationCreator = null;
+
 class UiVisualisationCreator{
 
-    static visualizeNetworkGraph(arrayWithJsons){
+    constructor() {
+        if(uiVisualisationCreator){
+            return uiVisualisationCreator;
+        } else {
+            this.entityAndRelationTypeManager = new EntityAndRelationTypeManager();
+            uiVisualisationCreator = this;
+        }
+    }
+
+    visualizeNetworkGraph(arrayWithJsons){
         // TODO: clean svg
 
         // create new
@@ -14,7 +25,7 @@ class UiVisualisationCreator{
         return;
     }
 
-    static createGraph(jsonData, artefactName){
+    createGraph(jsonData, artefactName){
         console.log('UiVisualisationCreator - createGraph');
         let entities = jsonData.entities;
         let links = jsonData.links;
@@ -85,7 +96,7 @@ class UiVisualisationCreator{
         return true;
     }
 
-    static highlightSelection(deselectionList){
+    highlightSelection(deselectionList){
         // select all
         $('svg').find('.deselect').removeClass('deselect');
         // deselect selection2
@@ -96,12 +107,12 @@ class UiVisualisationCreator{
         }
     }
 
-    static drawNode(json, artifactName){
+    drawNode(json, artifactName){
         let cicleClass = artifactName + '_entities_type_' + json.type;
         let circles = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circles.setAttribute("cx", json.coordinates.x);
         circles.setAttribute("cy", json.coordinates.y);
-        circles.setAttribute('fill', '#0000FF');
+        circles.setAttribute('fill', this.entityAndRelationTypeManager.getColorOfType(json.type));
         circles.setAttribute('fill-opacity', 1);
         circles.setAttribute('class', cicleClass);
 
@@ -114,8 +125,8 @@ class UiVisualisationCreator{
         let radius = json.neighbors * 0.5;
         if(radius < 1){
             radius = 1;
-        } else if(radius > 8){
-            radius = 8;
+        } else if(radius > 6){
+            radius = 6;
         }
 
         circles.setAttribute("r", radius);
@@ -124,7 +135,7 @@ class UiVisualisationCreator{
         return circles;
     }
 
-    static drawLine(id, artifactName, json, sourceCoordinates, targetCoordinates){
+    drawLine(id, artifactName, json, sourceCoordinates, targetCoordinates){
         let lineClass= artifactName + '_links_relation_' + json.relation;
         let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttribute('x1', sourceCoordinates.x);
@@ -139,7 +150,7 @@ class UiVisualisationCreator{
         return line;
     }
 
-    static drawArrow(id){
+    drawArrow(id){
         let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', 'M0,0 L0,6 L9,3 z');
         path.setAttribute('fill', 'black');
@@ -155,7 +166,7 @@ class UiVisualisationCreator{
         return arrow;
     }
 
-    static removeChildElementIfExists(parentElement, childSelector){
+    removeChildElementIfExists(parentElement, childSelector){
         if(parentElement.find(childSelector).length !== 0){
             parentElement.find(childSelector).remove();
         }
