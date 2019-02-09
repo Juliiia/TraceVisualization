@@ -38,9 +38,9 @@ class NetworkGraph:
         for line in reader:
 
             source_node_id = line[0].strip() + ':' + line[1].strip()
-            target_node_id = line[3].strip() + ':' + line[4].strip()
+            target_node_id = ''
+            relation = ''
             allNodes.append(source_node_id)
-            allNodes.append(target_node_id)
 
             # HANDLE NODES
             if source_node_id not in unique_nodes_set:
@@ -52,20 +52,27 @@ class NetworkGraph:
                 # add id to unique_nodes_set
                 unique_nodes_set.add(source_node_id)
 
-            if target_node_id not in unique_nodes_set:
-                # create and add node json
-                json_node_target = self.getNodeJson(line[3], line[4])
-                array_nodes.append(json_node_target)
-                # add node to graph
-                self.graph.add_node(str(target_node_id))
-                # add id to unique_nodes_set
-                unique_nodes_set.add(target_node_id)
+            if len(line) > 3 :
+                target_node_id = line[3].strip() + ':' + line[4].strip()
+                allNodes.append(target_node_id)
+                relation = line[2]
+
+                if target_node_id not in unique_nodes_set:
+                    # create and add node json
+                    json_node_target = self.getNodeJson(line[3], line[4])
+                    array_nodes.append(json_node_target)
+                    # add node to graph
+                    self.graph.add_node(str(target_node_id))
+                    # add id to unique_nodes_set
+                    unique_nodes_set.add(target_node_id)
+
+
 
             # HANDEL RELATIONS
             json_link = {}
             json_link['sourceId'] = source_node_id
             json_link['targetId'] = target_node_id
-            json_link['relation'] = line[2]
+            json_link['relation'] = relation
             json_link['approved'] = 'false'
             json_link['origin'] = 'matching algorithm'
             json_link['reposible'] = 'tool'
