@@ -7,10 +7,6 @@
     width: 95%;
 }
 
-.smallMargin {
-    margin: 5px;
-}
-
 .shortInfoBox p {
     color: white;
     width: 100%;
@@ -18,12 +14,12 @@
 }
 
 .hidden{
-    display: none;
+    display: none !important;
 }
 
 .space {
     width: 100%;
-    height: 15px;
+    height: 20px;
 }
 
 .loader{
@@ -39,4 +35,13 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Tags */
+div.filter .ui.label {
+    background-color: #666666;
+}
+
+div.filter .ui.label.active {
+    background-color: #3498db;
 }

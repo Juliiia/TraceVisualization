@@ -1,0 +1,41 @@
+body,
+body.pushable>.pusher {
+    background-color: #888888;
+}
+
+.ui.inverted.menu {
+    background: #4d4d4d;
+}
+
+div.dashboardElement {
+    background-color: white;
+    border-radius: 15px;
+    border-color: #999999;
+    margin: 10px;
+    overflow: hidden;
+}
+
+div.dashboardElement .subElement {
+    margin-bottom: 10px;
+}
+
+div.paddingSmall {
+    padding: 15px;
+}
+
+div.smallElement {
+    width: 22%;
+    min-width: 250px;
+}
+
+.floatRight {
+    float: right;
+}
+
+/* special information */
+
+div#visualisation {
+    float: left;
+    min-width: 1000px;
+    width: 75%;
+}

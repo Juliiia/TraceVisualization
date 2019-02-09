@@ -9,25 +9,19 @@ import pandas as pandas
 
 
 class NetworkGraph:
-    def __init__(self, file):
-        self.name = 'codeArtefact'  # TODO: dynamisch einfügen
+    def __init__(self, name, file):
+        self.name = name
         self.file = file
         self.json_complete = {}
         self.graph = network.Graph()
         self.log_path = 'src/backend/log/'
         self.dataexchange_path = 'src/backend/dataExchange/'
 
-    def returnJsonWithCoordinates(self):
-        self.createJsonAndGraph()
-        path_to_file = self.calculateCoordinates()
-        self.addCoordinatesToJson(path_to_file)
-        return self.json_complete
-
     # workaround
     def returnJsonWithCoordinatespath(self):
         self.createJsonAndGraph()
-        path_to_file = self.calculateCoordinates()
-        self.addCoordinatesToJson(path_to_file)
+        self.calculateCoordinates()
+        self.addCoordinatesToJson()
         path_to_json = self.dataexchange_path + self.name + '.json'
         self.writeJsonFile(path_to_json, self.json_complete)
         return path_to_json
@@ -86,6 +80,7 @@ class NetworkGraph:
 
         self.writeToFile(self.log_path + 'unique.txt', unique_nodes_set, True)
         self.writeToFile(self.log_path + 'allNodes.txt', allNodes, True)
+        return
 
     def calculateCoordinates(self):
         pos = network.spring_layout(self.graph, k=0.04, iterations=10, scale=100)
@@ -94,33 +89,23 @@ class NetworkGraph:
         # Set entrance into network and exit from network as top left and bottom right nodes.
         pos[-2] = [0.0, 0.0]
         pos[-1] = [900.0, 900.0]
-        # Structure output in pandas dataframe.
-        positions = pandas.DataFrame(pos).transpose()
-        positions.columns = ['X', 'Y']
-        # Export to csv.
-        path_to_file = self.dataexchange_path + 'nodepositions.csv'
-        positions.to_csv(path_to_file, encoding='utf-8', index_label='ID')
-        return path_to_file
+        return
 
-    def addCoordinatesToJson(self, path_to_file):
+    def addCoordinatesToJson(self):
         all_nodes = self.json_complete['entities']
-        with open(path_to_file, 'rt') as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            next(csv_reader, None)  # skip the headers
+
+        for node_id in network.nodes(self.graph):
+            node = self.graph.node[node_id]
 
             for item in all_nodes:
-                node_id = item['id']
+                if node_id == item['id']:
 
-                for row in csv_reader:
-                    if node_id == row[0]:
-
-                        json_coordinates = {}
-                        json_coordinates['x'] = float(row[1])
-                        json_coordinates['y'] = float(row[2])
-                        item['coordinates'] = json_coordinates
-                        break
-
-        self.json_complete['entities'] = all_nodes
+                    json_coordinates = {}
+                    json_coordinates['x'] = float(node['pos'][0])
+                    json_coordinates['y'] = float(node['pos'][1])
+                    item['coordinates'] = json_coordinates
+                    item['neighbors'] = len(list(self.graph.neighbors(node_id)))
+        return
 
     def writeToFile(self, path_file, logcontent, isList):
         log = open(path_file, 'w')
@@ -132,6 +117,7 @@ class NetworkGraph:
                 log.write(logcontent)
         finally:
             log.close()
+        return
 
     def writeJsonFile(self, path_file, content):
         outputfile = open(path_file, 'w')
@@ -139,6 +125,7 @@ class NetworkGraph:
             json.dump(content, outputfile)
         finally:
             outputfile.close()
+        return
 
     def getNodeJson(self, node_type, node):
         # remove space
@@ -148,6 +135,7 @@ class NetworkGraph:
         json_node_source = {}
         json_node_source['type'] = node_type
         json_node_source['name'] = node
+        json_node_source['artifact'] = self.name
         source_node_id = node_type + ':' + node
         json_node_source['id'] = source_node_id
         return json_node_source

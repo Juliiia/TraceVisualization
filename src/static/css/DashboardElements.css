@@ -1,0 +1,58 @@
+/* Visualisation svg */
+.deselect{
+    opacity: 0.1;
+}
+
+span.sectionTitle {
+    font-weight: bold;
+    padding-top: 15px;
+    padding-top: 5px;
+}
+
+span.subSectionTitle {
+    padding-right: 15px;
+}
+
+div.keyValuePair {
+    color: #888888;
+}
+
+div.keyValuePair span.valueOfKey {
+    padding-left: 10px;
+    color: black;
+}
+
+.ui.label {
+    margin-top: 0.142857em;
+    margin-bottom: 0.142857em;
+}
+
+.ui.button.highlight {
+    background: #3498db;
+    color: white;
+}
+
+div.beginOfLineLabel {
+    min-width: 5%;
+}
+
+.clear{
+    clear: both;
+}
+
+/* special elements */
+#settingsSidebar .inner-group{
+    display: block;
+    width: 10%;
+    float: left;
+}
+
+#settingsSidebar textarea{
+    margin-left: 10px;
+    width: 75%;
+    margin-right: 0px;
+}
+
+#settingsSidebar .label{
+    width: 60px;
+}

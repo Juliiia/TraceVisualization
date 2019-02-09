@@ -7,23 +7,26 @@
         <link rel="stylesheet" type="text/css" href="../node_modules/semantic-ui/dist/semantic.min.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="static/css/filter.css">
+        <link rel="stylesheet" type="text/css" href="static/css/Dashboard.css">
+        <link rel="stylesheet" type="text/css" href="static/css/DashboardElements.css">
 
     </head>
 
     <body>
         <!-- ----- Sidebar ----- -->
-        <div class="ui sidebar inverted vertical menu">
+        <div id="uploadSidebar" class="ui sidebar inverted vertical menu">
 
             <!-- ####### NEW FILTER SECTION: Requirements ####### -->
             <div class="item" id="filterSectionRequirements">
                 <h5>
-                    Requirements
+                    Requirements Analysis
                 </h5>
+
                 <!-- input Requirements -->
-                <div class="input-group mb-3 smallMargin">
+                <div class="input-group mb-3">
                     <div class="custom-file">
                         <input name="Requirements" type="file" class="custom-file-input" id="inputCSVRequirements" accept=".csv" aria-describedby="button-UploadInput">
-                        <label class="custom-file-label" for="inputCSV">Choose Requirements CSV file</label>
+                        <label id="inputCSVLabelRequirements" class="custom-file-label" for="inputCSV">Choose CSV file</label>
                     </div>
 
                     <div class="input-group-append">
@@ -33,60 +36,84 @@
 
                 <div class="loader hidden"></div>
 
-                <!--div class="filterOptionsSection hidden"-->
-                <div class="filterOptionsSection">
+                <!-- Filter -->
+                <div class="filterOptionsSection hidden">
 
                     <!-- shortInfo -->
                     <div class="shortInfoBox"></div>
+                    <div class="space"></div>
 
                     <!-- Filter -->
-                    <div class="filter">
-                        <div class="entityTypes">
-                            <span> Entity Types: </span>
-                            <a class="ui label">
-                              PROD
-                            </a>
-                            <a class="ui label">
-                              CLASS
-                            </a>
-                            <a class="ui label">
-                              REQU
-                            </a>
-                            <a class="ui label">
-                              mehr
-                            </a>
-                        </div>
-
-                        <div class="space"></div>
-
-                        <div class="linkeTypes">
-                            <span>Linke Types: </span>
-                             <a class="ui label">
-                              PROD
-                            </a>
-                            <a class="ui label">
-                              CLASS
-                            </a>
-                            <a class="ui label">
-                              REQU
-                            </a>
-                            <a class="ui label">
-                              mehr
-                            </a>
-                        </div>
-                    </div>
+                    <div class="filter"></div>
 
                 </div>
 
             </div>
 
             <!-- ####### NEW FILTER SECTION: Code ####### -->
-            <a class="item">
-              2
-            </a>
-            <a class="item">
-              3
-            </a>
+            <div class="item" id="filterSectionSourceCode">
+                <h5>
+                    Source Code Analysis
+                </h5>
+
+                <!-- input Requirements -->
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input name="SourceCode" type="file" class="custom-file-input" id="inputCSVSourceCode" accept=".csv" aria-describedby="button-UploadInput">
+                        <label id="inputCSVLabelSourceCode" class="custom-file-label" for="inputCSV">Choose CSV file</label>
+                    </div>
+
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary csvFileUploaderButton" id="button-UploadInput" form="inputCSVSourceCode" type="button">Upload</button>
+                    </div>
+                </div>
+
+                <div class="loader hidden"></div>
+
+                <!-- Filter -->
+                <div class="filterOptionsSection hidden">
+
+                    <!-- shortInfo -->
+                    <div class="shortInfoBox"></div>
+                    <div class="space"></div>
+
+                    <!-- Filter -->
+                    <div class="filter"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ----- Setup Sidebar ----- -->
+        <div id="settingsSidebar" class="ui sidebar inverted vertical menu">
+            <div class="item">
+                <button id="switchToEditButton" class="ui button highlight" >Edit</button>
+                <button id="saveTypesButton" class="ui button highlight hidden" >Save</button>
+                <button id="cancelTypesButton" class="ui button hidden" >Cancel</button>
+            </div>
+            <div class="item">
+                <h5>
+                    Type Setup
+                </h5>
+
+                <div id="nodeTypesSetup">
+                    <span class="sectionTitle">
+                        Entity Types
+                    </span>
+                    <div></div>
+                </div>
+                <div class="space"></div>
+                <div id="linkTypesSetup">
+                    <span class="sectionTitle">
+                        Relation Types
+                    </span>
+                    <div></div>
+                </div>
+                <div id="undeterminedTypesSetup">
+                </div>
+            </div>
         </div>
 
         <div class="pusher">
@@ -94,15 +121,33 @@
             <!-- ----- Menu Head ----- -->
             <div class="ui menu">
                 <a class="item" id="sidebarOpener" >
+                    <i class="arrow alternate circle up icon"></i>
+                </a>
+                <a class="item" id="setupSidebarOpener" >
                     <i class="cog icon"></i>
                 </a>
             </div>
 
             <div class="content">
-                <div class="visualisation">
-                    <svg id="svgVis" xmlns="http://www.w3.org/2000/svg" width="1000" height="800">
-                    </svg>
+
+                <!-- ELEMENTE: Visualisation Box -->
+                <div id="visualisation" class="dashboardElement">
+                    <!--svg id="svgVis" xmlns="http://www.w3.org/2000/svg" width="1000" height="800">
+                    </svg-->
                 </div>
+
+                <!-- ELEMENTE: Artefa.ui.labelkt Information Box -->
+                <div id="artifactInformationView" class="dashboardElement paddingSmall smallElement floatRight"></div>
+
+                <!-- ELEMENTE: Selected Node Information Box -->
+                <div id="selectedNodeInformationView" class="dashboardElement paddingSmall smallElement floatRight">
+                    nothing selected
+                </div>
+
+                <!-- ELEMENTE: Color Legend Box -->
+                <div id="colorLegendView" class="dashboardElement paddingSmall smallElement floatRight">
+                </div>
+
             </div>
         </div>
 
@@ -115,13 +160,16 @@
         <script type="text/javascript" src="static/js/lib/svg-pan-zoom.js"></script>
 
         <!-- classes -->
+        <script type="text/javascript" src="static/js/UiController.js"></script>
+        <script type="text/javascript" src="static/js/FileUploader.js"></script>
+
+        <script type="text/javascript" src="static/js/uiCreators/UiElementLib.js"></script>
         <script type="text/javascript" src="static/js/FilteredDataCollector.js"></script>
         <script type="text/javascript" src="static/js/OriginJson.js"></script>
-        <script type="text/javascript" src="static/js/UiFilterCreatorFactory.js"></script>
-        <script type="text/javascript" src="static/js/uiCreators/UiFilterCreatorArtefact.js"></script>
+        <script type="text/javascript" src="static/js/EntityAndRelationTypeManager.js"></script>
+        <script type="text/javascript" src="static/js/UiFilterAndInfoViewCreatorFactory.js"></script>
+        <script type="text/javascript" src="static/js/uiCreators/UiFilterAndInfoViewCreatorArtefact.js"></script>
         <script type="text/javascript" src="static/js/uiCreators/UiVisualisationCreator.js"></script>
-
-        <script type="text/javascript" src="static/js/uiController.js"></script>
-        <script type="text/javascript" src="static/js/FileUploader.js"></script>
+        <script type="text/javascript" src="static/js/uiCreators/UiDashboardCreator.js"></script>
     </body>
 <html>
