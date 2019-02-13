@@ -9,9 +9,9 @@ import pandas as pandas
 
 
 class NetworkGraph:
-    def __init__(self, name, file):
+    def __init__(self, name, path):
         self.name = name
-        self.file = file
+        self.path = path
         self.json_complete = {}
         self.graph = network.Graph()
         self.log_path = 'src/backend/log/'
@@ -27,46 +27,57 @@ class NetworkGraph:
         return path_to_json
 
     def createJsonAndGraph(self):
-        reader = csv.reader(self.file, delimiter=";")
-        next(reader, None)  # skip the headers
+        file = open(self.path, 'r', encoding='utf-8', errors='replace')
 
         array_nodes = []
         array_links = []
         unique_nodes_set = set()
-        allNodes = []
+        all_nodes = []
+        error_lines = ''
+
+        reader = csv.reader(file, quotechar='"', delimiter=";", quoting=csv.QUOTE_NONE, skipinitialspace=True)
+        next(reader, None)  # skip the headers
 
         for line in reader:
-
-            source_node_id = line[0].strip() + ':' + line[1].strip()
+            # for line in reader:
+            source_node_id = ''
             target_node_id = ''
             relation = ''
-            allNodes.append(source_node_id)
 
             # HANDLE NODES
-            if source_node_id not in unique_nodes_set:
-                # create and add node json
-                json_node_source = self.getNodeJson(line[0], line[1])
-                array_nodes.append(json_node_source)
-                # add node to graph
-                self.graph.add_node(str(source_node_id))
-                # add id to unique_nodes_set
-                unique_nodes_set.add(source_node_id)
+            print(line)
+            if len(line) > 1:
+                source_node_id = line[0].strip() + ':' + line[1].strip()
+                all_nodes.append(source_node_id)
 
-            if len(line) > 3 :
-                target_node_id = line[3].strip() + ':' + line[4].strip()
-                allNodes.append(target_node_id)
-                relation = line[2]
-
-                if target_node_id not in unique_nodes_set:
+                if source_node_id not in unique_nodes_set:
                     # create and add node json
-                    json_node_target = self.getNodeJson(line[3], line[4])
-                    array_nodes.append(json_node_target)
+                    json_node_source = self.getNodeJson(line[0], line[1])
+                    array_nodes.append(json_node_source)
                     # add node to graph
-                    self.graph.add_node(str(target_node_id))
+                    self.graph.add_node(str(source_node_id))
                     # add id to unique_nodes_set
-                    unique_nodes_set.add(target_node_id)
+                    unique_nodes_set.add(source_node_id)
 
+                if len(line) > 3:
+                    target_node_id = line[3].strip() + ':' + line[4].strip()
+                    all_nodes.append(target_node_id)
+                    relation = line[2]
 
+                    if target_node_id not in unique_nodes_set:
+                        # create and add node json
+                        json_node_target = self.getNodeJson(line[3], line[4])
+                        array_nodes.append(json_node_target)
+                        # add node to graph
+                        self.graph.add_node(str(target_node_id))
+                        # add id to unique_nodes_set
+                        unique_nodes_set.add(target_node_id)
+
+                else:
+                    error_lines = error_lines + '\n' + 'empty target entity ' + line[0] + ';' + line[1]
+
+            else:
+                error_lines = error_lines + '\n' + 'empty source entity'
 
             # HANDEL RELATIONS
             json_link = {}
@@ -78,27 +89,30 @@ class NetworkGraph:
             json_link['reposible'] = 'tool'
 
             # add edge to graph
-            self.graph.add_edge(str(source_node_id), str(target_node_id), weight=1)
             array_links.append(json_link)
+            self.graph.add_edge(str(source_node_id), str(target_node_id), weight=1)
 
         # add part arrays to json
         self.json_complete['entities'] = array_nodes
         self.json_complete['links'] = array_links
 
         self.writeToFile(self.log_path + 'unique.txt', unique_nodes_set, True)
-        self.writeToFile(self.log_path + 'allNodes.txt', allNodes, True)
+        self.writeToFile(self.log_path + 'error_lines.txt', error_lines, False)
+        # self.writeToFile(self.log_path + 'all_nodes.txt', all_nodes, True)
         return
 
     def calculateCoordinates(self):
+        print('calculateCoordinates')
         pos = network.spring_layout(self.graph, k=0.04, iterations=10, scale=100)
         # Set result dataset positions as positions to be used in graph.
         network.set_node_attributes(self.graph, values=pos, name='pos')
         # Set entrance into network and exit from network as top left and bottom right nodes.
         pos[-2] = [0.0, 0.0]
-        pos[-1] = [900.0, 900.0]
+        pos[-1] = [1000.0, 1000.0]
         return
 
     def addCoordinatesToJson(self):
+        print('addCoordinatesToJson')
         all_nodes = self.json_complete['entities']
 
         for node_id in network.nodes(self.graph):
@@ -115,6 +129,7 @@ class NetworkGraph:
         return
 
     def writeToFile(self, path_file, logcontent, isList):
+        print('writeToFile ' + path_file)
         log = open(path_file, 'w')
         try:
             if isList:
@@ -127,6 +142,7 @@ class NetworkGraph:
         return
 
     def writeJsonFile(self, path_file, content):
+        print('writeJsonFile ' + path_file)
         outputfile = open(path_file, 'w')
         try:
             json.dump(content, outputfile)

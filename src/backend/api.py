@@ -14,8 +14,7 @@ CORS(app, origins='http://localhost:8000')
 def print_out():
     path = request.form["path"]
     header = request.form["header"]
-    csv = open(path, "r")
-    networkgraph = NetworkGraph(header, csv)
+    networkgraph = NetworkGraph(header, path)
     text = networkgraph.returnJsonWithCoordinatespath()
     return text
 

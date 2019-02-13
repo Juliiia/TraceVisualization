@@ -82,6 +82,13 @@ class  UiElementLib {
         return element;
     }
 
+    static getErrorDiv(message){
+        let element = document.createElement('div');
+        element.setAttribute('class', 'errorDiv');
+        element.append(message);
+        return element;
+    }
+
     static getSpacer(){
         let element = document.createElement('div');
         element.setAttribute('class', 'space');
