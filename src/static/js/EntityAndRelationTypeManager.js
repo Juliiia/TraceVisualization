@@ -71,7 +71,7 @@ class EntityAndRelationTypeManager{
         $.each(this.typeJson, function (key, value) {
            let group = document.createElement('div');
            let label = UiElementLib.getLabelWithCustomColor(key, key, null, value[0].color);
-           let descText = document.createElement('span');
+           let descText = UiElementLib.getSpanWithClass('marginLeft');
            descText.append( value[0].desc);
 
            group.append(label);

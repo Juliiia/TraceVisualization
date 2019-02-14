@@ -17,6 +17,10 @@ div.keyValuePair {
     color: #888888;
 }
 
+span.marginLeft {
+    margin-left: 10px;
+}
+
 div.keyValuePair span.valueOfKey {
     padding-left: 10px;
     color: black;
