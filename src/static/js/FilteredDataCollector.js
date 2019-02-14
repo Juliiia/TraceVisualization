@@ -29,9 +29,19 @@ class FilteredDataCollector{
         }
         let originJson = new OriginJson(artefaktName, pathToJsonFile);
         this.originJsonList.push(originJson);
-        console.log(this.originJsonList.length);
     }
 
+    addNewViewCoordinatesToOriginJson(artifactName, viewName, pathToJson){
+        if(this.originJsonList.length > 0) {
+            for(let i=0; i<this.originJsonList.length; i++) {
+                if(this.originJsonList[i].artefactName == artifactName){
+                    this.originJsonList[i].getNewViewFromFile(viewName, pathToJson);
+                    return;
+                }
+            }
+        }
+        return;
+    }
 
     visualizeJsonStructure(){
         console.log('FilteredDataCollector - visualizeJsonStructure');
@@ -70,6 +80,46 @@ class FilteredDataCollector{
 
             return;
 
+        } else {
+            this.onError('No Json', 'There are no json data available.')
+        }
+        return;
+    }
+
+    visualizeView(artifactName, viewName){
+        if(ViewRegister.isSingleArtifactView(viewName)){
+            if (this.originJsonList.length > 0) {
+                let arrayWithViewInfo = new Object();
+
+                for (let i = 0; i < this.originJsonList.length; i++) {
+                    if(this.originJsonList[i].artefactName == artifactName){
+                        arrayWithViewInfo['artifactName'] = this.originJsonList[i].artefactName;
+                        arrayWithViewInfo['baseInfo'] = this.originJsonList[i].jsonObject;
+                        arrayWithViewInfo['viewInfo'] = this.originJsonList[i].viewCoordinates[viewName];
+                        break;
+                    }
+                }
+
+                this.uiVisualisationCreator.visualizeView(viewName, arrayWithViewInfo);
+            }
+        }
+    }
+
+    visualizeBaseStructure(artifactName){
+        if (this.originJsonList.length > 0) {
+            // if jsons are existing and there was a new filter selected or a new json was loaded
+            let arrayWithJsons = [];
+
+            // get all data structures
+            for (let i = 0; i < this.originJsonList.length; i++) {
+                if (artifactName == this.originJsonList[i].artefactName) {
+                    let item = [];
+                    item[0] = this.originJsonList[i].artefactName;
+                    item[1] = this.originJsonList[i].jsonObject;
+                    arrayWithJsons.push(item);
+                }
+            }
+            this.uiVisualisationCreator.visualizeBaseInformations(arrayWithJsons);
         } else {
             this.onError('No Json', 'There are no json data available.')
         }
@@ -122,7 +172,12 @@ class FilteredDataCollector{
      */
     notifyThatOriginJsonIsCompleted(artifactName){
         console.log('FilteredDataCollector - notifyThatOriginJsonIsCompleted');
-        this.visualizeJsonStructureConsiderFilter(artifactName);
+        this.visualizeBaseStructure(artifactName);
+        return;
+    }
+
+    notifyNewViewDataLoaded(artifactName, viewName){
+        this.visualizeView(artifactName, viewName);
         return;
     }
 

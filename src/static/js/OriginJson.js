@@ -7,6 +7,7 @@ class OriginJson{
         this.getJsonStructureFromFile(pathToJsonFile);
         this.uiFilterCreator = null;
         this.jsonDataCompleted = false;
+        this.viewCoordinates = new Object();
     }
 
     /**
@@ -36,6 +37,23 @@ class OriginJson{
                 that.uiFilterCreator.createFilter();
             }
         });
+    }
+
+    getNewViewFromFile(viewName, path){
+        let that = this;
+        let jsonData = null;
+        $.getJSON('../' + path, function (data) {
+            jsonData = data;
+        }).done(function () {
+            if(jsonData){
+                // add to view list
+                that.viewCoordinates[viewName] = jsonData;
+                new FilteredDataCollector().notifyNewViewDataLoaded(that.artefactName, viewName);
+            } else {
+                that.onError('jsonData = null', 'could not load json from file: ' + path);
+            }
+        });
+        return;
     }
 
     getUiFilterCreator(){
