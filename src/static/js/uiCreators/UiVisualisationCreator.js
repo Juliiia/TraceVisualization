@@ -7,6 +7,7 @@ class UiVisualisationCreator{
             return uiVisualisationCreator;
         } else {
             this.networkgraphCreator = new NetworkgraphCreator();
+            this.neighborTypChartCreator = new NeighborBarchartCreator();
             uiVisualisationCreator = this;
         }
     }
@@ -24,20 +25,22 @@ class UiVisualisationCreator{
             case ViewRegister.getNetworkViewName():
                 this.networkgraphCreator.visualizeNetworkGraph(array);
                 return;
+            case ViewRegister.getNeighborBarchartName():
+                this.neighborTypChartCreator.visualizeNeighborChart(array);
+                return;
             default:
                 this.onError('View Finding Error', 'Can not find visualization for: ' + viewName);
         }
     }
 
+    entitySelected(element){
+        this.neighborTypChartCreator.highlightNodeAndLinks(element);
+        this.networkgraphCreator.highlightNodeAndLinks(element);
+    }
+
     highlightSelection(deselectionList){
-        // select all
-        $('svg').find('.deselect').removeClass('deselect');
-        // deselect selection2
-        if(deselectionList.length > 0){
-            for(let i=0; i<deselectionList.length; i++){
-                $('svg').find( '.' + deselectionList[i] ).addClass('deselect');
-            }
-        }
+        this.networkgraphCreator.highlightSelection(deselectionList);
+        this.neighborTypChartCreator.highlightSelection(deselectionList);
     }
 
     onError(title, message){

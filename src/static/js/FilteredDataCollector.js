@@ -32,6 +32,7 @@ class FilteredDataCollector{
     }
 
     addNewViewCoordinatesToOriginJson(artifactName, viewName, pathToJson){
+        console.log('FilteredDataCollector - addNewViewCoordinatesToOriginJson ' + viewName);
         if(this.originJsonList.length > 0) {
             for(let i=0; i<this.originJsonList.length; i++) {
                 if(this.originJsonList[i].artefactName == artifactName){
@@ -87,12 +88,14 @@ class FilteredDataCollector{
     }
 
     visualizeView(artifactName, viewName){
-        if(ViewRegister.isSingleArtifactView(viewName)){
-            if (this.originJsonList.length > 0) {
-                let arrayWithViewInfo = new Object();
+        if (this.originJsonList.length > 0) {
+
+            let arrayWithViewInfo = new Object();
+
+            if (ViewRegister.isSingleArtifactView(viewName)) {
 
                 for (let i = 0; i < this.originJsonList.length; i++) {
-                    if(this.originJsonList[i].artefactName == artifactName){
+                    if (this.originJsonList[i].artefactName == artifactName) {
                         arrayWithViewInfo['artifactName'] = this.originJsonList[i].artefactName;
                         arrayWithViewInfo['baseInfo'] = this.originJsonList[i].jsonObject;
                         arrayWithViewInfo['viewInfo'] = this.originJsonList[i].viewCoordinates[viewName];
@@ -100,9 +103,31 @@ class FilteredDataCollector{
                     }
                 }
 
-                this.uiVisualisationCreator.visualizeView(viewName, arrayWithViewInfo);
+            } else {
+                // if the view needs coordinates of all artifacts
+                console.log(this.originJsonList.length);
+                for (let i = 0; i < this.originJsonList.length; i++) {
+                    // TODO: check ob Req und code da sind
+                    let item = new Object();
+                    item['artifactName'] = this.originJsonList[i].artefactName;
+                    item['baseInfo'] = this.originJsonList[i].jsonObject;
+                    // check if all artifacts contains the view coordinates
+                    if(this.originJsonList[i].viewCoordinates[viewName]){
+                        item['viewInfo'] = this.originJsonList[i].viewCoordinates[viewName];
+                    } else {
+                        return;
+                    }
+                    arrayWithViewInfo[i] = item;
+                }
             }
+
+            this.uiVisualisationCreator.visualizeView(viewName, arrayWithViewInfo);
+            return;
+
+        } else {
+            this.onError('No Data', 'CLASS: FilteredDataCollector METHODE: visualizeView MESSAGE: Could not find origin jsons!')
         }
+        return;
     }
 
     visualizeBaseStructure(artifactName){
@@ -130,6 +155,13 @@ class FilteredDataCollector{
         console.log('FilteredDataCollector - updateVisualisation');
         this.uiVisualisationCreator.highlightSelection(this.deselectedFilterList);
         this.isfilterChanged = false;
+    }
+
+    entitySelected(element){
+        console.log('FilteredDataCollector - entitySelected');
+        console.log(element);
+        this.uiVisualisationCreator.entitySelected(element);
+        return;
     }
 
     addDeselectionToFilter(selection){
@@ -171,12 +203,12 @@ class FilteredDataCollector{
      * checks if the variable jsonDataCompleted == true of all OriginJson objects
      */
     notifyThatOriginJsonIsCompleted(artifactName){
-        console.log('FilteredDataCollector - notifyThatOriginJsonIsCompleted');
         this.visualizeBaseStructure(artifactName);
         return;
     }
 
     notifyNewViewDataLoaded(artifactName, viewName){
+        console.log('FilteredDataCollector - notifyNewViewDataLoaded ' + viewName);
         this.visualizeView(artifactName, viewName);
         return;
     }

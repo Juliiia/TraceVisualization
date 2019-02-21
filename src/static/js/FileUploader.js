@@ -6,8 +6,14 @@ class FileUploader {
         let filteredDataCollector = new FilteredDataCollector();
         filteredDataCollector.notifyThatWaitForNewJsonData();
 
-        $.when(this.requestJson(data.path, artifactName)).then(function () {
+        $.when(this.requestJson(data.path, artifactName)).done(function (data) {
+
+            console.log('Path to Json ' + data);
+            let filteredDataCollector = new FilteredDataCollector();
+            filteredDataCollector.addNewOriginJson(artifactName, data);
+
             that.requestNetworkGraphCoordinates(artifactName);
+            that.requestNeighborBarchartCoordinates();
         })
     }
 
@@ -19,7 +25,7 @@ class FileUploader {
         formdata.append('path',path);
 
         // query to server
-        $.ajax({
+        return $.ajax({
             type: 'POST',
             url: 'http://127.0.0.1:5000/fileuploader',
             data: formdata,
@@ -31,14 +37,7 @@ class FileUploader {
                 let filteredDataCollector = new FilteredDataCollector();
                 filteredDataCollector.notifyIfErrorOccur();
                 // TODO: display to client
-                return;
             },
-            success: function (data) {
-                console.log('Path to Json ' + data);
-                let filteredDataCollector = new FilteredDataCollector();
-                filteredDataCollector.addNewOriginJson(artifactName, data);
-                return dfd.promise();
-            }
 
         });
     }
@@ -47,7 +46,6 @@ class FileUploader {
         let that = this;
         console.log('requestNetworkGraphCoordinates ' + artifactName);
         $.get("http://127.0.0.1:5000/networkgraphcreator", {name: artifactName}).done(function (data) {
-            console.log('From Server: ' + data);
             if(data == 'waiting'){
                 setTimeout(function () {
                     that.requestNetworkGraphCoordinates(artifactName)
@@ -57,7 +55,38 @@ class FileUploader {
                 filteredDataCollector.addNewViewCoordinatesToOriginJson(artifactName, ViewRegister.getNetworkViewName(), data);
             }
         }).fail(function () {
-            console.log('GET REQUEST FAILED');
+            console.log('GET REQUEST FAILED: requestNetworkGraphCoordinates');
         });
+    }
+
+    static requestNeighborBarchartCoordinates(){
+        console.log('requestNeighborBarchartCoordinates ');
+        $.get("http://127.0.0.1:5000/typeneighborsbarchartofall").done(function (data) {
+            if(data == 'waiting'){
+                setTimeout(function () {
+                    that.requestNeighborBarchartCoordinates()
+                }, 3000);
+            } else {
+                // add new coordinate so origen jsons by filteredDataCollector
+                let filteredDataCollector = new FilteredDataCollector();
+                console.log('DATA: ' + data);
+                let paths = data.split(';');
+                for(let i = 0; i < paths.length; i++){
+                    // TODO: do it better
+                    if(paths[i].includes('Requirements')){
+                        filteredDataCollector.addNewViewCoordinatesToOriginJson('Requirements', ViewRegister.getNeighborBarchartName(), paths[i])
+                    } else if(paths[i].includes('SourceCode')){
+                        filteredDataCollector.addNewViewCoordinatesToOriginJson('SourceCode', ViewRegister.getNeighborBarchartName(), paths[i])
+                    }
+                }
+                return;
+            }
+        }).fail(function () {
+            console.log('GET REQUEST FAILED: requestNeighborBarchartCoordinates');
+        });
+    }
+
+    static saveEntityAndRelationFile(json){
+        // TODO
     }
 }

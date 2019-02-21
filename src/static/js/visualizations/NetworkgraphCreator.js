@@ -6,12 +6,8 @@ class NetworkgraphCreator{
     }
 
     visualizeNetworkGraph(arrayWithJsons){
-        // TODO: clean svg
-        this.removeChildElementIfExists(this.parentElement, '.loader');
+        UiElementLib.removeChildElementIfExists(this.parentElement, '.loader');
         // create new
-        console.log('UiVisualisationCreator - visualizeNetworkGraph');
-        console.log(arrayWithJsons);
-
         this.createGraph(arrayWithJsons);
         return;
     }
@@ -23,6 +19,7 @@ class NetworkgraphCreator{
         let entities = array.baseInfo.entities;
         let links = array.baseInfo.links;
         let entityCoordinatesMap = array.viewInfo;
+        let nodesWithRadius = new Object();
 
         // create parent svg and title
         let childDiv = document.createElement('div');
@@ -31,7 +28,7 @@ class NetworkgraphCreator{
         let childId = UiElementLib.getSVGId(artifactName);
 
         // clean old
-        this.removeChildElementIfExists(this.parentElement, '#' + childId);
+        UiElementLib.removeChildElementIfExists(this.parentElement, '#' + childId);
 
         let svgElement = UiElementLib.getSVGTag(childId, 1000, 800);
 
@@ -43,7 +40,9 @@ class NetworkgraphCreator{
         let nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         nodeGroup.setAttribute("class", 'entities');
         for(let i=0; i < entities.length; i++ ){
-            let circle = this.drawNode(entities[i], artifactName, entityCoordinatesMap[entities[i].id]);
+            let radius = this.calculateRadius(entities[i]['outgoingRelations']);
+            let circle = this.drawNode(entities[i], entityCoordinatesMap[entities[i]['id']], radius);
+            nodesWithRadius[entities[i]['id']] = radius;
             nodeGroup.append(circle);
         }
 
@@ -52,20 +51,22 @@ class NetworkgraphCreator{
         let markerGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         linkGroup.setAttribute("class", 'links');
         for(let i=0; i < links.length; i++){
-            let id = links[i].sourceId + links[i].relation + links[i].targetId;
+            let id = UiElementLib.getGlobalArrowId(links[i]['sourceId'], links[i]['relation'], links[i]['targetId']);;
+            let lineClass= UiElementLib.getGlobalLinkFilterId(artifactName, links[i]['relation'], links[i]['sourceId'], links[i]['targetId']);
 
-            let link = this.drawLine(id, artifactName, links[i], entityCoordinatesMap[links[i].sourceId], entityCoordinatesMap[links[i].targetId])
-            let arrow = this.drawArrow(id);
+            let link = this.drawLine(id, artifactName, links[i], entityCoordinatesMap[links[i]['sourceId']], entityCoordinatesMap[links[i]['targetId']], lineClass);
+            // get radius to find the right place for arrows
+            let radius = 3;
+            if(nodesWithRadius[links[i]['targetId']]){
+                radius = nodesWithRadius[links[i]['targetId']];
+            }
+            let arrow = UiElementLib.getSVGArrow(id, radius, lineClass);
             markerGroup.append(arrow);
             linkGroup.append(link);
         }
 
-        // create Title
-        let sectionTitle = document.createElement('div');
-        sectionTitle.setAttribute('class', 'paddingSmall');
-
         // append all
-        sectionTitle.append(UiElementLib.getSectionTitle(artifactName + ' ' + ViewRegister.getNetworkViewTitle()));
+        let sectionTitle = UiElementLib.getSectionTitle(artifactName + ' ' + ViewRegister.getNetworkViewTitle());
         this.parentElement.append(childDiv);
         childDiv.append(sectionTitle);
         childDiv.append(svgElement);
@@ -87,70 +88,53 @@ class NetworkgraphCreator{
         return true;
     }
 
-    drawNode(json, artifactName, coordinatesInfo){
-        let cicleClass = artifactName + '_entities_type_' + json.type;
-        let circles = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circles.setAttribute("cx", coordinatesInfo.x);
-        circles.setAttribute("cy", coordinatesInfo.y);
-        circles.setAttribute('fill', this.entityAndRelationTypeManager.getColorOfType(json.type));
-        circles.setAttribute('fill-opacity', 1);
-        circles.setAttribute('class', cicleClass);
-
-        circles.setAttribute('data-name', json.name);
-        circles.setAttribute('data-neighbors', coordinatesInfo.neighbors);
-        circles.setAttribute('data-type', json.type);
-        circles.setAttribute('data-id', json.id);
-        circles.setAttribute('data-artifact', artifactName);
-
-        let radius = coordinatesInfo.neighbors * 0.5;
+    calculateRadius(nrOfOutgoingLinks){
+        let radius = nrOfOutgoingLinks * 0.5;
         if(radius < 1){
             radius = 1;
         } else if(radius > 6){
             radius = 6;
         }
+        return radius
+    }
 
-        circles.setAttribute("r", radius);
+    drawNode(json, coordinatesInfo, radius){
+        let circleClass = UiElementLib.getGlobalEntityFilterId(json.artifact, json.id, json.type);
+
+        let circles = UiElementLib.getSVGCircleElement(json, coordinatesInfo, circleClass, radius, this.entityAndRelationTypeManager.getColorOfType(json['type']));
+
         circles.addEventListener('click', handleNodeClick);
 
         return circles;
     }
 
-    drawLine(id, artifactName, json, sourceCoordinates, targetCoordinates){
-        let lineClass= artifactName + '_links_relation_' + json.relation;
-        let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', sourceCoordinates.x);
-        line.setAttribute('y1', sourceCoordinates.y);
-        line.setAttribute('x2', targetCoordinates.x);
-        line.setAttribute('y2', targetCoordinates.y);
-        line.setAttribute('y2', targetCoordinates.y);
-        line.setAttribute('stroke', 'black');
-        line.setAttribute('stroke-width', 0.2);
-        line.setAttribute('class', lineClass);
+    drawLine(id, artifactName, json, sourceCoordinates, targetCoordinates, className){
+        let line = UiElementLib.getSVGLineElement(sourceCoordinates, targetCoordinates, className);
         line.setAttribute('marker-end', 'url(#'+ id +')');
         return line;
     }
 
-    drawArrow(id){
-        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', 'M0,0 L0,6 L9,3 z');
-        path.setAttribute('fill', 'black');
-        let arrow = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-        arrow.setAttribute('id', id);
-        arrow.setAttribute('markerWidth', 10);
-        arrow.setAttribute('markerHeight', 10);
-        arrow.setAttribute('refX', 14);
-        arrow.setAttribute('refY', 3);
-        arrow.setAttribute('orient', 'auto');
-        arrow.setAttribute('markerUnits', 'strokeWidth');
-        arrow.append(path);
-        return arrow;
-    }
-
-    removeChildElementIfExists(parentElement, childSelector){
-        console.log('Remove ' + parentElement.find(childSelector).length);
-        if(parentElement.find(childSelector).length !== 0){
-            parentElement.find(childSelector).remove();
+    highlightSelection(deselectionList){
+        // select all
+        this.parentElement.find('.deselect').removeClass('deselect');
+        // deselect selection2
+        if(deselectionList.length > 0){
+            for(let i=0; i<deselectionList.length; i++){
+                this.parentElement.find( '.' + deselectionList[i] ).addClass('deselect');
+            }
         }
     }
 
+    highlightNodeAndLinks(element){
+        this.parentElement.find('.clicked').removeClass('clicked');
+        // mark node
+        let nodeId = UiElementLib.getGlobalEntityFilterId(element.data('artifact'), element.data('id'), element.data('type'));
+        this.parentElement.find('.' + nodeId).addClass('clicked');
+        // mark dependent links
+        let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(element.data('id'));
+        let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(element.data('id'));
+        this.parentElement.find('.' + sourceNodeId).addClass('clicked');
+        this.parentElement.find('.' + targetNodeId).addClass('clicked');
+        return;
+    }
 }
