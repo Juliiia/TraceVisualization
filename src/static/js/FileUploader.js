@@ -13,13 +13,11 @@ class FileUploader {
             filteredDataCollector.addNewOriginJson(artifactName, data);
 
             that.requestNetworkGraphCoordinates(artifactName);
-            that.requestNeighborBarchartCoordinates();
+            that.requestNeighborBarchartCoordinates(ViewRegister.getNeighborBarchartSortDefaultOption());
         })
     }
 
     static requestJson(path, artifactName){
-        let dfd = $.Deferred();
-
         let formdata = new FormData();
         formdata.append('header', artifactName);
         formdata.append('path',path);
@@ -59,12 +57,13 @@ class FileUploader {
         });
     }
 
-    static requestNeighborBarchartCoordinates(){
+    static requestNeighborBarchartCoordinates(sortby){
+        let that = this;
         console.log('requestNeighborBarchartCoordinates ');
-        $.get("http://127.0.0.1:5000/typeneighborsbarchartofall").done(function (data) {
+        $.get("http://127.0.0.1:5000/typeneighborsbarchartofall", {sortby: sortby}).done(function (data) {
             if(data == 'waiting'){
                 setTimeout(function () {
-                    that.requestNeighborBarchartCoordinates()
+                    that.requestNeighborBarchartCoordinates(sortby)
                 }, 3000);
             } else {
                 // add new coordinate so origen jsons by filteredDataCollector

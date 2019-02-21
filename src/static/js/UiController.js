@@ -162,6 +162,16 @@ function visibleElement(element){
     }
     return true;
 }
+
+let neighborBarChartSortSelectionState = ViewRegister.getNeighborBarchartSortDefaultOption();
+function dropdownClicked(){
+    console.log($(this).data('parentid'));
+    if($(this)[0].value != neighborBarChartSortSelectionState){
+        neighborBarChartSortSelectionState = $(this)[0].value;
+        // query for new coordinates
+        FileUploader.requestNeighborBarchartCoordinates(neighborBarChartSortSelectionState);
+    }
+}
 // addEventListeners /////////////////////////////
 
 $(document).ready(function () {

@@ -88,3 +88,9 @@ div.beginOfLineLabel {
 #settingsSidebar .label{
     width: 60px;
 }
+
+/* Dropdown */
+div#neighborBarChartSortSelection{
+    width: 300px;
+    float: right;
+}

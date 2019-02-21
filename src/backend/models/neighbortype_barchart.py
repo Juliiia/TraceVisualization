@@ -6,7 +6,7 @@ from models.path_name_manager import *
 
 
 class NeighborTypeBarchart:
-    def __init__(self):
+    def __init__(self, sortby):
         self.name = 'neigborTypeBarchart'
         self.req_artifact_name = 'Requirements'
         self.code_artifact_name = 'SourceCode'
@@ -15,7 +15,9 @@ class NeighborTypeBarchart:
         self.space_between_two_artifacts = 30
         self.max_outgoing_relations = 0
         self.min_outgoing_relations = -1
-        self.sort_by = 'outgoingRelations'
+        self.sort_by = sortby
+        # self.sort_by = 'outgoingRelations'
+        # self.sort_by = 'incomingRelations'
 
     def createBarchart(self):
         # check if files exists
@@ -79,30 +81,27 @@ class NeighborTypeBarchart:
     def getMapByOutgoingLinks(self, list_of_all_entities):
         map_of_entities_by_outgoing_relations = {}
         for entity in list_of_all_entities:
-            if entity['outgoingRelations'] in map_of_entities_by_outgoing_relations:
-                list_of_entities = map_of_entities_by_outgoing_relations[entity['outgoingRelations']]
+            if entity[self.sort_by] in map_of_entities_by_outgoing_relations:
+                list_of_entities = map_of_entities_by_outgoing_relations[entity[self.sort_by]]
                 list_of_entities.append(entity['id'])
-                map_of_entities_by_outgoing_relations[entity['outgoingRelations']] = list_of_entities
+                map_of_entities_by_outgoing_relations[entity[self.sort_by]] = list_of_entities
             else:
                 # set min / max
-                print(self.max_outgoing_relations)
-                print('out ' + str(entity['outgoingRelations']))
-                if entity['outgoingRelations'] > self.max_outgoing_relations:
-                    self.max_outgoing_relations = entity['outgoingRelations']
+                if entity[self.sort_by] > self.max_outgoing_relations:
+                    self.max_outgoing_relations = entity[self.sort_by]
                 else:
                     # initial set min
                     if self.min_outgoing_relations == -1:
-                        self.min_outgoing_relations = entity['outgoingRelations']
+                        self.min_outgoing_relations = entity[self.sort_by]
 
-                    if entity['outgoingRelations'] < self.min_outgoing_relations:
-                        self.min_outgoing_relations = entity['outgoingRelations']
+                    if entity[self.sort_by] < self.min_outgoing_relations:
+                        self.min_outgoing_relations = entity[self.sort_by]
                 # add new element
                 list_of_entities = []
                 list_of_entities.append(entity['id'])
-                map_of_entities_by_outgoing_relations[entity['outgoingRelations']] = list_of_entities
+                map_of_entities_by_outgoing_relations[entity[self.sort_by]] = list_of_entities
 
-        # END OF LOOP ----
-        print(len(map_of_entities_by_outgoing_relations))
+        # END OF LOOP ----)
         return map_of_entities_by_outgoing_relations
 
     def calculateCoordinates(self, map_by_nr_of_relations, x_start, direction):

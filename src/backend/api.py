@@ -30,7 +30,8 @@ def get_graph():
 
 @app.route("/typeneighborsbarchartofall", methods=["GET"])
 def get_type_neighbors_chart_all():
-    barchart = NeighborTypeBarchart()
+    sortby = request.args.get('sortby')
+    barchart = NeighborTypeBarchart(sortby)
     response = barchart.createBarchart()
     return response
 

@@ -11,15 +11,19 @@ class NeighborBarchartCreator {
         let svgId = 'neighborSVG';
 
         // clean
-        UiElementLib.removeChildElementIfExists(this.parentElement, '.titleDiv');
         UiElementLib.removeChildElementIfExists(this.parentElement, '#' + svgId);
+        this.parentElement.empty();
 
         // add title
         let title = UiElementLib.getSectionTitle('Neighbor Visualization');
         this.parentElement.append(title);
 
+        // add dropdown for sorting
+        let dropdown = UiElementLib.getDropdownElement('Sort by', ViewRegister.getNeighborBarchartSortOptions(), 'neighborBarChartSortSelection', dropdownClicked);
+        this.parentElement.append(dropdown);
+
         // add SVG Tag
-        let svgElement = UiElementLib.getSVGTag(svgId, 1200, 800);
+        let svgElement = UiElementLib.getSVGTag(svgId, 1200, 1000);
         this.parentElement.append(svgElement);
 
         let that  = this;
@@ -95,11 +99,6 @@ class NeighborBarchartCreator {
         let circles = UiElementLib.getSVGCircleElement(json, coordinatesInfo, circleClass, radius, this.entityAndRelationTypeManager.getColorOfType(json['type']));
         circles.addEventListener('click', handleNodeClick);
         return circles;
-    }
-
-    drawPathWithArrow(arrowId, className, sourceCoordinates, targetCoordinates){
-        let link = UiElementLib.getSVGCurveElement(sourceCoordinates, targetCoordinates, className);
-
     }
 
     drawMiddleLine(spaceBetweenArtifacts, maxRelations, minRelations, sizeOfEntity, space) {

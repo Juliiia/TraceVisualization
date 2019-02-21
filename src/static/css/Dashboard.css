@@ -1,4 +1,9 @@
 body,
+.ui.header{
+    font-family: Arial, sans-serif;
+}
+
+body,
 body.pushable>.pusher {
     background-color: #888888;
 }
