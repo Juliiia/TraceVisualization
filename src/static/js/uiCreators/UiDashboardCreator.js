@@ -10,7 +10,7 @@ class UiDashboardCreator{
         let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName);
 
         // clean existing Information
-        this.removeChildElementIfExists(parentElement, 'div.' + artifactName);
+        UiElementLib.removeChildElementIfExists(parentElement, 'div.' + artifactName);
 
         let titleElement = UiElementLib.getSectionTitle(artifactName);
         let nodesInfoElement = UiElementLib.getKeyValuePair('Entities', nrOfNodes);
@@ -29,7 +29,7 @@ class UiDashboardCreator{
         let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName)
 
         // clean existing Informations
-        this.removeChildElementIfExists(parentElement, 'div.' + artifactName);
+        UiElementLib.removeChildElementIfExists(parentElement, 'div.' + artifactName);
 
         let titleElement = UiElementLib.getSectionTitle(artifactName + ' Color Legend');
 
@@ -40,7 +40,6 @@ class UiDashboardCreator{
 
         // append labels for entity types
         $.each(nodetypes, function (key, nr) {
-            console.log(key);
            let text = key + ' (' + nr + ')';
            let id = UiElementLib.getGlobalEntityFilterId(artifactName, key);
            let label = UiElementLib.getLabelWithCustomColor(text, id, null, that.entityAndRelationTypesManager.getColorOfType(key));
@@ -64,12 +63,6 @@ class UiDashboardCreator{
         newChildElement.append(subSectionLinks);
         parentElement.append(newChildElement);
         return true;
-    }
-
-    removeChildElementIfExists(parentElement, childSelector){
-        if(parentElement.find(childSelector).length !== 0){
-            parentElement.find(childSelector).remove();
-        }
     }
 
 }

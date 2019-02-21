@@ -34,7 +34,7 @@ div.smallElement {
 
 /* special information */
 
-div#visualisation {
+div#neighborVisualisation {
     float: left;
     min-width: 1000px;
     width: 75%;

@@ -81,7 +81,7 @@ class UiFilterAndInfoViewCreatorArtefact{
         let nodesAndCounter = this.originJson.getAllNodeTypesWithNrOfTypes();
         $.each(nodesAndCounter, function (key, nr) {
            let text = key + ' (' + nr + ')';
-           let id = UiElementLib.getGlobalEntityFilterId(that.artefactName, key);
+           let id = UiElementLib.getGlobalEntityTypeClass(that.artefactName, key);
            let label = UiElementLib.getLabel(text, id, handleLabelClick);
            entityTypeFilter.append(label);
         });
@@ -108,7 +108,7 @@ class UiFilterAndInfoViewCreatorArtefact{
         let linksAndCounter = this.originJson.getAllLinkTypesWithNrOfTypes();
         $.each(linksAndCounter, function (key, nr) {
             let text = key + ' (' + nr + ')';
-            let id = UiElementLib.getGlobalLinkFilterId(that.artefactName, key);
+            let id = UiElementLib.getGlobalLinkTypeClass(that.artefactName, key);
             let label = UiElementLib.getLabel(text, id, handleLabelClick);
             linkTypeFilter.append(label);
         });

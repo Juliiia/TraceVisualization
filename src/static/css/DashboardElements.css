@@ -3,10 +3,38 @@
     opacity: 0.1;
 }
 
+path,
+line {
+    stroke: #595959;
+    stroke-width: 0.2;
+}
+
+path.arrow{
+    fill: #595959;
+    stroke: #595959;
+}
+
+path.arrow.clicked {
+    fill: #b30000;
+    stroke: #b30000;
+}
+
+circle.clicked {
+    fill: #ff0000;
+    stroke: black;
+    stroke-width: 0.5;
+}
+
+line.clicked,
+path.curved.clicked {
+    stroke: #b30000;
+    stroke-width: 0.6;
+}
+
 span.sectionTitle {
     font-weight: bold;
     padding-top: 15px;
-    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 span.subSectionTitle {
