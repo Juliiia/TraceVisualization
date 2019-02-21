@@ -16,3 +16,10 @@ def getPathOfMainJsonFile(artifact_name):
 def getPathOfNetworkJsonFile(artifact_name):
     return getPathToDataExchangeFolder() + artifact_name + '_network.json'
 
+
+def getPathOfNeighborBarchart(artifact_name):
+    return getPathToDataExchangeFolder() + artifact_name + '_neighbor_barchart.json'
+
+
+def getNodeId(artifact_name, counter):
+    return artifact_name + 'entity' + str(counter)

@@ -2,7 +2,7 @@
 import csv
 import json
 
-from models.path_manager import *
+from models.path_name_manager import *
 
 
 class CsvTranslater:
@@ -25,41 +25,80 @@ class CsvTranslater:
         array_nodes = []
         array_links = []
         unique_nodes_set = set()
-        all_nodes = []
+        all_nodes_with_num_id = {}
+
+        # to count neighbors
+        node_is_source_node = {}
+        node_is_target_node = {}
+
         error_lines = ''
+        counter = 0
 
         reader = csv.reader(file, quotechar='"', delimiter=";", quoting=csv.QUOTE_NONE, skipinitialspace=True)
         next(reader, None)  # skip the headers
 
         for line in reader:
             # for line in reader:
-            source_node_id = ''
-            target_node_id = ''
-            relation = ''
 
             # HANDLE NODES
             if len(line) > 1:
                 source_node_id = line[0].strip() + ':' + line[1].strip()
-                all_nodes.append(source_node_id)
+                source_node_id_numeric = ''
 
                 if source_node_id not in unique_nodes_set:
                     # create and add node json
-                    json_node_source = self.getNodeJson(line[0], line[1])
+                    counter = counter + 1
+                    source_node_id_numeric = getNodeId(self.name, counter)
+                    json_node_source = self.getNodeJson(line[0], line[1], source_node_id_numeric)
                     array_nodes.append(json_node_source)
+                    # store numeric id to node
+                    all_nodes_with_num_id[source_node_id] = source_node_id_numeric
+                    # increment source node counter
+                    node_is_source_node[source_node_id_numeric] = 1
+                    node_is_target_node[source_node_id_numeric] = 0
                     # add id to unique_nodes_set
                     unique_nodes_set.add(source_node_id)
+                else:
+                    # get numeric id
+                    source_node_id_numeric = all_nodes_with_num_id[source_node_id]
+                    # increment source node counter
+                    node_is_source_node[source_node_id_numeric] = node_is_source_node[source_node_id_numeric] + 1
 
                 if len(line) > 3:
                     target_node_id = line[3].strip() + ':' + line[4].strip()
-                    all_nodes.append(target_node_id)
+                    target_node_id_numeric = ''
                     relation = line[2]
 
                     if target_node_id not in unique_nodes_set:
                         # create and add node json
-                        json_node_target = self.getNodeJson(line[3], line[4])
+                        counter = counter + 1
+                        target_node_id_numeric = getNodeId(self.name, counter)
+                        json_node_target = self.getNodeJson(line[3], line[4], target_node_id_numeric)
                         array_nodes.append(json_node_target)
+                        # store numeric id to node
+                        all_nodes_with_num_id[target_node_id] = target_node_id_numeric
+                        # increment target node counter
+                        node_is_target_node[target_node_id_numeric] = 1
+                        node_is_source_node[target_node_id_numeric] = 0
                         # add id to unique_nodes_set
                         unique_nodes_set.add(target_node_id)
+                    else:
+                        # get numeric id
+                        target_node_id_numeric = all_nodes_with_num_id[target_node_id]
+                        # increment target node counter
+                        node_is_target_node[target_node_id_numeric] = node_is_target_node[target_node_id_numeric] + 1
+
+                    # HANDEL RELATIONS
+                    json_link = {}
+                    json_link['sourceId'] = source_node_id_numeric
+                    json_link['targetId'] = target_node_id_numeric
+                    json_link['relation'] = relation
+                    json_link['artifact'] = self.name
+                    json_link['approved'] = 'false'
+                    json_link['origin'] = 'matching algorithm'
+                    json_link['responsible'] = 'tool'
+
+                    array_links.append(json_link)
 
                 else:
                     error_lines = error_lines + '\n' + 'empty target entity ' + line[0] + ';' + line[1]
@@ -67,16 +106,9 @@ class CsvTranslater:
             else:
                 error_lines = error_lines + '\n' + 'empty source entity'
 
-            # HANDEL RELATIONS
-            json_link = {}
-            json_link['sourceId'] = source_node_id
-            json_link['targetId'] = target_node_id
-            json_link['relation'] = relation
-            json_link['approved'] = 'false'
-            json_link['origin'] = 'matching algorithm'
-            json_link['reposible'] = 'tool'
+            # END OF LOOP ----
 
-            array_links.append(json_link)
+        array_nodes = self.addNeighborsToEntities(array_nodes, node_is_source_node, node_is_target_node)
 
         # add part arrays to json
         self.json_complete['entities'] = array_nodes
@@ -84,10 +116,16 @@ class CsvTranslater:
 
         self.writeToFile(self.log_path + 'unique.txt', unique_nodes_set, True)
         self.writeToFile(self.log_path + 'error_lines.txt', error_lines, False)
-        # self.writeToFile(self.log_path + 'all_nodes.txt', all_nodes, True)
         return
 
-    def getNodeJson(self, node_type, node):
+    def addNeighborsToEntities(self, entity_array, node_is_source_node, node_is_target_node):
+        for entity in entity_array:
+            entity['outgoingRelations'] = node_is_source_node[entity['id']]
+            entity['incomingRelations'] = node_is_target_node[entity['id']]
+            # END OF LOOP ----
+        return entity_array
+
+    def getNodeJson(self, node_type, node, node_id):
         # remove space
         node_type = node_type.strip()
         node = node.strip()
@@ -96,8 +134,7 @@ class CsvTranslater:
         json_node_source['type'] = node_type
         json_node_source['name'] = node
         json_node_source['artifact'] = self.name
-        source_node_id = node_type + ':' + node
-        json_node_source['id'] = source_node_id
+        json_node_source['id'] = node_id
         return json_node_source
 
     def writeJsonFile(self, path_file, content):

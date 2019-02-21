@@ -8,7 +8,7 @@ import plotly.graph_objs as graphobject
 import networkx as network
 import pandas as pandas
 
-from models.path_manager import *
+from models.path_name_manager import *
 
 
 class NetworkGraph:
@@ -18,12 +18,6 @@ class NetworkGraph:
         self.graph = network.Graph()
         self.log_path = 'src/backend/log/'
         self.dataexchange_path = 'src/backend/dataExchange/'
-
-    def addNode(self, node_id):
-        self.graph.add_node(str(node_id))
-
-    def addEdge(self, source_id, target_id):
-        self.graph.add_edge(str(source_id), str(target_id), weight=1)
 
     def returnNodesWithCoordinates(self):
         response = 'waiting'
@@ -47,6 +41,8 @@ class NetworkGraph:
         if links['links']:
             for item in links['links']:
                 self.graph.add_edge(str(item['sourceId']), str(item['targetId']), weight=1)
+
+            json_file.close()
             return True
         else:
             return False
@@ -54,11 +50,12 @@ class NetworkGraph:
     def calculateCoordinates(self):
         print('calculateCoordinates')
         pos = network.spring_layout(self.graph, k=0.04, iterations=10, scale=100)
+        # https://networkx.github.io/documentation/stable/reference/drawing.html#module-networkx.drawing.layout
         # Set result dataset positions as positions to be used in graph.
         network.set_node_attributes(self.graph, values=pos, name='pos')
         # Set entrance into network and exit from network as top left and bottom right nodes.
         pos[-2] = [0.0, 0.0]
-        pos[-1] = [1000.0, 1000.0]
+        pos[-1] = [10000.0, 10000.0]
         return
 
     def createJsonData(self):
