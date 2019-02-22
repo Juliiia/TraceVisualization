@@ -1,7 +1,14 @@
+let uiDashboardCreator = null
 class UiDashboardCreator{
 
     constructor() {
-        this.entityAndRelationTypesManager = new EntityAndRelationTypeManager();
+        if(!uiDashboardCreator){
+            this.entityAndRelationTypesManager = new EntityAndRelationTypeManager();
+            uiDashboardCreator = this;
+        } else {
+            return uiDashboardCreator;
+        }
+
     }
 
     createArtifactInfoView(artifactName, nrOfNodes, nrOfLinks){
@@ -63,6 +70,48 @@ class UiDashboardCreator{
         newChildElement.append(subSectionLinks);
         parentElement.append(newChildElement);
         return true;
+    }
+
+    createSelectedEntityInfoView(selectedElement){
+        // clean div
+        let selectedInfoDiv = $('#selectedNodeInformationView').empty();
+
+        // create pairs
+        let title = UiElementLib.getSectionTitle('Selected Node');
+        let namePair = UiElementLib.getKeyValuePair('Name', selectedElement.data('name'));
+        let typePair = UiElementLib.getKeyValuePair('Type', selectedElement.data('type'));
+        let outNeighborsPair = UiElementLib.getKeyValuePair('Outgoing Relations', selectedElement.data('outrelations'));
+        let inNeighborsPair = UiElementLib.getKeyValuePair('Incoming Relations', selectedElement.data('inrelations'));
+        let independence = UiElementLib.getKeyValuePair('Independence', selectedElement.data('independence'));
+        let idPair = UiElementLib.getKeyValuePair('Id', selectedElement.data('id'));
+        let artifactPair = UiElementLib.getKeyValuePair('Artifact', selectedElement.data('artifact'));
+
+        // add outgoing link types
+        let that = this;
+        let subSectionRelations = UiElementLib.getDashboardElementSubsection('linkTypes');
+        let addictbytypes = selectedElement.data('addictbytypes');
+        if(addictbytypes != 0){
+             $.each(addictbytypes, function (key, value) {
+                console.log(key);
+                console.log(value);
+                let text = key + ' (' + value.length + ')';
+                let id = UiElementLib.getGlobalLinkFilterId(selectedElement.data('artifact'), key);
+                let label = UiElementLib.getLabelWithCustomColor(text, id, null, that.entityAndRelationTypesManager.getColorOfType(key));
+                subSectionRelations.append(label);
+             });
+        }
+        let addictByTypes = UiElementLib.getKeyValuePair('Addict by Types', subSectionRelations);
+
+        selectedInfoDiv.append(title);
+        selectedInfoDiv.append(artifactPair);
+        selectedInfoDiv.append(namePair);
+        selectedInfoDiv.append(typePair);
+        selectedInfoDiv.append(outNeighborsPair);
+        selectedInfoDiv.append(inNeighborsPair);
+        selectedInfoDiv.append(independence);
+        selectedInfoDiv.append(idPair);
+        selectedInfoDiv.append(addictByTypes);
+        return;
     }
 
 }

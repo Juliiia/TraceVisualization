@@ -127,27 +127,9 @@ function handleNodeClick(){
     let filterdDataCollector = new FilteredDataCollector();
     filterdDataCollector.entitySelected($(this));
 
-    // clean div
-    let selectedInfoDiv = $('#selectedNodeInformationView').empty();
-    let title = UiElementLib.getSectionTitle('Selected Node');
-    let namePair = UiElementLib.getKeyValuePair('Name', $(this).data('name'));
-    let typePair = UiElementLib.getKeyValuePair('Type', $(this).data('type'));
-    let origin = UiElementLib.getKeyValuePair('Origin', $(this).data('origin'));
-    let responsible = UiElementLib.getKeyValuePair('Responsible', $(this).data('responsible'));
-    let outNeighborsPair = UiElementLib.getKeyValuePair('outgoing Relations', $(this).data('outrelations'));
-    let inNeighborsPair = UiElementLib.getKeyValuePair('incoming Relations', $(this).data('inrelations'));
-    let idPair = UiElementLib.getKeyValuePair('Id', $(this).data('id'));
-    let artifactPair = UiElementLib.getKeyValuePair('Artifact', $(this).data('artifact'));
+    let uiDashboardCreator = new UiDashboardCreator();
+    uiDashboardCreator.createSelectedEntityInfoView($(this));
 
-    selectedInfoDiv.append(title);
-    selectedInfoDiv.append(artifactPair);
-    selectedInfoDiv.append(namePair);
-    selectedInfoDiv.append(typePair);
-    selectedInfoDiv.append(outNeighborsPair);
-    selectedInfoDiv.append(inNeighborsPair);
-    selectedInfoDiv.append(origin);
-    selectedInfoDiv.append(responsible);
-    selectedInfoDiv.append(idPair);
     return;
 }
 
@@ -166,6 +148,7 @@ function visibleElement(element){
 let neighborBarChartSortSelectionState = ViewRegister.getNeighborBarchartSortDefaultOption();
 function dropdownClicked(){
     console.log($(this).data('parentid'));
+    console.log(neighborBarChartSortSelectionState);
     if($(this)[0].value != neighborBarChartSortSelectionState){
         neighborBarChartSortSelectionState = $(this)[0].value;
         // query for new coordinates
