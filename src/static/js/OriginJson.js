@@ -61,25 +61,25 @@ class OriginJson{
     }
 
     getNrOfAllNodes(){
-        console.log(this.jsonObject);
-        return this.jsonObject['entities'].length
+        return Object.keys(this.jsonObject['entities']).length;
     }
 
     getNrOfAllLinks(){
-        return this.jsonObject['links'].length
+        return Object.keys(this.jsonObject['links']).length;
     }
 
     getAllNodeTypesWithNrOfTypes(){
         let entities = this.jsonObject.entities;
         let nodeTypesWithNr = new Object();
 
-        for(let i=0; i<entities.length; i++){
-            if(nodeTypesWithNr[entities[i].type]){
+        for(let key in entities){
+
+            if(nodeTypesWithNr[entities[key].type]){
                 // increment counter
-                nodeTypesWithNr[entities[i].type] = nodeTypesWithNr[entities[i].type] + 1
+                nodeTypesWithNr[entities[key].type] = nodeTypesWithNr[entities[key].type] + 1
             } else {
                 // create element
-                nodeTypesWithNr[entities[i].type] = 1;
+                nodeTypesWithNr[entities[key].type] = 1;
             }
         }
         return nodeTypesWithNr;

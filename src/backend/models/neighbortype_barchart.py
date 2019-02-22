@@ -80,14 +80,15 @@ class NeighborTypeBarchart:
 
         if main_file_data['entities']:
             for item in main_file_data['entities']:
-                if item['type'] == typ:
-                    list_of_entities.append(item)
+                if main_file_data['entities'][item]['type'] == typ:
+                    list_of_entities.append(main_file_data['entities'][item])
 
         return list_of_entities
 
     def getMapByOutgoingLinks(self, list_of_all_entities):
         map_of_entities_by_outgoing_relations = {}
         for entity in list_of_all_entities:
+            # print(entity)
             key = entity[self.sort_by]
             if self.sort_by == 'independence':
                 key = round(key, None)
@@ -122,7 +123,6 @@ class NeighborTypeBarchart:
                 map_of_entities_by_outgoing_relations[key] = list_of_entities
 
         # END OF LOOP ----))
-        print(map_of_entities_by_outgoing_relations)
         return map_of_entities_by_outgoing_relations
 
     def calculateCoordinates(self, map_by_nr_of_relations, x_start, direction):

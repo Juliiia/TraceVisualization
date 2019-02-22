@@ -14,6 +14,7 @@ class NetworkgraphCreator{
 
     createGraph(array){
         console.log('UiVisualisationCreator - createGraph');
+        console.log(array);
 
         let artifactName = array.artifactName;
         let entities = array.baseInfo.entities;
@@ -40,10 +41,11 @@ class NetworkgraphCreator{
         // create node for each entity
         let nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         nodeGroup.setAttribute("class", 'entities');
-        for(let i=0; i < entities.length; i++ ){
-            let radius = this.calculateRadius(entities[i]['outgoingRelations']);
-            let circle = this.drawNode(entities[i], entityCoordinatesMap[entities[i]['id']], radius);
-            nodesWithRadius[entities[i]['id']] = radius;
+
+        for(let key in entities){
+            let radius = this.calculateRadius(entities[key]['outgoingRelations']);
+            let circle = this.drawNode(entities[key], entityCoordinatesMap[key], radius);
+            nodesWithRadius[key] = radius;
             nodeGroup.append(circle);
         }
 

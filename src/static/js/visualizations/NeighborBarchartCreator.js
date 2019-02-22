@@ -7,7 +7,7 @@ class NeighborBarchartCreator {
 
     visualizeNeighborChart(arrayWithJsons){
         console.log('visualizeNeighborChart');
-        console.log(arrayWithJsons);
+
         let svgId = 'neighborSVG';
 
         // clean
@@ -62,10 +62,10 @@ class NeighborBarchartCreator {
 
         // create Nodes
         let nodeGroup = UiElementLib.getSVGGroup('nodeGroup');
-        for(let i=0; i<baseInfoEntities.length; i++){
-            if(types.indexOf(baseInfoEntities[i]['type']) > -1){
-                displayedNodeIds.push(baseInfoEntities[i]['id']);
-                let node = this.drawNode(baseInfoEntities[i], coordinates[baseInfoEntities[i]['id']], entitySize);
+        for(let key in baseInfoEntities){
+            if(types.indexOf(baseInfoEntities[key]['type']) > -1){
+                displayedNodeIds.push(key);
+                let node = this.drawNode(baseInfoEntities[key], coordinates[key], entitySize);
                 nodeGroup.append(node);
             }
         }
