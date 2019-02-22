@@ -25,11 +25,6 @@ circle.clicked {
     stroke-width: 0.5;
 }
 
-circle.dependentClicked{
-    stroke: #ff0000;
-    stroke-width: 0.5;
-}
-
 line.clicked,
 path.curved.clicked {
     stroke: #b30000;
@@ -73,6 +68,7 @@ div.beginOfLineLabel {
     min-width: 5%;
 }
 
+<<<<<<< HEAD
 div.halfWidth {
     width: 50%;
     float: left;
@@ -83,6 +79,8 @@ div.halfWidth {
     word-wrap: break-word;
 }
 
+=======
+>>>>>>> parent of ba94374... improve click function
 .clear{
     clear: both;
 }
