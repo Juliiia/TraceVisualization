@@ -1,6 +1,7 @@
 #!/usr/bin/python3.6
 import os
 import json
+import operator
 
 from models.path_name_manager import *
 
@@ -16,8 +17,15 @@ class NeighborTypeBarchart:
         self.max_outgoing_relations = 0
         self.min_outgoing_relations = -1
         self.sort_by = sortby
-        # self.sort_by = 'outgoingRelations'
-        # self.sort_by = 'incomingRelations'
+        self.second_sort_by = self.getSecondSortValue()
+
+    def getSecondSortValue(self):
+        if self.sort_by == 'outgoingRelations':
+            return 'incomingRelations'
+        if self.sort_by == 'incomingRelations':
+            return 'outgoingRelations'
+        if self.sort_by == 'independence':
+            return 'independence'
 
     def createBarchart(self):
         # check if files exists
@@ -57,7 +65,6 @@ class NeighborTypeBarchart:
         return infoItem
 
     def createStructure(self, typ_name, aritfact_name):
-        # TODO: later more connections
         # get REQU from Requirements json
         main_file = open(getPathOfMainJsonFile(aritfact_name), 'r')
         list_of_entities = self.getAllTypesFromJsonWithNeighbors(main_file, typ_name)
@@ -81,27 +88,41 @@ class NeighborTypeBarchart:
     def getMapByOutgoingLinks(self, list_of_all_entities):
         map_of_entities_by_outgoing_relations = {}
         for entity in list_of_all_entities:
-            if entity[self.sort_by] in map_of_entities_by_outgoing_relations:
-                list_of_entities = map_of_entities_by_outgoing_relations[entity[self.sort_by]]
-                list_of_entities.append(entity['id'])
-                map_of_entities_by_outgoing_relations[entity[self.sort_by]] = list_of_entities
+            key = entity[self.sort_by]
+            if self.sort_by == 'independence':
+                key = round(key, None)
+
+            if key in map_of_entities_by_outgoing_relations:
+                list_of_entities = map_of_entities_by_outgoing_relations[key]
+
+                # add new element
+                item = (entity['id'], entity[self.second_sort_by])
+
+                list_of_entities.append(item)
+                list_of_entities.sort(key=operator.itemgetter(1))
+
+                map_of_entities_by_outgoing_relations[key] = list_of_entities
             else:
                 # set min / max
-                if entity[self.sort_by] > self.max_outgoing_relations:
-                    self.max_outgoing_relations = entity[self.sort_by]
+                if key > self.max_outgoing_relations:
+                    self.max_outgoing_relations = key
                 else:
                     # initial set min
                     if self.min_outgoing_relations == -1:
-                        self.min_outgoing_relations = entity[self.sort_by]
+                        self.min_outgoing_relations = key
 
-                    if entity[self.sort_by] < self.min_outgoing_relations:
-                        self.min_outgoing_relations = entity[self.sort_by]
+                    if key < self.min_outgoing_relations:
+                        self.min_outgoing_relations = key
+
                 # add new element
-                list_of_entities = []
-                list_of_entities.append(entity['id'])
-                map_of_entities_by_outgoing_relations[entity[self.sort_by]] = list_of_entities
+                item = (entity['id'], entity[self.second_sort_by])
 
-        # END OF LOOP ----)
+                list_of_entities = []
+                list_of_entities.append(item)
+                map_of_entities_by_outgoing_relations[key] = list_of_entities
+
+        # END OF LOOP ----))
+        print(map_of_entities_by_outgoing_relations)
         return map_of_entities_by_outgoing_relations
 
     def calculateCoordinates(self, map_by_nr_of_relations, x_start, direction):
@@ -119,7 +140,7 @@ class NeighborTypeBarchart:
                 else:
                     x_value = x_value + (self.size_of_one_entity + self.space_between_two_entities)
 
-                entities_with_coordinates[entity] = coordinates
+                entities_with_coordinates[entity[0]] = coordinates
 
         return entities_with_coordinates
 

@@ -19,7 +19,7 @@ class NeighborBarchartCreator {
         this.parentElement.append(title);
 
         // add dropdown for sorting
-        let dropdown = UiElementLib.getDropdownElement('Sort by', ViewRegister.getNeighborBarchartSortOptions(), 'neighborBarChartSortSelection', dropdownClicked);
+        let dropdown = UiElementLib.getDropdownElement('Sort by', ViewRegister.getNeighborBarchartSortOptions(), neighborBarChartSortSelectionState, 'neighborBarChartSortSelection', dropdownClicked);
         this.parentElement.append(dropdown);
 
         // add SVG Tag
@@ -141,14 +141,33 @@ class NeighborBarchartCreator {
 
     highlightNodeAndLinks(element){
         this.parentElement.find('.clicked').removeClass('clicked');
+        this.parentElement.find('.dependentClicked').removeClass('dependentClicked');
+
         // mark node
-        let nodeId = UiElementLib.getGlobalEntityFilterId(element.data('artifact'), element.data('id'), element.data('type'));
+        let nodeId = UiElementLib.getGlobelEntityId(element.data('artifact'), element.data('id'));
         this.parentElement.find('.' + nodeId).addClass('clicked');
+
         // mark dependent links
         let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(element.data('id'));
         let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(element.data('id'));
-        this.parentElement.find('.' + sourceNodeId).addClass('clicked');
         this.parentElement.find('.' + targetNodeId).addClass('clicked');
+
+        let linksToTarget = this.parentElement.find('.' + sourceNodeId);
+        if(linksToTarget.length > 0){
+            for(let i=0; i<linksToTarget.length; i++){
+                let classes = linksToTarget[i].className.baseVal.split(/\s+/);
+                for(let ii=0; ii<classes.length; ii++){
+                    if(classes[ii].includes('to_')){
+                        // get id
+                        let id = classes[ii].split('_')[1];
+                        id = UiElementLib.getGlobelEntityId(element.data('artifact'), id);
+                        this.parentElement.find('.' + id).addClass('dependentClicked');
+                    }
+                }
+            }
+        }
+        linksToTarget.addClass('clicked');
+
         return;
     }
 }
