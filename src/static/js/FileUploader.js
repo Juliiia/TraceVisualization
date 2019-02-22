@@ -12,7 +12,7 @@ class FileUploader {
             let filteredDataCollector = new FilteredDataCollector();
             filteredDataCollector.addNewOriginJson(artifactName, data);
 
-            that.requestNetworkGraphCoordinates(artifactName);
+            // that.requestNetworkGraphCoordinates(artifactName);
             that.requestNeighborBarchartCoordinates(ViewRegister.getNeighborBarchartSortDefaultOption());
         })
     }
@@ -45,9 +45,9 @@ class FileUploader {
         console.log('requestNetworkGraphCoordinates ' + artifactName);
         $.get("http://127.0.0.1:5000/networkgraphcreator", {name: artifactName}).done(function (data) {
             if(data == 'waiting'){
-                setTimeout(function () {
+                /*setTimeout(function () {
                     that.requestNetworkGraphCoordinates(artifactName)
-                }, 3000);
+                }, 3000);*/
             } else {
                 let filteredDataCollector = new FilteredDataCollector();
                 filteredDataCollector.addNewViewCoordinatesToOriginJson(artifactName, ViewRegister.getNetworkViewName(), data);

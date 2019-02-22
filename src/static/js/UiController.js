@@ -110,6 +110,11 @@ function startLoaderAndHideFilter(artifactName) {
     return true;
 }
 
+function handleLabelWithToggleClick() {
+    let uiDashboardCreator = new UiDashboardCreator();
+    uiDashboardCreator.createToggleInfoForReletedEntities($(this));
+}
+
 function handleLabelClick() {
     let filterdDataCollector = new FilteredDataCollector();
     // check if already active

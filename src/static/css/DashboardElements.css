@@ -78,6 +78,11 @@ div.halfWidth {
     float: left;
 }
 
+.wrapText{
+    width: inherit;
+    word-wrap: break-word;
+}
+
 .clear{
     clear: both;
 }

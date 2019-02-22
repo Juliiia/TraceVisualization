@@ -4,6 +4,7 @@ class UiDashboardCreator{
     constructor() {
         if(!uiDashboardCreator){
             this.entityAndRelationTypesManager = new EntityAndRelationTypeManager();
+            this.selectedNodeElement = $('#selectedNodeInformationView');
             uiDashboardCreator = this;
         } else {
             return uiDashboardCreator;
@@ -74,7 +75,7 @@ class UiDashboardCreator{
 
     createSelectedEntityInfoView(selectedElement){
         // clean div
-        let selectedInfoDiv = $('#selectedNodeInformationView').empty();
+        let selectedInfoDiv = this.selectedNodeElement.empty();
 
         // create pairs
         let title = UiElementLib.getSectionTitle('Selected Node');
@@ -82,7 +83,7 @@ class UiDashboardCreator{
         let typePair = UiElementLib.getKeyValuePair('Type', selectedElement.data('type'));
         let outNeighborsPair = UiElementLib.getKeyValuePair('Outgoing Relations', selectedElement.data('outrelations'));
         let inNeighborsPair = UiElementLib.getKeyValuePair('Incoming Relations', selectedElement.data('inrelations'));
-        let independence = UiElementLib.getKeyValuePair('Independence', selectedElement.data('independence'));
+        let independence = UiElementLib.getKeyValuePair('Independence', selectedElement.data('independence') + ' %');
         let idPair = UiElementLib.getKeyValuePair('Id', selectedElement.data('id'));
         let artifactPair = UiElementLib.getKeyValuePair('Artifact', selectedElement.data('artifact'));
 
@@ -92,11 +93,10 @@ class UiDashboardCreator{
         let addictbytypes = selectedElement.data('addictbytypes');
         if(addictbytypes != 0){
              $.each(addictbytypes, function (key, value) {
-                console.log(key);
-                console.log(value);
                 let text = key + ' (' + value.length + ')';
                 let id = UiElementLib.getGlobalLinkFilterId(selectedElement.data('artifact'), key);
-                let label = UiElementLib.getLabelWithCustomColor(text, id, null, that.entityAndRelationTypesManager.getColorOfType(key));
+                let label = UiElementLib.getLabelWithCustomColor(text, id, handleLabelWithToggleClick, that.entityAndRelationTypesManager.getColorOfType(key));
+                label.setAttribute('data-entityids', value);
                 subSectionRelations.append(label);
              });
         }
@@ -112,6 +112,22 @@ class UiDashboardCreator{
         selectedInfoDiv.append(idPair);
         selectedInfoDiv.append(addictByTypes);
         return;
+    }
+
+    createToggleInfoForReletedEntities(selectedRelationType){
+        console.log(selectedRelationType.data('entityids'));
+        let subSectionDiv;
+        if(this.selectedNodeElement.find('.toggleInfoSubsection').length > 0){
+             subSectionDiv = this.selectedNodeElement.find('.toggleInfoSubsection').empty();
+        } else {
+            subSectionDiv = UiElementLib.getDashboardElementSubsection('toggleInfoSubsection');
+            this.selectedNodeElement.append(subSectionDiv);
+        }
+        let p = document.createElement('p');
+        p.setAttribute('class', 'wrapText');
+        p.append(selectedRelationType.data('entityids'));
+        subSectionDiv.append(p);
+        return
     }
 
 }

@@ -63,6 +63,7 @@ class NeighborBarchartCreator {
         // create Nodes
         let nodeGroup = UiElementLib.getSVGGroup('nodeGroup');
         for(let key in baseInfoEntities){
+            console.log(key);
             if(types.indexOf(baseInfoEntities[key]['type']) > -1){
                 displayedNodeIds.push(key);
                 let node = this.drawNode(baseInfoEntities[key], coordinates[key], entitySize);
@@ -74,7 +75,6 @@ class NeighborBarchartCreator {
         let linkGroup = UiElementLib.getSVGGroup('linkGroup');
         let markerGroup = UiElementLib.getSVGGroup('markerGroup');
         for(let i=0; i<baseInfoLinks.length; i++) {
-
             if(displayedNodeIds.indexOf(baseInfoLinks[i]['sourceId']) > -1 && displayedNodeIds.indexOf(baseInfoLinks[i]['targetId']) > -1){
                 let linkClass = UiElementLib.getGlobalLinkFilterId(baseInfoLinks[i]['artifact'], baseInfoLinks[i]['relation'], baseInfoLinks[i]['sourceId'], baseInfoLinks[i]['targetId']);
                 let arrowId = UiElementLib.getGlobalArrowId(baseInfoLinks[i]['sourceId'], baseInfoLinks[i]['relation'], baseInfoLinks[i]['targetId']);
