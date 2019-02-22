@@ -24,13 +24,14 @@ class NetworkgraphCreator{
         // create parent svg and title
         let childDiv = document.createElement('div');
         childDiv.setAttribute('id', 'svgDiv' + artifactName);
+        childDiv.setAttribute('class', 'halfWidth');
 
         let childId = UiElementLib.getSVGId(artifactName);
 
         // clean old
         UiElementLib.removeChildElementIfExists(this.parentElement, '#' + childId);
 
-        let svgElement = UiElementLib.getSVGTag(childId, 1000, 800);
+        let svgElement = UiElementLib.getSVGTag(childId, 900, 800);
 
         // create group for each artifact json
         let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -128,7 +129,7 @@ class NetworkgraphCreator{
     highlightNodeAndLinks(element){
         this.parentElement.find('.clicked').removeClass('clicked');
         // mark node
-        let nodeId = UiElementLib.getGlobalEntityFilterId(element.data('artifact'), element.data('id'), element.data('type'));
+        let nodeId = UiElementLib.getGlobelEntityId(element.data('artifact'), element.data('id'));
         this.parentElement.find('.' + nodeId).addClass('clicked');
         // mark dependent links
         let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(element.data('id'));
