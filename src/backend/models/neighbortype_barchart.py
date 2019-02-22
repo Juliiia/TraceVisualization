@@ -79,9 +79,9 @@ class NeighborTypeBarchart:
         main_file_data = json.load(main_json)
 
         if main_file_data['entities']:
-            for key, value in main_file_data['entities'].items():
-                if value['type'] == typ:
-                    list_of_entities.append(value)
+            for item in main_file_data['entities']:
+                if main_file_data['entities'][item]['type'] == typ:
+                    list_of_entities.append(main_file_data['entities'][item])
 
         return list_of_entities
 
