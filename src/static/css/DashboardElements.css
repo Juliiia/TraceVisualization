@@ -68,7 +68,6 @@ div.beginOfLineLabel {
     min-width: 5%;
 }
 
-<<<<<<< HEAD
 div.halfWidth {
     width: 50%;
     float: left;
@@ -79,8 +78,6 @@ div.halfWidth {
     word-wrap: break-word;
 }
 
-=======
->>>>>>> parent of ba94374... improve click function
 .clear{
     clear: both;
 }
