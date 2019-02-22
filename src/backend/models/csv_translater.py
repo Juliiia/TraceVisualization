@@ -31,8 +31,11 @@ class CsvTranslater:
         node_is_source_node = {}
         node_is_target_node = {}
 
+        # to collect all outgoing link ids by Type
+        relations_by_node_id = {}
+
         error_lines = ''
-        counter = 0
+        counter = 0  # to get short and unique ids
 
         reader = csv.reader(file, quotechar='"', delimiter=";", quoting=csv.QUOTE_NONE, skipinitialspace=True)
         next(reader, None)  # skip the headers
@@ -41,7 +44,9 @@ class CsvTranslater:
             # for line in reader:
 
             # HANDLE NODES
-            if len(line) > 1:
+            # SOURCE NODE //////////////////////////
+            if len(line) > 1 and '/*' not in line[0]:
+
                 source_node_id = line[0].strip() + ':' + line[1].strip()
                 source_node_id_numeric = ''
 
@@ -64,6 +69,7 @@ class CsvTranslater:
                     # increment source node counter
                     node_is_source_node[source_node_id_numeric] = node_is_source_node[source_node_id_numeric] + 1
 
+                # TARGET NODE //////////////////////////
                 if len(line) > 3:
                     target_node_id = line[3].strip() + ':' + line[4].strip()
                     target_node_id_numeric = ''
@@ -88,6 +94,22 @@ class CsvTranslater:
                         # increment target node counter
                         node_is_target_node[target_node_id_numeric] = node_is_target_node[target_node_id_numeric] + 1
 
+                    # add Relation to source node
+                    relations_by_type = {}
+                    if source_node_id_numeric in relations_by_node_id:
+                        relations_by_type = relations_by_node_id[source_node_id_numeric]
+                    else:
+                        relations_by_node_id[source_node_id_numeric] = relations_by_type
+
+                    if relation in relations_by_type:
+                        relations_by_type[relation].append(target_node_id_numeric)
+                    else:
+                        relations = []
+                        relations.append(target_node_id_numeric)
+                        relations_by_type[relation] = relations
+
+                        relations_by_node_id[source_node_id_numeric] = relations_by_type
+
                     # HANDEL RELATIONS
                     json_link = {}
                     json_link['sourceId'] = source_node_id_numeric
@@ -108,7 +130,7 @@ class CsvTranslater:
 
             # END OF LOOP ----
 
-        array_nodes = self.addNeighborsToEntities(array_nodes, node_is_source_node, node_is_target_node)
+        array_nodes = self.addRelToEntities(array_nodes, node_is_source_node, node_is_target_node, relations_by_node_id)
 
         # add part arrays to json
         self.json_complete['entities'] = array_nodes
@@ -118,10 +140,28 @@ class CsvTranslater:
         self.writeToFile(self.log_path + 'error_lines.txt', error_lines, False)
         return
 
-    def addNeighborsToEntities(self, entity_array, node_is_source_node, node_is_target_node):
+    def addRelToEntities(self, entity_array, node_is_source_node, node_is_target_node, relations_by_node_id):
         for entity in entity_array:
-            entity['outgoingRelations'] = node_is_source_node[entity['id']]
-            entity['incomingRelations'] = node_is_target_node[entity['id']]
+            # add link counter
+            incoming = node_is_target_node[entity['id']]
+            outgoing = node_is_source_node[entity['id']]
+
+            entity['outgoingRelations'] = outgoing
+            entity['incomingRelations'] = incoming
+
+            # calculate independence
+            independence = 100
+            if incoming != 0:
+                independence = (outgoing/(incoming + outgoing))*100
+
+            entity['independence'] = independence
+
+            # add outgoing links by types
+            if entity['id'] in relations_by_node_id:
+                entity['addictByTypes'] = relations_by_node_id[entity['id']]
+            else:
+                entity['addictByTypes'] = 0
+
             # END OF LOOP ----
         return entity_array
 
