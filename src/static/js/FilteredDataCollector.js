@@ -71,7 +71,6 @@ class FilteredDataCollector{
                 }
             }
             // send json to visualise
-            console.log(arrayWithJsons);
             this.uiVisualisationCreator.visualizeNetworkGraph(arrayWithJsons);
 
             // highlight selections
@@ -105,7 +104,6 @@ class FilteredDataCollector{
 
             } else {
                 // if the view needs coordinates of all artifacts
-                console.log(this.originJsonList.length);
                 for (let i = 0; i < this.originJsonList.length; i++) {
                     // TODO: check ob Req und code da sind
                     let item = new Object();
@@ -159,7 +157,6 @@ class FilteredDataCollector{
 
     entitySelected(element){
         console.log('FilteredDataCollector - entitySelected');
-        console.log(element);
         this.uiVisualisationCreator.entitySelected(element);
         return;
     }

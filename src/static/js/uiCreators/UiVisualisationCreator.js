@@ -14,7 +14,6 @@ class UiVisualisationCreator{
 
     visualizeBaseInformations(arrayWithJsons){
         console.log('UiVisualisationCreator - visualizeNetworkGraph');
-        console.log(arrayWithJsons);
         // add loading spinner to visualisation
         $('#visualisation').append(UiElementLib.getLoadingSpinner());
 
