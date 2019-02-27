@@ -70,7 +70,8 @@ function startFileUploader() {
     } else if (!input.files[0]) {
         errormessage = "Please select a file before clicking 'Load'";
     } else {
-        FileUploader.uploadFile(input.files[0], artifactName);
+        let fileUploader = new FileUploader();
+        fileUploader.uploadFile(input.files[0], artifactName);
         startLoaderAndHideFilter(artifactName);
         return true;
     }
@@ -110,11 +111,6 @@ function startLoaderAndHideFilter(artifactName) {
     return true;
 }
 
-function handleLabelWithToggleClick() {
-    let uiDashboardCreator = new UiDashboardCreator();
-    uiDashboardCreator.createToggleInfoForReletedEntities($(this));
-}
-
 function handleLabelClick() {
     let filterdDataCollector = new FilteredDataCollector();
     // check if already active
@@ -138,6 +134,11 @@ function handleNodeClick(){
     return;
 }
 
+function handleLabelWithToggleClick() {
+    let uiDashboardCreator = new UiDashboardCreator();
+    uiDashboardCreator.createToggleInfoForReletedEntities($(this));
+}
+
 function hideElement(element){
     element.addClass('hidden');
     return true;
@@ -157,7 +158,8 @@ function dropdownClicked(){
     if($(this)[0].value != neighborBarChartSortSelectionState){
         neighborBarChartSortSelectionState = $(this)[0].value;
         // query for new coordinates
-        FileUploader.requestNeighborBarchartCoordinates(neighborBarChartSortSelectionState);
+        let fileUploader = new FileUploader();
+        fileUploader.requestNeighborBarchartCoordinates(neighborBarChartSortSelectionState);
     }
 }
 // addEventListeners /////////////////////////////

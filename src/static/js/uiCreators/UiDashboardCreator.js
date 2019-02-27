@@ -83,7 +83,7 @@ class UiDashboardCreator{
         let typePair = UiElementLib.getKeyValuePair('Type', selectedElement.data('type'));
         let outNeighborsPair = UiElementLib.getKeyValuePair('Outgoing Relations', selectedElement.data('outrelations'));
         let inNeighborsPair = UiElementLib.getKeyValuePair('Incoming Relations', selectedElement.data('inrelations'));
-        let independence = UiElementLib.getKeyValuePair('Independence', selectedElement.data('independence') + ' %');
+        let independence = UiElementLib.getKeyValuePair('Independence', selectedElement.data('independence'));
         let idPair = UiElementLib.getKeyValuePair('Id', selectedElement.data('id'));
         let artifactPair = UiElementLib.getKeyValuePair('Artifact', selectedElement.data('artifact'));
 

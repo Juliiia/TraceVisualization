@@ -22,7 +22,7 @@ class CsvTranslater:
     def createJsonAndGraph(self):
         file = open(self.path, 'r', encoding='utf-8', errors='replace')
 
-        array_nodes = {}
+        array_nodes = []
         array_links = []
         unique_nodes_set = set()
         all_nodes_with_num_id = {}
@@ -55,7 +55,7 @@ class CsvTranslater:
                     counter = counter + 1
                     source_node_id_numeric = getNodeId(self.name, counter)
                     json_node_source = self.getNodeJson(line[0], line[1], source_node_id_numeric)
-                    array_nodes[source_node_id_numeric] = json_node_source
+                    array_nodes.append(json_node_source)
                     # store numeric id to node
                     all_nodes_with_num_id[source_node_id] = source_node_id_numeric
                     # increment source node counter
@@ -80,7 +80,7 @@ class CsvTranslater:
                         counter = counter + 1
                         target_node_id_numeric = getNodeId(self.name, counter)
                         json_node_target = self.getNodeJson(line[3], line[4], target_node_id_numeric)
-                        array_nodes[target_node_id_numeric] = json_node_target
+                        array_nodes.append(json_node_target)
                         # store numeric id to node
                         all_nodes_with_num_id[target_node_id] = target_node_id_numeric
                         # increment target node counter
@@ -141,26 +141,26 @@ class CsvTranslater:
         return
 
     def addRelToEntities(self, entity_array, node_is_source_node, node_is_target_node, relations_by_node_id):
-        for entityId in entity_array:
+        for entity in entity_array:
             # add link counter
-            incoming = node_is_target_node[entityId]
-            outgoing = node_is_source_node[entityId]
+            incoming = node_is_target_node[entity['id']]
+            outgoing = node_is_source_node[entity['id']]
 
-            entity_array[entityId]['outgoingRelations'] = outgoing
-            entity_array[entityId]['incomingRelations'] = incoming
+            entity['outgoingRelations'] = outgoing
+            entity['incomingRelations'] = incoming
 
             # calculate independence
             independence = 100
             if incoming != 0:
                 independence = (outgoing/(incoming + outgoing))*100
 
-            entity_array[entityId]['independence'] = independence
+            entity['independence'] = independence
 
             # add outgoing links by types
-            if entityId in relations_by_node_id:
-                entity_array[entityId]['addictByTypes'] = relations_by_node_id[entityId]
+            if entity['id'] in relations_by_node_id:
+                entity['addictByTypes'] = relations_by_node_id[entity['id']]
             else:
-                entity_array[entityId]['addictByTypes'] = 0
+                entity['addictByTypes'] = 0
 
             # END OF LOOP ----
         return entity_array

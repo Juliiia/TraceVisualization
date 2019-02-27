@@ -1,6 +1,18 @@
+let fileUploader = null;
+
 class FileUploader {
 
-    static uploadFile(data, artifactName) {
+    constructor(){
+        if(!fileUploader){
+            this.isRequirementFileUploaded = false;
+            this.isSourceCodeFileUploaded = false;
+            fileUploader = this;
+        } else {
+            return fileUploader;
+        }
+    }
+
+    uploadFile(data, artifactName) {
         let that = this;
         // get or create FilteredDataCollector()
         let filteredDataCollector = new FilteredDataCollector();
@@ -12,12 +24,16 @@ class FileUploader {
             let filteredDataCollector = new FilteredDataCollector();
             filteredDataCollector.addNewOriginJson(artifactName, data);
 
-            // that.requestNetworkGraphCoordinates(artifactName);
-            that.requestNeighborBarchartCoordinates(ViewRegister.getNeighborBarchartSortDefaultOption());
+            that.requestNetworkGraphCoordinates(artifactName);
+
+            // send request only if both files are uploaded successful
+            if(that.updateAndGetState(artifactName)){
+                that.requestNeighborBarchartCoordinates(ViewRegister.getNeighborBarchartSortDefaultOption());
+            }
         })
     }
 
-    static requestJson(path, artifactName){
+    requestJson(path, artifactName){
         let formdata = new FormData();
         formdata.append('header', artifactName);
         formdata.append('path',path);
@@ -35,19 +51,19 @@ class FileUploader {
                 let filteredDataCollector = new FilteredDataCollector();
                 filteredDataCollector.notifyIfErrorOccur();
                 // TODO: display to client
-            },
+            }
 
         });
     }
 
-    static requestNetworkGraphCoordinates(artifactName){
+    requestNetworkGraphCoordinates(artifactName){
         let that = this;
         console.log('requestNetworkGraphCoordinates ' + artifactName);
         $.get("http://127.0.0.1:5000/networkgraphcreator", {name: artifactName}).done(function (data) {
             if(data == 'waiting'){
-                /*setTimeout(function () {
+                setTimeout(function () {
                     that.requestNetworkGraphCoordinates(artifactName)
-                }, 3000);*/
+                }, 3000);
             } else {
                 let filteredDataCollector = new FilteredDataCollector();
                 filteredDataCollector.addNewViewCoordinatesToOriginJson(artifactName, ViewRegister.getNetworkViewName(), data);
@@ -57,14 +73,14 @@ class FileUploader {
         });
     }
 
-    static requestNeighborBarchartCoordinates(sortby){
+    requestNeighborBarchartCoordinates(sortby){
         let that = this;
         console.log('requestNeighborBarchartCoordinates ');
         $.get("http://127.0.0.1:5000/typeneighborsbarchartofall", {sortby: sortby}).done(function (data) {
             if(data == 'waiting'){
-                setTimeout(function () {
+                /*setTimeout(function () {
                     that.requestNeighborBarchartCoordinates(sortby)
-                }, 3000);
+                }, 3000);*/
             } else {
                 // add new coordinate so origen jsons by filteredDataCollector
                 let filteredDataCollector = new FilteredDataCollector();
@@ -85,7 +101,31 @@ class FileUploader {
         });
     }
 
-    static saveEntityAndRelationFile(json){
+    saveEntityAndRelationFile(json){
         // TODO
+    }
+
+    /**
+     * returns true if the other file was successful updated
+     *
+     * @param artifactName
+     */
+    updateAndGetState(artifactName){
+        switch (artifactName) {
+            case ViewRegister.getReqArtifactName():
+                this.isRequirementFileUploaded = true;
+                if(this.isSourceCodeFileUploaded){
+                    return true;
+                }
+                break;
+
+            case ViewRegister.getSourceCodeArtifactName():
+                this.isSourceCodeFileUploaded = true;
+                if(this.isRequirementFileUploaded){
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 }

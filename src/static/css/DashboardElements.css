@@ -25,6 +25,11 @@ circle.clicked {
     stroke-width: 0.5;
 }
 
+circle.dependentClicked{
+    stroke: #ff0000;
+    stroke-width: 0.5;
+}
+
 line.clicked,
 path.curved.clicked {
     stroke: #b30000;

@@ -7,7 +7,7 @@ class NeighborBarchartCreator {
 
     visualizeNeighborChart(arrayWithJsons){
         console.log('visualizeNeighborChart');
-
+        console.log(arrayWithJsons);
         let svgId = 'neighborSVG';
 
         // clean
@@ -62,11 +62,10 @@ class NeighborBarchartCreator {
 
         // create Nodes
         let nodeGroup = UiElementLib.getSVGGroup('nodeGroup');
-        for(let key in baseInfoEntities){
-            console.log(key);
-            if(types.indexOf(baseInfoEntities[key]['type']) > -1){
-                displayedNodeIds.push(key);
-                let node = this.drawNode(baseInfoEntities[key], coordinates[key], entitySize);
+        for(let i=0; i<baseInfoEntities.length; i++){
+            if(types.indexOf(baseInfoEntities[i]['type']) > -1){
+                displayedNodeIds.push(baseInfoEntities[i]['id']);
+                let node = this.drawNode(baseInfoEntities[i], coordinates[baseInfoEntities[i]['id']], entitySize);
                 nodeGroup.append(node);
             }
         }
@@ -75,6 +74,7 @@ class NeighborBarchartCreator {
         let linkGroup = UiElementLib.getSVGGroup('linkGroup');
         let markerGroup = UiElementLib.getSVGGroup('markerGroup');
         for(let i=0; i<baseInfoLinks.length; i++) {
+
             if(displayedNodeIds.indexOf(baseInfoLinks[i]['sourceId']) > -1 && displayedNodeIds.indexOf(baseInfoLinks[i]['targetId']) > -1){
                 let linkClass = UiElementLib.getGlobalLinkFilterId(baseInfoLinks[i]['artifact'], baseInfoLinks[i]['relation'], baseInfoLinks[i]['sourceId'], baseInfoLinks[i]['targetId']);
                 let arrowId = UiElementLib.getGlobalArrowId(baseInfoLinks[i]['sourceId'], baseInfoLinks[i]['relation'], baseInfoLinks[i]['targetId']);
