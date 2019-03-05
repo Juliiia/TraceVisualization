@@ -1,10 +1,12 @@
 let uiDashboardCreator = null
 class UiDashboardCreator{
 
-    constructor() {
+    constructor(uiFilterAndInfoViewManager) {
         if(!uiDashboardCreator){
+            this.uiFilterAndInfoViewManager = uiFilterAndInfoViewManager;
             this.entityAndRelationTypesManager = new EntityAndRelationTypeManager();
             this.selectedNodeElement = $('#selectedNodeInformationView');
+            this.artifactInfoElement = $('#artifactInformationView');
             uiDashboardCreator = this;
         } else {
             return uiDashboardCreator;
@@ -14,11 +16,10 @@ class UiDashboardCreator{
 
     createArtifactInfoView(artifactName, nrOfNodes, nrOfLinks){
         console.log('UiDashboardCreator - createArtifactInfoView');
-        let parentElement = $('#artifactInformationView');
         let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName);
 
         // clean existing Information
-        UiElementLib.removeChildElementIfExists(parentElement, 'div.' + artifactName);
+        UiElementLib.removeChildElementIfExists(this.artifactInfoElement, 'div.' + artifactName);
 
         let titleElement = UiElementLib.getSectionTitle(artifactName);
         let nodesInfoElement = UiElementLib.getKeyValuePair('Entities', nrOfNodes);
@@ -27,7 +28,7 @@ class UiDashboardCreator{
         newChildElement.append(titleElement);
         newChildElement.append(nodesInfoElement);
         newChildElement.append(linksInfoElement);
-        parentElement.append(newChildElement);
+        this.artifactInfoElement.append(newChildElement);
         return true;
     }
 
@@ -114,20 +115,49 @@ class UiDashboardCreator{
         return;
     }
 
+    /**
+     * displays all related entities of the special relation type
+     * @param {HTMLElement} selectedRelationType
+     */
     createToggleInfoForReletedEntities(selectedRelationType){
         console.log(selectedRelationType.data('entityids'));
         let subSectionDiv;
+
+        // clean or create toggleInfoSubsection Div
         if(this.selectedNodeElement.find('.toggleInfoSubsection').length > 0){
              subSectionDiv = this.selectedNodeElement.find('.toggleInfoSubsection').empty();
         } else {
             subSectionDiv = UiElementLib.getDashboardElementSubsection('toggleInfoSubsection');
             this.selectedNodeElement.append(subSectionDiv);
         }
-        let p = document.createElement('p');
-        p.setAttribute('class', 'wrapText');
-        p.append(selectedRelationType.data('entityids'));
-        subSectionDiv.append(p);
-        return
+
+        // append new Information
+        let allEntities = selectedRelationType.data('entityids').split(',');
+        let allEntitiesWithInfo = this.uiFilterAndInfoViewManager.getEntityInfos(allEntities);
+        let allEntityAttributes = ViewRegister.getEntityAttributes();
+
+        if(allEntities.length < 6){
+            let accordion = UiElementLib.getAccordionDiv();
+            for(let i=0; i<allEntities.length; i++){
+                let entityInfo = allEntitiesWithInfo[allEntities[i]];
+                let content = document.createElement('div');
+
+                for(let ii=0; ii<allEntityAttributes.length; ii++){
+                    let element = UiElementLib.getKeyValuePair(allEntityAttributes[ii], entityInfo[allEntityAttributes[ii]]);
+                    content.append(element);
+                }
+
+                accordion = UiElementLib.getAccordionElement(accordion, entityInfo['name'], content);
+            }
+            subSectionDiv.append(accordion);
+            initAccordion();
+        } else {
+            let p = document.createElement('p');
+            p.setAttribute('class', 'wrapText');
+            p.append(selectedRelationType.data('entityids'));
+            subSectionDiv.append(p);
+        }
+        return;
     }
 
 }

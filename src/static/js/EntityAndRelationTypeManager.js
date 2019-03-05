@@ -30,63 +30,82 @@ class EntityAndRelationTypeManager{
     displayAllTypesEditMode(){
         let parentEntityDivElement = $('#settingsSidebar #nodeTypesSetup div').empty();
         let parentLinkDivElement = $('#settingsSidebar #linkTypesSetup div').empty();
-        let parentUndetDivElement = $('#settingsSidebar #undeterminedTypesSetup div').empty();
 
-        console.log(this.typeJson);
-        $.each(this.typeJson, function (key, value) {
-            console.log(key);
-           let group = document.createElement('div');
-           group.setAttribute('class', 'form-group');
+        // add all entity types
+        $.each(this.typeJson['entitiesTypes'], function (key, value) {
+            let group = document.createElement('div');
+            group.setAttribute('class', 'form-group');
 
-           let innergroup = document.createElement('div');
-           innergroup.setAttribute('class', 'inner-group');
+            let innergroup = document.createElement('div');
+            innergroup.setAttribute('class', 'inner-group');
 
-           let label = UiElementLib.getBeginOfLineLabel(key + ': ');
-           let colorpicker = UiElementLib.getColorPickerInput('color-' + key, value[0].color);
-           let textarea = UiElementLib.getTextAreaInput('desc-' + key, value[0].desc);
+            let label = UiElementLib.getBeginOfLineLabel(key + ': ');
+            let colorpicker = UiElementLib.getColorPickerInput('color-' + key, value[0].color);
+            let textarea = UiElementLib.getTextAreaInput('desc-' + key, value[0].desc);
 
-           innergroup.append(label);
-           innergroup.append(colorpicker);
-           group.append(innergroup);
-           group.append(textarea);
+            innergroup.append(label);
+            innergroup.append(colorpicker);
+            group.append(innergroup);
+            group.append(textarea);
 
-           switch (value[0].type) {
-               case 'entity' :
-                   parentEntityDivElement.append(group);
-                   break;
-               case 'relation':
-                   parentLinkDivElement.append(group);
-                   break;
-               default:
-                   parentUndetDivElement.append(group);
-           }
+            parentEntityDivElement.append(group);
+        });
+
+        $.each(this.typeJson['relationTypes'], function (key, value) {
+            let group = document.createElement('div');
+            group.setAttribute('class', 'form-group');
+
+            let innergroup = document.createElement('div');
+            innergroup.setAttribute('class', 'inner-group');
+
+            let label = UiElementLib.getBeginOfLineLabel(key + ': ');
+            let colorpicker = UiElementLib.getColorPickerInput('color-' + key, value[0].color);
+            let textarea = UiElementLib.getTextAreaInput('desc-' + key, value[0].desc);
+
+            innergroup.append(label);
+            innergroup.append(colorpicker);
+            group.append(innergroup);
+            group.append(textarea);
+
+            parentLinkDivElement.append(group);
         });
     }
 
     displayAllTypesReadMode(){
         let parentEntityDivElement = $('#settingsSidebar #nodeTypesSetup div').empty();
         let parentLinkDivElement = $('#settingsSidebar #linkTypesSetup div').empty();
-        let parentUndetDivElement = $('#settingsSidebar #undeterminedTypesSetup div').empty();
 
-        $.each(this.typeJson, function (key, value) {
-           let group = document.createElement('div');
-           let label = UiElementLib.getLabelWithCustomColor(key, key, null, value[0].color);
-           let descText = UiElementLib.getSpanWithClass('marginLeft');
-           descText.append( value[0].desc);
+        $.each(this.typeJson['entitiesTypes'], function (key, value) {
+            console.log(key);
+            console.log(value);
+            let group = document.createElement('div');
 
-           group.append(label);
-           group.append(descText);
+            let label = UiElementLib.getLabelWithCustomColor(key, key, null, value[0].color);
+            let descText = UiElementLib.getSpanWithClass('marginLeft');
+            let name = UiElementLib.getBoldTextWithSpace(value[0].name);
+            descText.append(name);
+            descText.append(value[0].desc);
 
-           switch (value[0].type) {
-               case 'entity' :
-                   parentEntityDivElement.append(group);
-                   break;
-               case 'relation':
-                   parentLinkDivElement.append(group);
-                   break;
-               default:
-                   parentUndetDivElement.append(group);
-           }
+            group.append(label);
+            group.append(descText);
+
+            parentEntityDivElement.append(group);
+        });
+
+        $.each(this.typeJson['relationTypes'], function (key, value) {
+            console.log(key);
+            console.log(value);
+            let group = document.createElement('div');
+            let label = UiElementLib.getLabelWithCustomColor(key, key, null, value[0].color);
+            let descText = UiElementLib.getSpanWithClass('marginLeft');
+            let name = UiElementLib.getBoldTextWithSpace(value[0].primaryDirection);
+            descText.append(name);
+            descText.append(value[0].desc);
+
+            group.append(label);
+            group.append(descText);
+
+            parentLinkDivElement.append(group);
         });
     }
 
@@ -104,8 +123,10 @@ class EntityAndRelationTypeManager{
 
     getColorOfType(type){
         let colorCode = '#e6e6e6';
-        if(this.typeJson[type]){
-            colorCode = this.typeJson[type][0].color;
+        if(this.typeJson['entitiesTypes'][type]){
+            colorCode = this.typeJson['entitiesTypes'][type][0].color;
+        } else if(this.typeJson['relationTypes'][type]){
+            colorCode = this.typeJson['relationTypes'][type][0].color;
         }
         return colorCode;
     }

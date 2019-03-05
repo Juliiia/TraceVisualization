@@ -83,6 +83,15 @@ div.halfWidth {
     word-wrap: break-word;
 }
 
+.bold{
+    font-weight: bold;
+}
+
+.spaceBeforeAfter{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .clear{
     clear: both;
 }
