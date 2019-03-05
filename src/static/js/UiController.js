@@ -162,6 +162,12 @@ function dropdownClicked(){
         fileUploader.requestNeighborBarchartCoordinates(neighborBarChartSortSelectionState);
     }
 }
+
+function initAccordion(){
+    $('.ui.accordion')
+      .accordion()
+    ;
+}
 // addEventListeners /////////////////////////////
 
 $(document).ready(function () {

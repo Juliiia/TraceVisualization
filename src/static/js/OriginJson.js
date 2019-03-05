@@ -107,4 +107,15 @@ class OriginJson{
         console.error(text);
     }
 
+    getInfosForEntities(listOfEntityIds){
+        let entities = this.jsonObject.entities;
+        let foundEntities = new Object();
+        for(let i=0; i<entities.length; i++){
+            if(listOfEntityIds.indexOf(entities[i].id) > -1){
+                foundEntities[entities[i].id] = entities[i];
+            }
+        }
+        return foundEntities;
+    }
+
 }
