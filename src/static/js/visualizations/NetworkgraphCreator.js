@@ -34,8 +34,7 @@ class NetworkgraphCreator{
         let svgElement = UiElementLib.getSVGTag(childId, 900, 800);
 
         // create group for each artifact json
-        let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        group.setAttribute("id", artifactName);
+        let group = UiElementLib.getSVGGroup('artifactGroup', artifactName);
 
         // create node for each entity
         let nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -52,8 +51,8 @@ class NetworkgraphCreator{
         let markerGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         linkGroup.setAttribute("class", 'links');
         for(let i=0; i < links.length; i++){
-            let id = UiElementLib.getGlobalArrowId(links[i]['sourceId'], links[i]['relation'], links[i]['targetId']);;
-            let lineClass= UiElementLib.getGlobalLinkFilterId(artifactName, links[i]['relation'], links[i]['sourceId'], links[i]['targetId']);
+            let id = UiElementLib.getGlobalArrowId(links[i]['sourceId'], links[i]['relation'], links[i]['targetId']);
+            let lineClass= UiElementLib.getGlobalLinkFilterId(artifactName, links[i]['relation'], links[i]['sourceId'], links[i]['targetId']) + ' smallSvgLines';
 
             let link = this.drawLine(id, artifactName, links[i], entityCoordinatesMap[links[i]['sourceId']], entityCoordinatesMap[links[i]['targetId']], lineClass);
             // get radius to find the right place for arrows

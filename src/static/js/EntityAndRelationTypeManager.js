@@ -76,8 +76,6 @@ class EntityAndRelationTypeManager{
         let parentLinkDivElement = $('#settingsSidebar #linkTypesSetup div').empty();
 
         $.each(this.typeJson['entitiesTypes'], function (key, value) {
-            console.log(key);
-            console.log(value);
             let group = document.createElement('div');
 
             let label = UiElementLib.getLabelWithCustomColor(key, key, null, value[0].color);
@@ -93,8 +91,6 @@ class EntityAndRelationTypeManager{
         });
 
         $.each(this.typeJson['relationTypes'], function (key, value) {
-            console.log(key);
-            console.log(value);
             let group = document.createElement('div');
             let label = UiElementLib.getLabelWithCustomColor(key, key, null, value[0].color);
             let descText = UiElementLib.getSpanWithClass('marginLeft');
