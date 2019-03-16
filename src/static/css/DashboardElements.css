@@ -3,8 +3,8 @@
     opacity: 0.1;
 }
 
-path,
-line {
+path.smallSvgLines ,
+line.smallSvgLines  {
     stroke: #595959;
     stroke-width: 0.2;
 }
@@ -76,6 +76,7 @@ div.beginOfLineLabel {
 div.halfWidth {
     width: 50%;
     float: left;
+    overflow: hidden;
 }
 
 .wrapText{

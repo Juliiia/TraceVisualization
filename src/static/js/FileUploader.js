@@ -24,7 +24,9 @@ class FileUploader {
             let filteredDataCollector = new FilteredDataCollector();
             filteredDataCollector.addNewOriginJson(artifactName, data);
 
+            // request new View information
             that.requestNetworkGraphCoordinates(artifactName);
+            that.requestSankeyDiagrammJson(artifactName);
 
             // send request only if both files are uploaded successful
             if(that.updateAndGetState(artifactName)){
@@ -103,6 +105,23 @@ class FileUploader {
 
     saveEntityAndRelationFile(json){
         // TODO
+    }
+
+    requestSankeyDiagrammJson(artifactName){
+        let that = this;
+        console.log('requestSankeyDiagrammJson ' + artifactName);
+        $.get("http://127.0.0.1:5000/sankeydiagram", {name: artifactName}).done(function (data) {
+            if(data == 'waiting'){
+                setTimeout(function () {
+                    that.requestSankeyDiagrammJson(artifactName)
+                }, 3000);
+            } else {
+                let filteredDataCollector = new FilteredDataCollector();
+                filteredDataCollector.addNewViewCoordinatesToOriginJson(artifactName, ViewRegister.getSankeyDiagramName(), data);
+            }
+        }).fail(function () {
+            console.log('GET REQUEST FAILED: requestSankeyDiagrammJson');
+        });
     }
 
     /**

@@ -21,5 +21,10 @@ def getPathOfNeighborBarchart(artifact_name):
     return getPathToDataExchangeFolder() + artifact_name + '_neighbor_barchart.json'
 
 
+def getPathOfSankeyDiagram(artifact_name):
+    return getPathToDataExchangeFolder() + artifact_name + '_sankey_diagram.json'
+
+
 def getNodeId(artifact_name, counter):
     return artifact_name + 'entity' + str(counter)
+

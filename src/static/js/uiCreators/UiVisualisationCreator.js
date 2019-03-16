@@ -8,6 +8,7 @@ class UiVisualisationCreator{
         } else {
             this.networkgraphCreator = new NetworkgraphCreator();
             this.neighborTypChartCreator = new NeighborBarchartCreator();
+            this.sankeyDiagramCreator = new SankeyDiagram();
             uiVisualisationCreator = this;
         }
     }
@@ -26,6 +27,9 @@ class UiVisualisationCreator{
                 return;
             case ViewRegister.getNeighborBarchartName():
                 this.neighborTypChartCreator.visualizeNeighborChart(array);
+                return;
+            case ViewRegister.getSankeyDiagramName():
+                this.sankeyDiagramCreator.visualizeSankeyDiagram(array);
                 return;
             default:
                 this.onError('View Finding Error', 'Can not find visualization for: ' + viewName);

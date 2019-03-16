@@ -7,6 +7,7 @@ from flask_cors import CORS, cross_origin
 from models.network_graph import NetworkGraph
 from models.csv_translater import CsvTranslater
 from models.neighbortype_barchart import NeighborTypeBarchart
+from models.sankey_diagram import SankeyDiagram
 
 app = Flask(__name__)
 CORS(app, origins='http://localhost:8000')
@@ -28,11 +29,20 @@ def get_graph():
     pathToFile = networkGraph.returnNodesWithCoordinates()
     return pathToFile
 
+
 @app.route("/typeneighborsbarchartofall", methods=["GET"])
 def get_type_neighbors_chart_all():
     sortby = request.args.get('sortby')
     barchart = NeighborTypeBarchart(sortby)
     response = barchart.createBarchart()
+    return response
+
+
+@app.route("/sankeydiagram", methods=["GET"])
+def get_type_sankey_diagram():
+    name = request.args.get('name')
+    sankey = SankeyDiagram(name)
+    response = sankey.createSankeyDiagram()
     return response
 
 
