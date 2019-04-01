@@ -168,9 +168,41 @@ function initAccordion(){
       .accordion()
     ;
 }
+
+function openContextMenu(event){
+    let top = event.clientY;
+    let left = event.clientX;
+    console.log(top);
+    console.log(left);
+
+    // Show contextmenu
+    $("#contextMenu").css({
+        top: top + "px",
+        left: left + "px",
+        display: "block"
+    });
+
+    // add id of svg to contextMenu
+    $("#contextMenu").data('svgId', $(this).attr('id'));
+}
+
+function hideContextMenu(){
+    $("#contextMenu").hide();
+    $("#contextMenu").removeData('svgId');
+}
+
+function svg2PDF(){
+    console.log('print');
+    console.log($("#contextMenu").data('svgId'));
+    let elementId = $("#contextMenu").data('svgId');
+    let element = document.getElementById(elementId);
+    html2pdf(element);
+}
+
 // addEventListeners /////////////////////////////
 
 $(document).ready(function () {
+    $(document).click(hideContextMenu);
     $('#switchToEditButton').click(switchEntityAndTypeManagerToEditMode);
     $('#saveTypesButton').click(switchAndSaveChanges);
     $('#cancelTypesButton').click(switchEntityAndTypeManagerToViewMode);
@@ -178,4 +210,5 @@ $(document).ready(function () {
     $('#setupSidebarOpener').click(toggleSetupSidebar);
     $('.csvFileUploaderButton').click(startFileUploader);
     $('input.custom-file-input').change(displayFileName);
+    $('#printSVG2PDF').click(svg2PDF);
 });

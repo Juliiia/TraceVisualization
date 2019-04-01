@@ -22,16 +22,16 @@ class NetworkgraphCreator{
         let nodesWithRadius = new Object();
 
         // create parent svg and title
-        let childDiv = document.createElement('div');
-        childDiv.setAttribute('id', 'svgDiv' + artifactName);
-        childDiv.setAttribute('class', 'halfWidth');
+        let childDiv = UiElementLib.getHalfWidthDiv('svgDiv' + ViewRegister.getNetworkViewName() + artifactName, null);
 
         let childId = UiElementLib.getSVGId(artifactName);
 
         // clean old
         UiElementLib.removeChildElementIfExists(this.parentElement, '#' + childId);
 
-        let svgElement = UiElementLib.getSVGTag(childId, 900, 800);
+        let svgElement = UiElementLib.getSVGTag(childId, null,900, 800);
+        // add listener to have the print option
+        svgElement.addEventListener('contextmenu', openContextMenu);
 
         // create group for each artifact json
         let group = UiElementLib.getSVGGroup('artifactGroup', artifactName);

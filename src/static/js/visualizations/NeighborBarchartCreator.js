@@ -6,8 +6,6 @@ class NeighborBarchartCreator {
     }
 
     visualizeNeighborChart(arrayWithJsons){
-        console.log('visualizeNeighborChart');
-        console.log(arrayWithJsons);
         let svgId = 'neighborSVG';
 
         // clean
@@ -23,8 +21,10 @@ class NeighborBarchartCreator {
         this.parentElement.append(dropdown);
 
         // add SVG Tag
-        let svgElement = UiElementLib.getSVGTag(svgId, 1200, 1000);
+        let svgElement = UiElementLib.getSVGTag(svgId, null,1200, 1000);
         this.parentElement.append(svgElement);
+        // add listener to have the print option
+        svgElement.addEventListener('contextmenu', openContextMenu);
 
         let that  = this;
         $.each(arrayWithJsons, function (key, value) {

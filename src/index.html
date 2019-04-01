@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="static/css/filter.css">
         <link rel="stylesheet" type="text/css" href="static/css/Dashboard.css">
         <link rel="stylesheet" type="text/css" href="static/css/DashboardElements.css">
+        <link rel="stylesheet" type="text/css" href="static/css/BasicStyling.css">
 
     </head>
 
@@ -156,6 +157,17 @@
             </div>
         </div>
 
+        <!-- Context Menu -->
+        <div id='contextMenu'>
+            <div class="ui list">
+                <div id="printSVG2PDF" class="item">
+                    <i class="save icon"></i>
+                    <div class="content">
+                      Save as PDF
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Scripts -->
         <script>window.$ = window.jQuery = require("../node_modules/jquery/dist/jquery.min");</script>
@@ -163,6 +175,7 @@
         <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
         <script type="text/javascript" src="static/js/lib/svg-pan-zoom.js"></script>
+        <script type="text/javascript" src="static/js/lib/html2pdf.bundle.min.js"></script>
 
         <!-- classes -->
         <script type="text/javascript" src="static/js/lib/UiElementLib.js"></script>

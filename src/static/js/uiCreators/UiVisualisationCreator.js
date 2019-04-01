@@ -39,6 +39,7 @@ class UiVisualisationCreator{
     entitySelected(element){
         this.neighborTypChartCreator.highlightNodeAndLinks(element);
         this.networkgraphCreator.highlightNodeAndLinks(element);
+        this.sankeyDiagramCreator.highlightNodeAndLinks(element);
     }
 
     highlightSelection(deselectionList){

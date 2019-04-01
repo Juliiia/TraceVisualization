@@ -19,6 +19,7 @@ path.arrow.clicked {
     stroke: #b30000;
 }
 
+rect.clicked,
 circle.clicked {
     fill: #ff0000;
     stroke: black;

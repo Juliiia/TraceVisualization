@@ -35,7 +35,7 @@ class UiDashboardCreator{
     createColorLegend(artifactName, nodetypes, linktypes) {
         let that = this;
         let parentElement = $('#colorLegendView');
-        let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName)
+        let newChildElement = UiElementLib.getDashboardElementSubsection(artifactName);
 
         // clean existing Informations
         UiElementLib.removeChildElementIfExists(parentElement, 'div.' + artifactName);
@@ -117,6 +117,7 @@ class UiDashboardCreator{
 
     /**
      * displays all related entities of the special relation type
+     *
      * @param {HTMLElement} selectedRelationType
      */
     createToggleInfoForReletedEntities(selectedRelationType){

@@ -11,16 +11,16 @@
     "request-promise": "^1.0.2"
   },
   "dependencies": {
-    "electron": "^1.4.10",
-    "electron-builder": "^10.8.1",
-    "request-promise": "^4.2.2",
-    "jquery": "^3.3.1",
     "bootstrap": "^4.2.1",
-    "popper": "^1.0.1",
-    "semantic-ui": "^2.4.2",
     "d3": "^5.9.1",
     "d3-sankey": "^0.10.4",
-    "d3-sankey-diagram": "^0.7.3"
+    "d3-sankey-diagram": "^0.7.3",
+    "electron": "^1.4.10",
+    "electron-builder": "^10.8.1",
+    "jquery": "^3.3.1",
+    "popper": "^1.0.1",
+    "request-promise": "^4.2.2",
+    "semantic-ui": "^2.4.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

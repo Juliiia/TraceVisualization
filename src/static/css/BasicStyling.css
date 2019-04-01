@@ -1,0 +1,33 @@
+body,
+.ui.header{
+    font-family: Arial, sans-serif;
+}
+
+body,
+body.pushable>.pusher {
+    background-color: #888888;
+}
+
+.ui.inverted.menu {
+    background: #4d4d4d;
+}
+
+#contextMenu{
+    display: none;
+    z-index: 100;
+    position: absolute;
+    border: 1px solid #888888;
+    border-radius: 3px;
+    width: 200px;
+    background: white;
+    box-shadow: 3px 3px 8px #888888;
+}
+
+#contextMenu div .item{
+    padding: 4px;
+}
+
+#contextMenu div .item:hover{
+ cursor: pointer;
+ background-color: #7fffd4;
+}

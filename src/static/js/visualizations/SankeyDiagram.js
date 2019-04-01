@@ -26,26 +26,25 @@ class SankeyDiagram {
 
         let width = sankeyData['links'].length * 2;
         let height = sankeyData['links'].length * 5;
-        console.log(height);
         let opacity = 0.4;
 
         let that = this;
 
         // create parent svg and title
-        let childDiv = document.createElement('div');
-        childDiv.setAttribute('id', 'svgDiv' + artifactName);
-        childDiv.setAttribute('class', 'halfWidth');
-
+        let childDiv = UiElementLib.getHalfWidthDiv('svgDiv' + artifactName, null);
         let childId = UiElementLib.getD3Id(artifactName);
 
         // clean old
         UiElementLib.removeChildElementIfExists(this.parentElement, '#' + childId);
 
         let sectionTitle = UiElementLib.getSectionTitle(artifactName + ' ' + ViewRegister.getSankeyDiagramTitle());
-        let svgElement = UiElementLib.getSVGTag(childId, width, height);
+        let svgElement = UiElementLib.getSVGTag(childId, null, width, height);
+
         this.parentElement.append(childDiv);
         childDiv.append(sectionTitle);
         childDiv.append(svgElement);
+        // add listener to have the print option
+        svgElement.addEventListener('contextmenu', openContextMenu);
 
         const svg = d3.select('#' + childId)
             .append("g")
@@ -186,12 +185,16 @@ class SankeyDiagram {
             .attr("width", function (d) {
                 return d.dx;
             })
+            .attr("id", function (d) {
+                return d.nodeid;
+            })
             .attr("fill", function (d) {
                 return '#000'
             });
 
 
         //add labels
+        let nodeName;
         node.append("text")
             .attr("x", function (d) {
                 return d.x0 - 6;
@@ -202,7 +205,8 @@ class SankeyDiagram {
             .attr("dy", "0.35em")
             .attr("text-anchor", "end")
             .text(function (d) {
-                return that.getNameForId(d.nodeid, entities);
+                nodeName = that.getNameForId(d.nodeid, entities);
+                return nodeName;
             })
             .filter(function (d) {
                 return d.x0 < 5;
@@ -235,6 +239,12 @@ class SankeyDiagram {
     }
 
     highlightNodeAndLinks(element){
-        
+        console.log(element.data('artifact'));
+        console.log(element.data('id'));
+        // deselect
+        this.parentElement.find('.clicked').removeClass('clicked');
+
+        // mark node
+        this.parentElement.find('#'+ element.data('id')).addClass('clicked');
     }
 }
