@@ -14,7 +14,7 @@ class EntityAndRelationTypeManager{
     }
 
     loadJson(){
-        let path = '../src/static/js/lib/entityAndRelationTypes.json';
+        let path = '../src/static/js/staticLib/entityAndRelationTypes.json';
         let that = this;
         $.getJSON(path, function (data) {
             that.typeJson = data;
