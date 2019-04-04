@@ -16,7 +16,6 @@ class FilteredDataCollector{
     }
 
     addNewOriginJson(artefaktName, pathToJsonFile){
-        console.log('FilteredDataCollector - addNewOriginJson');
         this.newDataAvailable = 'LOADING';
         // replace an old artifact json
         if(this.originJsonList.length > 0){
@@ -32,7 +31,6 @@ class FilteredDataCollector{
     }
 
     addNewViewCoordinatesToOriginJson(artifactName, viewName, pathToJson){
-        console.log('FilteredDataCollector - addNewViewCoordinatesToOriginJson ' + viewName);
         if(this.originJsonList.length > 0) {
             for(let i=0; i<this.originJsonList.length; i++) {
                 if(this.originJsonList[i].artefactName == artifactName){
@@ -45,18 +43,15 @@ class FilteredDataCollector{
     }
 
     visualizeJsonStructure(){
-        console.log('FilteredDataCollector - visualizeJsonStructure');
         if(this.isfilterChanged){
             this.updateVisualisation();
             return;
         }
-        console.log('do nothing');
         return;
     }
 
     // TODO: maybe better to hold an array of all jsons and only update them if json changes
     visualizeJsonStructureConsiderFilter(artifactName){
-        console.log('FilteredDataCollector - visualizeJsonStructureConsiderFilter');
         if (this.originJsonList.length > 0) {
             // if jsons are existing and there was a new filter selected or a new json was loaded
             let arrayWithJsons = [];
@@ -150,14 +145,12 @@ class FilteredDataCollector{
     }
 
     updateVisualisation(){
-        console.log('FilteredDataCollector - updateVisualisation');
         this.uiVisualisationCreator.highlightSelection(this.deselectedFilterList);
         this.isfilterChanged = false;
     }
 
-    entitySelected(element){
-        console.log('FilteredDataCollector - entitySelected');
-        this.uiVisualisationCreator.entitySelected(element);
+    entitySelected(elementId, artifact){
+        this.uiVisualisationCreator.entitySelected(elementId, artifact);
         return;
     }
 
@@ -205,7 +198,6 @@ class FilteredDataCollector{
     }
 
     notifyNewViewDataLoaded(artifactName, viewName){
-        console.log('FilteredDataCollector - notifyNewViewDataLoaded ' + viewName);
         this.visualizeView(artifactName, viewName);
         return;
     }

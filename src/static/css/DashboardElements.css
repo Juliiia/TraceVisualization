@@ -3,12 +3,29 @@
     opacity: 0.1;
 }
 
-path.smallSvgLines ,
-line.smallSvgLines  {
+/* lines & paths */
+path,
+line{
     stroke: #595959;
+}
+
+path.normalSvgLines,
+line.normalSvgLines{
+    stroke-width: 0.7;
+}
+
+path.smallSvgLines,
+line.smallSvgLines  {
     stroke-width: 0.2;
 }
 
+line.clicked,
+path.curved.clicked {
+    stroke: #b30000;
+    stroke-width: 0.6;
+}
+
+/* Arrow */
 path.arrow{
     fill: #595959;
     stroke: #595959;
@@ -19,6 +36,7 @@ path.arrow.clicked {
     stroke: #b30000;
 }
 
+/* Nodes */
 rect.clicked,
 circle.clicked {
     fill: #ff0000;
@@ -29,12 +47,6 @@ circle.clicked {
 circle.dependentClicked{
     stroke: #ff0000;
     stroke-width: 0.5;
-}
-
-line.clicked,
-path.curved.clicked {
-    stroke: #b30000;
-    stroke-width: 0.6;
 }
 
 span.sectionTitle {

@@ -146,8 +146,8 @@ class CsvTranslater:
             incoming = node_is_target_node[entity['id']]
             outgoing = node_is_source_node[entity['id']]
 
-            entity['outgoingRelations'] = outgoing
-            entity['incomingRelations'] = incoming
+            entity['outgoingrelations'] = outgoing
+            entity['incomingrelations'] = incoming
 
             # calculate independence
             independence = 100
@@ -158,9 +158,9 @@ class CsvTranslater:
 
             # add outgoing links by types
             if entity['id'] in relations_by_node_id:
-                entity['addictByTypes'] = relations_by_node_id[entity['id']]
+                entity['addictbytypes'] = relations_by_node_id[entity['id']]
             else:
-                entity['addictByTypes'] = 0
+                entity['addictbytypes'] = 0
 
             # END OF LOOP ----
         return entity_array

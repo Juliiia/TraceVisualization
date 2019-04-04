@@ -47,6 +47,67 @@ class  UiElementLib {
         return element;
     }
 
+    static getClearDiv(){
+        let element = document.createElement('div');
+        element.setAttribute('class', 'clear');
+        return element;
+    }
+
+    /**
+     * creates a button with icon
+     * icons: https://semantic-ui.com/elements/icon.html
+     *
+     * @param {String} id
+     * @param {String} className
+     * @param {String} icon
+     * @param {String} content
+     * @returns {HTMLElement}
+     */
+    static getButtonWithIcon(id, className, icon, content){
+        let elementClass = 'ui labeled icon button';
+        if(className != null){
+            elementClass = elementClass + ' ' + className;
+        }
+        let button = UiElementLib.getButton(id, elementClass);
+        let iconElement = document.createElement('i');
+        iconElement.setAttribute('class', icon + ' icon');
+        button.append(iconElement);
+        button.append(content);
+        return button;
+    }
+
+    /**
+     * creates a button with colored background
+     *
+     * @param {String} id
+     * @param {String} className
+     * @param {String} content
+     * @returns {HTMLElement}
+     */
+    static getPrimaryButton(id, className, content){
+        let elementClass = 'ui primary button';
+        if(className != null){
+            elementClass = elementClass + ' ' + className;
+        }
+        let element = UiElementLib.getButton(id, elementClass);
+        element.append(content);
+        return element;
+    }
+
+    /**
+     * create a basic button
+     *
+     * @param {String} id
+     * @param {String} className
+     * @returns {HTMLElement}
+     */
+    static getButton(id, className){
+        let element = document.createElement('button');
+        element.setAttribute('id', id);
+        element.setAttribute('class', className);
+        return element;
+    }
+
     ////////////////////////////////////////////////////////////////
     // TEXT ELEMENTS ///////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
@@ -223,6 +284,20 @@ class  UiElementLib {
         return accordion;
     }
 
+    static addEntityDataToElement(element, infoArray){
+        element.setAttribute('data-name', infoArray['name']);
+        element.setAttribute('data-type', infoArray['type']);
+        element.setAttribute('data-id', infoArray['id']);
+        element.setAttribute('data-outgoingrelations', infoArray['outgoingrelations']);
+        element.setAttribute('data-incomingrelations', infoArray['incomingrelations']);
+        element.setAttribute('data-artifact', infoArray['artifact']);
+        element.setAttribute('data-addictbytypes', JSON.stringify(infoArray['addictbytypes']));
+        // circle.setAttribute('data-origin', entityInfoJson['origin']);
+        // circle.setAttribute('data-responsible', entityInfoJson['responsible']);
+        element.setAttribute('data-independence', infoArray['independence']);
+        return element
+    }
+
     ////////////////////////////////////////////////////////////////
     // SVG ELEMENTS ////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
@@ -255,16 +330,7 @@ class  UiElementLib {
         circle.setAttribute('fill-opacity', 1);
         circle.setAttribute('class', className);
 
-        circle.setAttribute('data-name', entityInfoJson['name']);
-        circle.setAttribute('data-type', entityInfoJson['type']);
-        circle.setAttribute('data-id', entityInfoJson['id']);
-        circle.setAttribute('data-outrelations', entityInfoJson['outgoingRelations']);
-        circle.setAttribute('data-inrelations', entityInfoJson['incomingRelations']);
-        circle.setAttribute('data-artifact', entityInfoJson['artifact']);
-        circle.setAttribute('data-addictbytypes', JSON.stringify(entityInfoJson['addictByTypes']));
-        // circle.setAttribute('data-origin', entityInfoJson['origin']);
-        // circle.setAttribute('data-responsible', entityInfoJson['responsible']);
-        circle.setAttribute('data-independence', entityInfoJson['independence']);
+        circle = UiElementLib.addEntityDataToElement(circle, entityInfoJson);
         circle.setAttribute("r", radius);
         return circle;
     }

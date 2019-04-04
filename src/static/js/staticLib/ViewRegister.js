@@ -15,10 +15,16 @@ class  ViewRegister {
         attributes.push('artifact');
         attributes.push('name');
         attributes.push('type');
-        attributes.push('outgoingRelations');
-        attributes.push('incomingRelations');
+        attributes.push('outgoingrelations');
+        attributes.push('incomingrelations');
         attributes.push('independence');
         attributes.push('id');
+        return attributes;
+    }
+
+    static getEntityWithLinkAttributes(){
+        let attributes = ViewRegister.getEntityAttributes();
+        attributes.push('approved');
         return attributes;
     }
 
@@ -39,14 +45,14 @@ class  ViewRegister {
 
     static getNeighborBarchartSortOptions(){
         let options = [];
-        options.push('outgoingRelations');
-        options.push('incomingRelations');
+        options.push('outgoingrelations');
+        options.push('incomingrelations');
         options.push('independence');
         return options;
     }
 
     static getNeighborBarchartSortDefaultOption(){
-        return 'outgoingRelations';
+        return 'outgoingrelations';
     }
 
     // SANKEY DIAGRAM ------------------------------------------------------

@@ -8,6 +8,18 @@ body.pushable>.pusher {
     background-color: #888888;
 }
 
+.floatRight{
+    float: right;
+}
+
+.clear{
+    clear: both;
+}
+
+.marginBefore{
+    margin-top: 13px !important;
+}
+
 .ui.inverted.menu {
     background: #4d4d4d;
 }
@@ -29,5 +41,5 @@ body.pushable>.pusher {
 
 #contextMenu div .item:hover{
  cursor: pointer;
- background-color: #7fffd4;
+ font-weight: bold;
 }

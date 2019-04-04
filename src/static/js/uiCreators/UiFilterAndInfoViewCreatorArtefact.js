@@ -1,9 +1,8 @@
 class UiFilterAndInfoViewCreatorArtefact{
-    //TODO: rename to UiFilterAndInfoViewManager
     //TODO: filterViewCreator auslagern
 
     constructor(artefactName, originJsonReference) {
-        console.log('# UiFilterAndInfoViewCreatorArtefact - Constructor');
+        console.log('# UiFilterAndInfoViewCreatorArtefact - Constructor for ' + artefactName);
         this.artefactName = artefactName;
         this.originJson = originJsonReference;
         this.uiDashboardCreator = new UiDashboardCreator(this);
@@ -119,5 +118,10 @@ class UiFilterAndInfoViewCreatorArtefact{
 
     getEntityInfos(listOfEntityIds){
         return this.originJson.getInfosForEntities(listOfEntityIds);
+    }
+
+    getEntityAndLinkInfo(sourceEntityId, listOfEntityIds){
+        console.log('artefakt ' + this.artefactName);
+        return this.originJson.getInfosForEntitiesAndLinks(sourceEntityId, listOfEntityIds);
     }
 }

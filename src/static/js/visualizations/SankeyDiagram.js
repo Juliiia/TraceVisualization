@@ -24,7 +24,7 @@ class SankeyDiagram {
         let entities = array.baseInfo.entities;
         let sankeyData = array.viewInfo;
 
-        let width = sankeyData['links'].length * 2;
+        let width = sankeyData['links'].length * 3;
         let height = sankeyData['links'].length * 5;
         let opacity = 0.4;
 
@@ -238,13 +238,11 @@ class SankeyDiagram {
         return id;
     }
 
-    highlightNodeAndLinks(element){
-        console.log(element.data('artifact'));
-        console.log(element.data('id'));
+    highlightNodeAndLinks(elementId, artifact){
         // deselect
         this.parentElement.find('.clicked').removeClass('clicked');
 
         // mark node
-        this.parentElement.find('#'+ element.data('id')).addClass('clicked');
+        this.parentElement.find('#'+ elementId).addClass('clicked');
     }
 }

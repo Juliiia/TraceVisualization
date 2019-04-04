@@ -3,10 +3,12 @@ class UiFilterAndInfoViewCreatorFactory{
     static createUiFilterCreator(artefactName, originJsonReference){
         switch (artefactName) {
             case 'Requirements':
+                console.log('create Requ filterandinfoview');
                 return new UiFilterAndInfoViewCreatorArtefact(artefactName, originJsonReference);
                 break;
 
             case 'SourceCode':
+                console.log('create Sourcecode filterandinfoview');
                 return new UiFilterAndInfoViewCreatorArtefact(artefactName, originJsonReference);
                 break;
 

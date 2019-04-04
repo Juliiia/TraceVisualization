@@ -20,10 +20,10 @@ class NeighborTypeBarchart:
         self.second_sort_by = self.getSecondSortValue()
 
     def getSecondSortValue(self):
-        if self.sort_by == 'outgoingRelations':
-            return 'incomingRelations'
-        if self.sort_by == 'incomingRelations':
-            return 'outgoingRelations'
+        if self.sort_by == 'outgoingrelations':
+            return 'incomingrelations'
+        if self.sort_by == 'incomingrelations':
+            return 'outgoingrelations'
         if self.sort_by == 'independence':
             return 'independence'
 

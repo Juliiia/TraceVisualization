@@ -17,7 +17,6 @@ class OriginJson{
      * @param {String} path - path to json file
      */
     getJsonStructureFromFile(path){
-        console.log('OriginJson - loadJsonStructureFromFile ' + path);
         this.jsonObject = null;
         this.jsonDataCompleted = false;
         let that = this;
@@ -61,7 +60,6 @@ class OriginJson{
     }
 
     getNrOfAllNodes(){
-        console.log(this.jsonObject);
         return this.jsonObject['entities'].length
     }
 
@@ -107,15 +105,51 @@ class OriginJson{
         console.error(text);
     }
 
+    /**
+     * returns an object with node information
+     *
+     * @param {Array} listOfEntityIds
+     * @returns {Object}
+     */
     getInfosForEntities(listOfEntityIds){
         let entities = this.jsonObject.entities;
+        console.log(entities);
         let foundEntities = new Object();
         for(let i=0; i<entities.length; i++){
             if(listOfEntityIds.indexOf(entities[i].id) > -1){
                 foundEntities[entities[i].id] = entities[i];
             }
         }
+        console.log('FOUND:');
+        console.log(foundEntities);
         return foundEntities;
     }
 
+    /**
+     * returns an object with node information
+     * and link (from the sourceEntity) information
+     * Beispiel return:
+     * "Requirementsentity352:
+     *  addictByTypes:0, approved:"false", artifact:"Requirements", id:"Requirementsentity352", incomingRelations:2, independence:0, name:"Func-Req-04", outgoingRelations:0, type:"REQU""
+     *
+     * @param {String} sourceEntityId
+     * @param {Array} listOfEntityIds
+     * @returns {Object}
+     */
+    getInfosForEntitiesAndLinks(sourceEntityId, listOfEntityIds){
+        let links = this.jsonObject.links;
+        let foundEntitiesWithLinks = this.getInfosForEntities(listOfEntityIds);
+        console.log('-----------');
+        console.log(foundEntitiesWithLinks);
+        for(let i=0; i<links.length; i++) {
+            if(links[i].sourceId == sourceEntityId
+                && foundEntitiesWithLinks[links[i].targetId] != undefined){
+                console.log(foundEntitiesWithLinks[links[i].targetId]);
+                foundEntitiesWithLinks[links[i].targetId]['approved'] = links[i].approved;
+            }
+        }
+        console.log(foundEntitiesWithLinks);
+        console.log('-----------');
+        return foundEntitiesWithLinks;
+    }
 }

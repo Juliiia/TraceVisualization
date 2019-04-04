@@ -63,7 +63,7 @@ class UiDashboardCreator{
         $.each(linktypes, function (key, nr) {
             let text = key + ' (' + nr + ')';
             let id = UiElementLib.getGlobalLinkFilterId(artifactName, key);
-            let label = UiElementLib.getLabel(text, id, null);
+            let label = UiElementLib.getLabelWithCustomColor(text, id, null, that.entityAndRelationTypesManager.getColorOfType(key));
             subSectionLinks.append(label);
         });
 
@@ -78,19 +78,21 @@ class UiDashboardCreator{
         // clean div
         let selectedInfoDiv = this.selectedNodeElement.empty();
 
-        // create pairs
+        // add title
         let title = UiElementLib.getSectionTitle('Selected Node');
-        let namePair = UiElementLib.getKeyValuePair('Name', selectedElement.data('name'));
-        let typePair = UiElementLib.getKeyValuePair('Type', selectedElement.data('type'));
-        let outNeighborsPair = UiElementLib.getKeyValuePair('Outgoing Relations', selectedElement.data('outrelations'));
-        let inNeighborsPair = UiElementLib.getKeyValuePair('Incoming Relations', selectedElement.data('inrelations'));
-        let independence = UiElementLib.getKeyValuePair('Independence', selectedElement.data('independence'));
-        let idPair = UiElementLib.getKeyValuePair('Id', selectedElement.data('id'));
-        let artifactPair = UiElementLib.getKeyValuePair('Artifact', selectedElement.data('artifact'));
+        selectedInfoDiv.append(title);
+
+        // create pairs
+        let allEntityAttributes = ViewRegister.getEntityAttributes();
+        for(let i=0; i<allEntityAttributes.length; i++){
+            let element = UiElementLib.getKeyValuePair(allEntityAttributes[i], selectedElement.data(allEntityAttributes[i]));
+            selectedInfoDiv.append(element);
+        }
 
         // add outgoing link types
         let that = this;
         let subSectionRelations = UiElementLib.getDashboardElementSubsection('linkTypes');
+        console.log(selectedElement.data());
         let addictbytypes = selectedElement.data('addictbytypes');
         if(addictbytypes != 0){
              $.each(addictbytypes, function (key, value) {
@@ -98,19 +100,14 @@ class UiDashboardCreator{
                 let id = UiElementLib.getGlobalLinkFilterId(selectedElement.data('artifact'), key);
                 let label = UiElementLib.getLabelWithCustomColor(text, id, handleLabelWithToggleClick, that.entityAndRelationTypesManager.getColorOfType(key));
                 label.setAttribute('data-entityids', value);
+                label.setAttribute('data-sourceentity', selectedElement.data('id'));
                 subSectionRelations.append(label);
              });
+        } else {
+            subSectionRelations.append('-');
         }
         let addictByTypes = UiElementLib.getKeyValuePair('Addict by Types', subSectionRelations);
 
-        selectedInfoDiv.append(title);
-        selectedInfoDiv.append(artifactPair);
-        selectedInfoDiv.append(namePair);
-        selectedInfoDiv.append(typePair);
-        selectedInfoDiv.append(outNeighborsPair);
-        selectedInfoDiv.append(inNeighborsPair);
-        selectedInfoDiv.append(independence);
-        selectedInfoDiv.append(idPair);
         selectedInfoDiv.append(addictByTypes);
         return;
     }
@@ -121,7 +118,8 @@ class UiDashboardCreator{
      * @param {HTMLElement} selectedRelationType
      */
     createToggleInfoForReletedEntities(selectedRelationType){
-        console.log(selectedRelationType.data('entityids'));
+        let sourceId = selectedRelationType.data('sourceentity');
+        console.log(sourceId);
         let subSectionDiv;
 
         // clean or create toggleInfoSubsection Div
@@ -134,19 +132,31 @@ class UiDashboardCreator{
 
         // append new Information
         let allEntities = selectedRelationType.data('entityids').split(',');
-        let allEntitiesWithInfo = this.uiFilterAndInfoViewManager.getEntityInfos(allEntities);
-        let allEntityAttributes = ViewRegister.getEntityAttributes();
+        let allEntitiesWithInfo = this.uiFilterAndInfoViewManager.getEntityAndLinkInfo(sourceId, allEntities);
+        console.log(allEntitiesWithInfo);
+        let allEntityAttributes = ViewRegister.getEntityWithLinkAttributes();
 
         if(allEntities.length < 6){
+            // create on accordion
             let accordion = UiElementLib.getAccordionDiv();
             for(let i=0; i<allEntities.length; i++){
                 let entityInfo = allEntitiesWithInfo[allEntities[i]];
                 let content = document.createElement('div');
 
+                console.log(entityInfo);
                 for(let ii=0; ii<allEntityAttributes.length; ii++){
+                    console.log(allEntityAttributes[ii]);
                     let element = UiElementLib.getKeyValuePair(allEntityAttributes[ii], entityInfo[allEntityAttributes[ii]]);
                     content.append(element);
                 }
+
+                // add "go to" button
+                let button = UiElementLib.getButtonWithIcon(entityInfo['id'], 'floatRight marginBefore', 'arrow right', 'go to this');
+                button = UiElementLib.addEntityDataToElement(button, entityInfo);
+                button.addEventListener('click', handleNodeClick);
+                let div = UiElementLib.getClearDiv();
+                content.append(button);
+                content.append(div);
 
                 accordion = UiElementLib.getAccordionElement(accordion, entityInfo['name'], content);
             }

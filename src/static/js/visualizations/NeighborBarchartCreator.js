@@ -139,17 +139,17 @@ class NeighborBarchartCreator {
         }
     }
 
-    highlightNodeAndLinks(element){
+    highlightNodeAndLinks(elementId, artifact){
         this.parentElement.find('.clicked').removeClass('clicked');
         this.parentElement.find('.dependentClicked').removeClass('dependentClicked');
 
         // mark node
-        let nodeId = UiElementLib.getGlobelEntityId(element.data('artifact'), element.data('id'));
+        let nodeId = UiElementLib.getGlobelEntityId(artifact, elementId);
         this.parentElement.find('.' + nodeId).addClass('clicked');
 
         // mark dependent links
-        let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(element.data('id'));
-        let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(element.data('id'));
+        let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(elementId);
+        let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(elementId);
         this.parentElement.find('.' + targetNodeId).addClass('clicked');
 
         let linksToTarget = this.parentElement.find('.' + sourceNodeId);
@@ -160,7 +160,7 @@ class NeighborBarchartCreator {
                     if(classes[ii].includes('to_')){
                         // get id
                         let id = classes[ii].split('_')[1];
-                        id = UiElementLib.getGlobelEntityId(element.data('artifact'), id);
+                        id = UiElementLib.getGlobelEntityId(artifact, id);
                         this.parentElement.find('.' + id).addClass('dependentClicked');
                     }
                 }

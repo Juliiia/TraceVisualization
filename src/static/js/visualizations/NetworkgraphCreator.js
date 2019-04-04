@@ -40,7 +40,7 @@ class NetworkgraphCreator{
         let nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         nodeGroup.setAttribute("class", 'entities');
         for(let i=0; i < entities.length; i++ ){
-            let radius = this.calculateRadius(entities[i]['outgoingRelations']);
+            let radius = this.calculateRadius(entities[i]['outgoingrelations']);
             let circle = this.drawNode(entities[i], entityCoordinatesMap[entities[i]['id']], radius);
             nodesWithRadius[entities[i]['id']] = radius;
             nodeGroup.append(circle);
@@ -125,14 +125,14 @@ class NetworkgraphCreator{
         }
     }
 
-    highlightNodeAndLinks(element){
+    highlightNodeAndLinks(elementId, artifact){
         this.parentElement.find('.clicked').removeClass('clicked');
         // mark node
-        let nodeId = UiElementLib.getGlobelEntityId(element.data('artifact'), element.data('id'));
+        let nodeId = UiElementLib.getGlobelEntityId(artifact, elementId);
         this.parentElement.find('.' + nodeId).addClass('clicked');
         // mark dependent links
-        let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(element.data('id'));
-        let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(element.data('id'));
+        let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(elementId);
+        let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(elementId);
         this.parentElement.find('.' + sourceNodeId).addClass('clicked');
         this.parentElement.find('.' + targetNodeId).addClass('clicked');
         return;

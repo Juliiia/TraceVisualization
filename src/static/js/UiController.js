@@ -125,8 +125,12 @@ function handleLabelClick() {
 }
 
 function handleNodeClick(){
+
+    let elementId = $(this).data('id');
+    let artifact = $(this).data('artifact');
+
     let filterdDataCollector = new FilteredDataCollector();
-    filterdDataCollector.entitySelected($(this));
+    filterdDataCollector.entitySelected(elementId, artifact);
 
     let uiDashboardCreator = new UiDashboardCreator();
     uiDashboardCreator.createSelectedEntityInfoView($(this));
@@ -170,11 +174,12 @@ function initAccordion(){
 }
 
 function openContextMenu(event){
-    let top = event.clientY;
-    let left = event.clientX;
+    let top = event.pageY;
+    let left = event.pageX;
     console.log(top);
     console.log(left);
 
+    // Todo: fix on scroll
     // Show contextmenu
     $("#contextMenu").css({
         top: top + "px",
@@ -186,17 +191,32 @@ function openContextMenu(event){
     $("#contextMenu").data('svgId', $(this).attr('id'));
 }
 
+/**
+ * if user clicks somewhere else
+ * hide the context menu
+ */
 function hideContextMenu(){
     $("#contextMenu").hide();
     $("#contextMenu").removeData('svgId');
 }
 
+/**
+ * Source: https://github.com/eKoopmans/html2pdf.js
+ */
 function svg2PDF(){
-    console.log('print');
-    console.log($("#contextMenu").data('svgId'));
     let elementId = $("#contextMenu").data('svgId');
     let element = document.getElementById(elementId);
-    html2pdf(element);
+
+    let opt = {
+      margin:       0.25,
+      filename:     elementId + '.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 3 },
+      jsPDF:        { unit: 'in', format: 'a3', orientation: 'portrait' }
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(element).save();
 }
 
 // addEventListeners /////////////////////////////

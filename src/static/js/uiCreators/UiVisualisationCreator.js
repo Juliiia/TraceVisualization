@@ -36,10 +36,10 @@ class UiVisualisationCreator{
         }
     }
 
-    entitySelected(element){
-        this.neighborTypChartCreator.highlightNodeAndLinks(element);
-        this.networkgraphCreator.highlightNodeAndLinks(element);
-        this.sankeyDiagramCreator.highlightNodeAndLinks(element);
+    entitySelected(elementId, artifact){
+        this.neighborTypChartCreator.highlightNodeAndLinks(elementId, artifact);
+        this.networkgraphCreator.highlightNodeAndLinks(elementId, artifact);
+        this.sankeyDiagramCreator.highlightNodeAndLinks(elementId, artifact);
     }
 
     highlightSelection(deselectionList){
