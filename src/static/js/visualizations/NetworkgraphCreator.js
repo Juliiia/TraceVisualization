@@ -127,9 +127,11 @@ class NetworkgraphCreator{
 
     highlightNodeAndLinks(elementId, artifact){
         this.parentElement.find('.clicked').removeClass('clicked');
+
         // mark node
         let nodeId = UiElementLib.getGlobelEntityId(artifact, elementId);
         this.parentElement.find('.' + nodeId).addClass('clicked');
+
         // mark dependent links
         let sourceNodeId = UiElementLib.getGlobalLinkSourceEntityId(elementId);
         let targetNodeId = UiElementLib.getGlobalLinkTargetEntityId(elementId);

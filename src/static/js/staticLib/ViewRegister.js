@@ -52,7 +52,7 @@ class  ViewRegister {
     }
 
     static getNeighborBarchartSortDefaultOption(){
-        return 'outgoingrelations';
+        return 'independence';
     }
 
     // SANKEY DIAGRAM ------------------------------------------------------

@@ -56,7 +56,8 @@ class OriginJson{
     }
 
     getUiFilterCreator(){
-        this.uiFilterCreator = UiFilterAndInfoViewCreatorFactory.createUiFilterCreator(this.artefactName, this);
+        let factory = new UiFilterAndInfoViewCreatorFactory();
+        this.uiFilterCreator = factory.createUiFilterCreator(this.artefactName, this);
     }
 
     getNrOfAllNodes(){

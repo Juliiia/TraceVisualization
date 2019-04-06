@@ -4,14 +4,18 @@ const d3_sankey = require('d3-sankey');
 class SankeyDiagram {
 
     constructor() {
+        console.log('# SankeyDiagram - Constructor');
         this.entityAndRelationTypeManager = new EntityAndRelationTypeManager();
         this.parentElement = $('#sankeyDiagram');
+        this.baseInfo = null;
     }
 
     visualizeSankeyDiagram(arrayWithJsons) {
         console.log('visualizeSankeyDiagram');
         console.log(arrayWithJsons);
+        //TODO: clean svg if already exists
 
+        this.baseInfo = arrayWithJsons.baseInfo;
         UiElementLib.removeChildElementIfExists(this.parentElement, '.loader');
 
         this.createDiagram(arrayWithJsons);
@@ -26,7 +30,7 @@ class SankeyDiagram {
 
         let width = sankeyData['links'].length * 3;
         let height = sankeyData['links'].length * 5;
-        let opacity = 0.4;
+        let opacity = 0.3;
 
         let that = this;
 
@@ -144,7 +148,6 @@ class SankeyDiagram {
 
         //prepare link
         const link = svg.append("g")
-            .attr("class", "links")
             .attr("fill", "none")
             .attr("stroke-opacity", opacity)
             .selectAll("path")
@@ -156,6 +159,9 @@ class SankeyDiagram {
             })
             .attr("stroke-width", function (d) {
                 return d.width;
+            })
+            .attr("class", function (d) {
+                return "links " + d.source.nodeid + " " + d.target.nodeid;
             });
 
 
@@ -208,6 +214,9 @@ class SankeyDiagram {
                 nodeName = that.getNameForId(d.nodeid, entities);
                 return nodeName;
             })
+            .attr("class", function (d) {
+                return d.nodeid;
+            })
             .filter(function (d) {
                 return d.x0 < 5;
             })
@@ -241,8 +250,19 @@ class SankeyDiagram {
     highlightNodeAndLinks(elementId, artifact){
         // deselect
         this.parentElement.find('.clicked').removeClass('clicked');
+        this.parentElement.find('.clicked').removeClass('dependentClicked');
 
-        // mark node
+        // mark node and link
         this.parentElement.find('#'+ elementId).addClass('clicked');
+        this.parentElement.find('.' + elementId).addClass('clicked');
+
+        // mark target nodes if exists
+        let links = this.baseInfo.links;
+        for(let i=0; i<links.length; i++){
+            if(links[i].sourceId == elementId){
+                this.parentElement.find('#'+ links[i].targetId).addClass('dependentClicked');
+                this.parentElement.find('.'+ links[i].targetId).addClass('clicked');
+            }
+        }
     }
 }

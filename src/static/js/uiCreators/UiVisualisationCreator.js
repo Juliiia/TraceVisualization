@@ -7,8 +7,12 @@ class UiVisualisationCreator{
             return uiVisualisationCreator;
         } else {
             this.networkgraphCreator = new NetworkgraphCreator();
+            // single visualisation for both artifacts
             this.neighborTypChartCreator = new NeighborBarchartCreator();
-            this.sankeyDiagramCreator = new SankeyDiagram();
+
+            // visualisation for each artifact
+            this.sankeyDiagramCreators = new Object();
+            this.networkgraphCreators = new Object();
             uiVisualisationCreator = this;
         }
     }
@@ -21,15 +25,25 @@ class UiVisualisationCreator{
     }
 
     visualizeView(viewName, array){
+        console.log(array.artifactName);
+        let artifact = array.artifactName;
         switch (viewName) {
-            case ViewRegister.getNetworkViewName():
-                this.networkgraphCreator.visualizeNetworkGraph(array);
-                return;
             case ViewRegister.getNeighborBarchartName():
                 this.neighborTypChartCreator.visualizeNeighborChart(array);
                 return;
+
+            case ViewRegister.getNetworkViewName():
+                if(this.networkgraphCreators[artifact] == undefined) {
+                    this.networkgraphCreators[artifact] = new NetworkgraphCreator();
+                }
+                this.networkgraphCreators[artifact].visualizeNetworkGraph(array);
+                return;
+
             case ViewRegister.getSankeyDiagramName():
-                this.sankeyDiagramCreator.visualizeSankeyDiagram(array);
+                if(this.sankeyDiagramCreators[artifact] == undefined){
+                    this.sankeyDiagramCreators[artifact] = new SankeyDiagram();
+                }
+                this.sankeyDiagramCreators[artifact].visualizeSankeyDiagram(array);
                 return;
             default:
                 this.onError('View Finding Error', 'Can not find visualization for: ' + viewName);
@@ -38,13 +52,27 @@ class UiVisualisationCreator{
 
     entitySelected(elementId, artifact){
         this.neighborTypChartCreator.highlightNodeAndLinks(elementId, artifact);
-        this.networkgraphCreator.highlightNodeAndLinks(elementId, artifact);
-        this.sankeyDiagramCreator.highlightNodeAndLinks(elementId, artifact);
+
+        // start selection for network
+        if(this.networkgraphCreators[artifact] != undefined) {
+            this.networkgraphCreators[artifact].highlightNodeAndLinks(elementId, artifact);
+        }
+
+        // start selection for sankey
+        if(this.sankeyDiagramCreators[artifact] != undefined) {
+            this.sankeyDiagramCreators[artifact].highlightNodeAndLinks(elementId, artifact);
+        }
     }
 
     highlightSelection(deselectionList){
-        this.networkgraphCreator.highlightSelection(deselectionList);
         this.neighborTypChartCreator.highlightSelection(deselectionList);
+
+        // deselect on all networks
+        for(let network in this.networkgraphCreators){
+            this.networkgraphCreators[network].highlightSelection(deselectionList);
+        }
+
+        // todo: for sankey
     }
 
     onError(title, message){

@@ -132,15 +132,28 @@ function handleNodeClick(){
     let filterdDataCollector = new FilteredDataCollector();
     filterdDataCollector.entitySelected(elementId, artifact);
 
-    let uiDashboardCreator = new UiDashboardCreator();
-    uiDashboardCreator.createSelectedEntityInfoView($(this));
+    let factory = new UiFilterAndInfoViewCreatorFactory();
+    let infoViewCreator = factory.getExistingCreatorByArtifact(artifact);
+    if(infoViewCreator != null){
+        infoViewCreator.createSelectedEntityInfoView($(this));
+    }else{
+        console.error('could not get infoViewCreator ' + artifact + ' (handleNodeClick)');
+    }
 
     return;
 }
 
 function handleLabelWithToggleClick() {
-    let uiDashboardCreator = new UiDashboardCreator();
-    uiDashboardCreator.createToggleInfoForReletedEntities($(this));
+    console.log($(this).data());
+    let artifact = $(this).data('artifact');
+
+    let factory = new UiFilterAndInfoViewCreatorFactory();
+    let infoViewCreator = factory.getExistingCreatorByArtifact(artifact);
+    if(infoViewCreator != null){
+        infoViewCreator.createToggleInfoForReletedEntities($(this));
+    }else{
+        console.error('could not get infoViewCreator for ' + artifact + ' (handleLabelWithToggleClick)');
+    }
 }
 
 function hideElement(element){

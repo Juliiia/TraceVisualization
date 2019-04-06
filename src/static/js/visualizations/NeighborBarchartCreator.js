@@ -114,7 +114,7 @@ class NeighborBarchartCreator {
         targetCoordinates.y = -maxRelations * (sizeOfEntity + space);
 
         let line = UiElementLib.getSVGLineElement(sourceCoordinates, targetCoordinates, 'neighborScale');
-        scaleGroup.append(line)
+        scaleGroup.append(line);
         // add scale
         let parts = 10;
         let spaceBetween = targetCoordinates.y / parts;

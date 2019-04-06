@@ -25,6 +25,15 @@ path.curved.clicked {
     stroke-width: 0.6;
 }
 
+/* Sankey Diagramm */
+path.clicked {
+    stroke-opacity: 1;
+}
+
+text.clicked {
+    font: bolder 12px sans-serif;
+}
+
 /* Arrow */
 path.arrow{
     fill: #595959;
@@ -44,6 +53,7 @@ circle.clicked {
     stroke-width: 0.5;
 }
 
+rect.dependentClicked,
 circle.dependentClicked{
     stroke: #ff0000;
     stroke-width: 0.5;
