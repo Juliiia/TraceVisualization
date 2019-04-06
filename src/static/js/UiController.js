@@ -232,6 +232,15 @@ function svg2PDF(){
     html2pdf().set(opt).from(element).save();
 }
 
+function saveToCSV(){
+    let artifact = $(this).data('artifact');
+    let fileUploader = new FileUploader();
+    let result = fileUploader.exportDataToCsvFile(artifact);
+    console.log('save Result ' + result);
+    // TODO: return darstellen
+    return;
+}
+
 // addEventListeners /////////////////////////////
 
 $(document).ready(function () {

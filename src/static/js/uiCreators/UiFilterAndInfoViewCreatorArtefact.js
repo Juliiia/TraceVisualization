@@ -28,6 +28,9 @@ class UiFilterAndInfoViewCreatorArtefact{
         // add link type filter
         this.updateLinkTypeFilter(mainSelector);
 
+        // add export Button
+        this.addExportButton(mainSelector);
+
         // create info view
         this.createArtifactInfoView(this.artefactName, this.originJson.getNrOfAllNodes(), this.originJson.getNrOfAllLinks());
 
@@ -266,6 +269,15 @@ class UiFilterAndInfoViewCreatorArtefact{
             p.append(selectedRelationType.data('entityids'));
             subSectionDiv.append(p);
         }
+        return;
+    }
+
+    addExportButton(mainSelectorSting){
+        let actionDiv = $(mainSelectorSting + ' .filterOptionsSection div.actions');
+        let button = UiElementLib.getButtonWithIcon('csvExport' + this.artefactName, null, 'save', 'save as CSV');
+        button.setAttribute('data-artifact', this.artefactName);
+        button.addEventListener('click', saveToCSV);
+        actionDiv.append(button);
         return;
     }
 }

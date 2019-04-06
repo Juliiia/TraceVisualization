@@ -119,6 +119,17 @@ class FileUploader {
         });
     }
 
+    exportDataToCsvFile(artifactName){
+        console.log(artifactName);
+        $.get("http://127.0.0.1:5000/csvexport", {artifact: artifactName}).done(function (data) {
+            return data;
+        }).fail(function () {
+            let error = 'GET REQUEST FAILED: exportDataToCsvFile for ' + artifactName;
+            console.log(error);
+            return error;
+        });
+    }
+
     /**
      * returns true if the other file was successful updated
      *
