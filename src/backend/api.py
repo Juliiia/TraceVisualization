@@ -8,6 +8,7 @@ from models.network_graph import NetworkGraph
 from models.csv_translater import CsvTranslater
 from models.neighbortype_barchart import NeighborTypeBarchart
 from models.sankey_diagram import SankeyDiagram
+from models.csv_exporter import CsvExporter
 
 app = Flask(__name__)
 CORS(app, origins='http://localhost:8000')
@@ -43,6 +44,14 @@ def get_type_sankey_diagram():
     name = request.args.get('name')
     sankey = SankeyDiagram(name)
     response = sankey.createSankeyDiagram()
+    return response
+
+
+@app.route("/csvexport", methods=["GET"])
+def get_csv_export():
+    artifact = request.args.get('artifact')
+    csv_exporter = CsvExporter(artifact)
+    response = csv_exporter.createCSVFile()
     return response
 
 
