@@ -366,7 +366,7 @@ class  UiElementLib {
 
         elementNS.setAttribute('d', 'M' + sourceCoordinates.x + ',' + sourceCoordinates.y + '  C'+targetCoordinates.x+',' + div + '  ' +targetCoordinates.x+ ',' + div + ' ' + targetCoordinates.x + ',' + targetCoordinates.y );
         elementNS.setAttribute('fill', 'none');
-        elementNS.setAttribute('stroke-width', '2px');
+        elementNS.setAttribute('stroke-width', '1px');
         elementNS.setAttribute('class', className + ' curved');
         return elementNS;
     }
